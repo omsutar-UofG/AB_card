@@ -1,0 +1,28 @@
+{
+	"id": 0,
+	"cardname": "Bad Omen",
+	"manacost": 0,
+	"miniCard": {
+		"cardTextures": [
+			"assets/game/extra/cards/card_background.png",
+			"assets/game/extra/cards/card_background_highlight.png"
+		],
+		"animationFrames": [],
+		"fps": 10,
+		"index": 0
+	},
+	"bigCard": {
+		"rulesTextRows": [
+			"Deathwatch (whenever a unit, friendly or",
+			"enemy dies, trigger the following effect):",
+			"This unit gains +1 attack permanently."
+		],
+		"cardTextures": [
+			"assets/game/extra/cards/neutral_unit_h.png"
+		],
+		"attack": 0,
+		"health": 1
+	},
+	"isCreature": true,
+	"unitConfig": "conf/gameconfs/units/bad_omen.json"
+}

@@ -1,0 +1,46 @@
+{
+	"id": 0,
+	"cardname": "Horn of the Forsaken",
+	"manacost": 1,
+	"miniCard": {
+		"cardTextures": [
+			"assets/game/extra/cards/card_background.png",
+			"assets/game/extra/cards/card_background_highlight.png"
+		],
+		"animationFrames": [
+"assets/game/extra/cards/minicards/artifact_f4_hornofforsaken/artifact_f4_hornofforsaken_active_000.png",
+"assets/game/extra/cards/minicards/artifact_f4_hornofforsaken/artifact_f4_hornofforsaken_active_001.png",
+"assets/game/extra/cards/minicards/artifact_f4_hornofforsaken/artifact_f4_hornofforsaken_active_002.png",
+"assets/game/extra/cards/minicards/artifact_f4_hornofforsaken/artifact_f4_hornofforsaken_active_003.png",
+"assets/game/extra/cards/minicards/artifact_f4_hornofforsaken/artifact_f4_hornofforsaken_active_004.png",
+"assets/game/extra/cards/minicards/artifact_f4_hornofforsaken/artifact_f4_hornofforsaken_active_005.png",
+"assets/game/extra/cards/minicards/artifact_f4_hornofforsaken/artifact_f4_hornofforsaken_active_006.png",
+"assets/game/extra/cards/minicards/artifact_f4_hornofforsaken/artifact_f4_hornofforsaken_active_007.png",
+"assets/game/extra/cards/minicards/artifact_f4_hornofforsaken/artifact_f4_hornofforsaken_active_008.png",
+"assets/game/extra/cards/minicards/artifact_f4_hornofforsaken/artifact_f4_hornofforsaken_active_009.png",
+"assets/game/extra/cards/minicards/artifact_f4_hornofforsaken/artifact_f4_hornofforsaken_active_010.png",
+"assets/game/extra/cards/minicards/artifact_f4_hornofforsaken/artifact_f4_hornofforsaken_active_011.png",
+"assets/game/extra/cards/minicards/artifact_f4_hornofforsaken/artifact_f4_hornofforsaken_active_012.png",
+"assets/game/extra/cards/minicards/artifact_f4_hornofforsaken/artifact_f4_hornofforsaken_active_013.png",
+"assets/game/extra/cards/minicards/artifact_f4_hornofforsaken/artifact_f4_hornofforsaken_active_014.png",
+"assets/game/extra/cards/minicards/artifact_f4_hornofforsaken/artifact_f4_hornofforsaken_active_015.png",
+"assets/game/extra/cards/minicards/artifact_f4_hornofforsaken/artifact_f4_hornofforsaken_active_016.png",
+"assets/game/extra/cards/minicards/artifact_f4_hornofforsaken/artifact_f4_hornofforsaken_active_017.png"
+		],
+		"fps": 10,
+		"index": 18
+	},
+	"bigCard": {
+		"rulesTextRows": [
+			"Artifact(3), On-hit summon",
+			"a wraithling."
+		],
+		"cardTextures": [
+			"assets/game/extra/cards/neutral_spell.png"
+		],
+		"attack": -1,
+		"health": -1
+	},
+	"isCreature": false,
+	"unitConfig": null
+}

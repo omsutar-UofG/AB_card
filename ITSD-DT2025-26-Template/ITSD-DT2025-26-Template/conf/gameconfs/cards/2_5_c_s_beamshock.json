@@ -1,0 +1,36 @@
+{
+	"id": 0,
+	"cardname": "Beamshock",
+	"manacost": 1,
+	"miniCard": {
+		"cardTextures": [
+			"assets/game/extra/cards/card_background.png",
+			"assets/game/extra/cards/card_background_highlight.png"
+		],
+		"animationFrames": [
+"assets/game/extra/cards/minicards/icon_f1_beamshock/icon_f1_beamshock_active_000.png",
+"assets/game/extra/cards/minicards/icon_f1_beamshock/icon_f1_beamshock_active_001.png",
+"assets/game/extra/cards/minicards/icon_f1_beamshock/icon_f1_beamshock_active_002.png",
+"assets/game/extra/cards/minicards/icon_f1_beamshock/icon_f1_beamshock_active_003.png",
+"assets/game/extra/cards/minicards/icon_f1_beamshock/icon_f1_beamshock_active_004.png",
+"assets/game/extra/cards/minicards/icon_f1_beamshock/icon_f1_beamshock_active_005.png",
+"assets/game/extra/cards/minicards/icon_f1_beamshock/icon_f1_beamshock_active_006.png",
+"assets/game/extra/cards/minicards/icon_f1_beamshock/icon_f1_beamshock_active_007.png",
+"assets/game/extra/cards/minicards/icon_f1_beamshock/icon_f1_beamshock_active_008.png"
+		],
+		"fps": 10,
+		"index": 18
+	},
+	"bigCard": {
+		"rulesTextRows": [
+			"Stun an enemy unit."
+		],
+		"cardTextures": [
+			"assets/game/extra/cards/neutral_spell.png"
+		],
+		"attack": -1,
+		"health": -1
+	},
+	"isCreature": false,
+	"unitConfig": null
+}

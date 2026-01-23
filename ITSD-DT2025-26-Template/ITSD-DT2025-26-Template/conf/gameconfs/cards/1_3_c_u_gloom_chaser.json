@@ -1,0 +1,29 @@
+{
+	"id": 0,
+	"cardname": "Gloom Chaser",
+	"manacost": 2,
+	"miniCard": {
+		"cardTextures": [
+			"assets/game/extra/cards/card_background.png",
+			"assets/game/extra/cards/card_background_highlight.png"
+		],
+		"animationFrames": [],
+		"fps": 10,
+		"index": 0
+	},
+	"bigCard": {
+		"rulesTextRows": [
+			"Opening Gambit (whenever a unit is summoned",
+			"onto the battlefield, trigger the following",
+			"effect): Summon a Wraithling directly behind",
+			"this unit."
+		],
+		"cardTextures": [
+			"assets/game/extra/cards/neutral_unit_h.png"
+		],
+		"attack": 3,
+		"health": 1
+	},
+	"isCreature": true,
+	"unitConfig": "conf/gameconfs/units/gloom_chaser.json"
+}

@@ -1,0 +1,36 @@
+{
+	"animationTextures": [
+			"assets/game/extra/cards/minicards/fx_f4_soulshatterpact/fx_f4_soulshatterpact_000.png",
+"assets/game/extra/cards/minicards/fx_f4_soulshatterpact/fx_f4_soulshatterpact_001.png",
+"assets/game/extra/cards/minicards/fx_f4_soulshatterpact/fx_f4_soulshatterpact_002.png",
+"assets/game/extra/cards/minicards/fx_f4_soulshatterpact/fx_f4_soulshatterpact_003.png",
+"assets/game/extra/cards/minicards/fx_f4_soulshatterpact/fx_f4_soulshatterpact_004.png",
+"assets/game/extra/cards/minicards/fx_f4_soulshatterpact/fx_f4_soulshatterpact_005.png",
+"assets/game/extra/cards/minicards/fx_f4_soulshatterpact/fx_f4_soulshatterpact_006.png",
+"assets/game/extra/cards/minicards/fx_f4_soulshatterpact/fx_f4_soulshatterpact_007.png",
+"assets/game/extra/cards/minicards/fx_f4_soulshatterpact/fx_f4_soulshatterpact_008.png",
+"assets/game/extra/cards/minicards/fx_f4_soulshatterpact/fx_f4_soulshatterpact_009.png",
+"assets/game/extra/cards/minicards/fx_f4_soulshatterpact/fx_f4_soulshatterpact_010.png",
+"assets/game/extra/cards/minicards/fx_f4_soulshatterpact/fx_f4_soulshatterpact_011.png",
+"assets/game/extra/cards/minicards/fx_f4_soulshatterpact/fx_f4_soulshatterpact_012.png",
+"assets/game/extra/cards/minicards/fx_f4_soulshatterpact/fx_f4_soulshatterpact_013.png",
+"assets/game/extra/cards/minicards/fx_f4_soulshatterpact/fx_f4_soulshatterpact_014.png",
+"assets/game/extra/cards/minicards/fx_f4_soulshatterpact/fx_f4_soulshatterpact_015.png",
+"assets/game/extra/cards/minicards/fx_f4_soulshatterpact/fx_f4_soulshatterpact_016.png",
+"assets/game/extra/cards/minicards/fx_f4_soulshatterpact/fx_f4_soulshatterpact_017.png",
+"assets/game/extra/cards/minicards/fx_f4_soulshatterpact/fx_f4_soulshatterpact_018.png",
+"assets/game/extra/cards/minicards/fx_f4_soulshatterpact/fx_f4_soulshatterpact_019.png",
+"assets/game/extra/cards/minicards/fx_f4_soulshatterpact/fx_f4_soulshatterpact_020.png"
+	],
+	"correction": {
+		"imgWidth" : 80,
+    	"imgHeight" : 80,
+		"scale": 2.0,
+    	"offsetX": -20,
+    	"offsetY": -20,
+    	"spriteTopLeftX" : 0,
+    	"spriteTopLeftY" : 0,
+    	"reflected": false
+	},
+	"fps": 9
+}

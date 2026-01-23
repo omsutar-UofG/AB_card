@@ -1,0 +1,1863 @@
+Tree structure of the directory 'D:\vscode\University\IT+ Project\AB_card\ITSD-DT2025-26-Template\ITSD-DT2025-26-Template':
+
+ITSD-DT2025-26-Template
+├── .DS_Store
+├── .classpath
+├── .project
+├── .settings
+│   ├── org.eclipse.core.resources.prefs
+│   └── org.scala-ide.sdt.core.prefs
+├── LICENSE
+├── NOTICE
+├── README.md
+├── app
+│   ├── actors
+│   │   └── GameActor.java // Main communication point where messages from frontend will arrive. It has Actor ref which creates a hashmap and maps a perticular message identifier with perticular class. If message received is "initialize" it responds by using `Initialize()` class. When actor is ready, it sends this message to front-end and send a set of images that are going to be used in the entire game.
+│   ├── assets
+│   │   ├── game
+│   │   │   └── extra
+│   │   │       ├── AttackCircle.png
+│   │   │       ├── GreyCircle.png
+│   │   │       ├── HealthCircle.png
+│   │   │       ├── ManaCircle.png
+│   │   │       ├── battlemap6_middleground.png
+│   │   │       ├── cards
+│   │   │       │   ├── card_background.png
+│   │   │       │   ├── card_background_highlight.png
+│   │   │       │   ├── card_glow_line.png
+│   │   │       │   ├── minicards
+│   │   │       │   │   ├── artifact_f3_staffofykir
+│   │   │       │   │   │   ├── artifact_f3_staffofykir_000.png
+│   │   │       │   │   │   ├── artifact_f3_staffofykir_001.png
+│   │   │       │   │   │   ├── artifact_f3_staffofykir_002.png
+│   │   │       │   │   │   ├── artifact_f3_staffofykir_003.png
+│   │   │       │   │   │   ├── artifact_f3_staffofykir_004.png
+│   │   │       │   │   │   ├── artifact_f3_staffofykir_005.png
+│   │   │       │   │   │   ├── artifact_f3_staffofykir_006.png
+│   │   │       │   │   │   ├── artifact_f3_staffofykir_007.png
+│   │   │       │   │   │   ├── artifact_f3_staffofykir_008.png
+│   │   │       │   │   │   ├── artifact_f3_staffofykir_009.png
+│   │   │       │   │   │   ├── artifact_f3_staffofykir_010.png
+│   │   │       │   │   │   ├── artifact_f3_staffofykir_011.png
+│   │   │       │   │   │   ├── artifact_f3_staffofykir_active_000.png
+│   │   │       │   │   │   ├── artifact_f3_staffofykir_active_001.png
+│   │   │       │   │   │   ├── artifact_f3_staffofykir_active_002.png
+│   │   │       │   │   │   ├── artifact_f3_staffofykir_active_003.png
+│   │   │       │   │   │   ├── artifact_f3_staffofykir_active_004.png
+│   │   │       │   │   │   ├── artifact_f3_staffofykir_active_005.png
+│   │   │       │   │   │   ├── artifact_f3_staffofykir_active_006.png
+│   │   │       │   │   │   ├── artifact_f3_staffofykir_active_007.png
+│   │   │       │   │   │   ├── artifact_f3_staffofykir_active_008.png
+│   │   │       │   │   │   ├── artifact_f3_staffofykir_active_009.png
+│   │   │       │   │   │   ├── artifact_f3_staffofykir_active_010.png
+│   │   │       │   │   │   ├── artifact_f3_staffofykir_active_011.png
+│   │   │       │   │   │   ├── artifact_f3_staffofykir_active_012.png
+│   │   │       │   │   │   ├── artifact_f3_staffofykir_active_013.png
+│   │   │       │   │   │   ├── artifact_f3_staffofykir_active_014.png
+│   │   │       │   │   │   ├── artifact_f3_staffofykir_active_015.png
+│   │   │       │   │   │   ├── artifact_f3_staffofykir_active_016.png
+│   │   │       │   │   │   └── artifact_f3_staffofykir_active_017.png
+│   │   │       │   │   ├── artifact_f4_hornofforsaken
+│   │   │       │   │   │   ├── artifact_f4_hornofforsaken_000.png
+│   │   │       │   │   │   ├── artifact_f4_hornofforsaken_001.png
+│   │   │       │   │   │   ├── artifact_f4_hornofforsaken_002.png
+│   │   │       │   │   │   ├── artifact_f4_hornofforsaken_003.png
+│   │   │       │   │   │   ├── artifact_f4_hornofforsaken_004.png
+│   │   │       │   │   │   ├── artifact_f4_hornofforsaken_005.png
+│   │   │       │   │   │   ├── artifact_f4_hornofforsaken_006.png
+│   │   │       │   │   │   ├── artifact_f4_hornofforsaken_007.png
+│   │   │       │   │   │   ├── artifact_f4_hornofforsaken_008.png
+│   │   │       │   │   │   ├── artifact_f4_hornofforsaken_009.png
+│   │   │       │   │   │   ├── artifact_f4_hornofforsaken_010.png
+│   │   │       │   │   │   ├── artifact_f4_hornofforsaken_011.png
+│   │   │       │   │   │   ├── artifact_f4_hornofforsaken_active_000.png
+│   │   │       │   │   │   ├── artifact_f4_hornofforsaken_active_001.png
+│   │   │       │   │   │   ├── artifact_f4_hornofforsaken_active_002.png
+│   │   │       │   │   │   ├── artifact_f4_hornofforsaken_active_003.png
+│   │   │       │   │   │   ├── artifact_f4_hornofforsaken_active_004.png
+│   │   │       │   │   │   ├── artifact_f4_hornofforsaken_active_005.png
+│   │   │       │   │   │   ├── artifact_f4_hornofforsaken_active_006.png
+│   │   │       │   │   │   ├── artifact_f4_hornofforsaken_active_007.png
+│   │   │       │   │   │   ├── artifact_f4_hornofforsaken_active_008.png
+│   │   │       │   │   │   ├── artifact_f4_hornofforsaken_active_009.png
+│   │   │       │   │   │   ├── artifact_f4_hornofforsaken_active_010.png
+│   │   │       │   │   │   ├── artifact_f4_hornofforsaken_active_011.png
+│   │   │       │   │   │   ├── artifact_f4_hornofforsaken_active_012.png
+│   │   │       │   │   │   ├── artifact_f4_hornofforsaken_active_013.png
+│   │   │       │   │   │   ├── artifact_f4_hornofforsaken_active_014.png
+│   │   │       │   │   │   ├── artifact_f4_hornofforsaken_active_015.png
+│   │   │       │   │   │   ├── artifact_f4_hornofforsaken_active_016.png
+│   │   │       │   │   │   └── artifact_f4_hornofforsaken_active_017.png
+│   │   │       │   │   ├── fx_buff
+│   │   │       │   │   │   ├── fx_buff_000.png
+│   │   │       │   │   │   ├── fx_buff_001.png
+│   │   │       │   │   │   ├── fx_buff_002.png
+│   │   │       │   │   │   ├── fx_buff_003.png
+│   │   │       │   │   │   ├── fx_buff_004.png
+│   │   │       │   │   │   ├── fx_buff_005.png
+│   │   │       │   │   │   ├── fx_buff_006.png
+│   │   │       │   │   │   ├── fx_buff_007.png
+│   │   │       │   │   │   ├── fx_buff_008.png
+│   │   │       │   │   │   ├── fx_buff_009.png
+│   │   │       │   │   │   ├── fx_buff_010.png
+│   │   │       │   │   │   └── fx_buff_011.png
+│   │   │       │   │   ├── fx_explosionyellowelectrical
+│   │   │       │   │   │   ├── fx_explosionyellowelectrical_000.png
+│   │   │       │   │   │   ├── fx_explosionyellowelectrical_001.png
+│   │   │       │   │   │   ├── fx_explosionyellowelectrical_002.png
+│   │   │       │   │   │   ├── fx_explosionyellowelectrical_003.png
+│   │   │       │   │   │   ├── fx_explosionyellowelectrical_004.png
+│   │   │       │   │   │   ├── fx_explosionyellowelectrical_005.png
+│   │   │       │   │   │   ├── fx_explosionyellowelectrical_006.png
+│   │   │       │   │   │   ├── fx_explosionyellowelectrical_007.png
+│   │   │       │   │   │   ├── fx_explosionyellowelectrical_008.png
+│   │   │       │   │   │   └── fx_explosionyellowelectrical_009.png
+│   │   │       │   │   ├── fx_f1_casterprojectile
+│   │   │       │   │   │   ├── fx_f1casterprojectile_000.png
+│   │   │       │   │   │   ├── fx_f1casterprojectile_001.png
+│   │   │       │   │   │   ├── fx_f1casterprojectile_002.png
+│   │   │       │   │   │   ├── fx_f1casterprojectile_003.png
+│   │   │       │   │   │   ├── fx_f1casterprojectile_004.png
+│   │   │       │   │   │   ├── fx_f1casterprojectile_005.png
+│   │   │       │   │   │   ├── fx_f1casterprojectile_006.png
+│   │   │       │   │   │   ├── fx_f1casterprojectile_007.png
+│   │   │       │   │   │   ├── fx_f1casterprojectile_008.png
+│   │   │       │   │   │   ├── fx_f1casterprojectile_009.png
+│   │   │       │   │   │   ├── fx_f1casterprojectile_010.png
+│   │   │       │   │   │   ├── fx_f1casterprojectile_011.png
+│   │   │       │   │   │   ├── fx_f1casterprojectile_012.png
+│   │   │       │   │   │   ├── fx_f1casterprojectile_013.png
+│   │   │       │   │   │   ├── fx_f1casterprojectilecharge_000.png
+│   │   │       │   │   │   ├── fx_f1casterprojectilecharge_001.png
+│   │   │       │   │   │   ├── fx_f1casterprojectilecharge_002.png
+│   │   │       │   │   │   └── fx_f1casterprojectilecharge_003.png
+│   │   │       │   │   ├── fx_f1_inmolation
+│   │   │       │   │   │   ├── fx_f1_inmolation_000.png
+│   │   │       │   │   │   ├── fx_f1_inmolation_001.png
+│   │   │       │   │   │   ├── fx_f1_inmolation_002.png
+│   │   │       │   │   │   ├── fx_f1_inmolation_003.png
+│   │   │       │   │   │   ├── fx_f1_inmolation_004.png
+│   │   │       │   │   │   ├── fx_f1_inmolation_005.png
+│   │   │       │   │   │   ├── fx_f1_inmolation_006.png
+│   │   │       │   │   │   ├── fx_f1_inmolation_007.png
+│   │   │       │   │   │   ├── fx_f1_inmolation_008.png
+│   │   │       │   │   │   ├── fx_f1_inmolation_009.png
+│   │   │       │   │   │   ├── fx_f1_inmolation_010.png
+│   │   │       │   │   │   ├── fx_f1_inmolation_011.png
+│   │   │       │   │   │   ├── fx_f1_inmolation_012.png
+│   │   │       │   │   │   ├── fx_f1_inmolation_013.png
+│   │   │       │   │   │   ├── fx_f1_inmolation_014.png
+│   │   │       │   │   │   ├── fx_f1_inmolation_015.png
+│   │   │       │   │   │   ├── fx_f1_inmolation_016.png
+│   │   │       │   │   │   ├── fx_f1_inmolation_017.png
+│   │   │       │   │   │   ├── fx_f1_inmolation_018.png
+│   │   │       │   │   │   ├── fx_f1_inmolation_019.png
+│   │   │       │   │   │   ├── fx_f1_inmolation_020.png
+│   │   │       │   │   │   └── fx_f1_inmolation_021.png
+│   │   │       │   │   ├── fx_f4_bbs_abyssalscar
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_000.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_001.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_002.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_003.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_004.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_005.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_006.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_007.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_008.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_009.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_010.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_011.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_012.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_013.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_014.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_015.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_016.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_017.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_018.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_019.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_020.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_021.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_022.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_023.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_024.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_025.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_026.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_027.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_028.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_029.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_030.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_031.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_032.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_033.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_034.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_035.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_036.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_037.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_038.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_039.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_040.png
+│   │   │       │   │   │   ├── fx_f4_bbs_abyssalscar_041.png
+│   │   │       │   │   │   └── fx_f4_bbs_abyssalscar_042.png
+│   │   │       │   │   ├── fx_f4_soulshatterpact
+│   │   │       │   │   │   ├── fx_f4_soulshatterpact_000.png
+│   │   │       │   │   │   ├── fx_f4_soulshatterpact_001.png
+│   │   │       │   │   │   ├── fx_f4_soulshatterpact_002.png
+│   │   │       │   │   │   ├── fx_f4_soulshatterpact_003.png
+│   │   │       │   │   │   ├── fx_f4_soulshatterpact_004.png
+│   │   │       │   │   │   ├── fx_f4_soulshatterpact_005.png
+│   │   │       │   │   │   ├── fx_f4_soulshatterpact_006.png
+│   │   │       │   │   │   ├── fx_f4_soulshatterpact_007.png
+│   │   │       │   │   │   ├── fx_f4_soulshatterpact_008.png
+│   │   │       │   │   │   ├── fx_f4_soulshatterpact_009.png
+│   │   │       │   │   │   ├── fx_f4_soulshatterpact_010.png
+│   │   │       │   │   │   ├── fx_f4_soulshatterpact_011.png
+│   │   │       │   │   │   ├── fx_f4_soulshatterpact_012.png
+│   │   │       │   │   │   ├── fx_f4_soulshatterpact_013.png
+│   │   │       │   │   │   ├── fx_f4_soulshatterpact_014.png
+│   │   │       │   │   │   ├── fx_f4_soulshatterpact_015.png
+│   │   │       │   │   │   ├── fx_f4_soulshatterpact_016.png
+│   │   │       │   │   │   ├── fx_f4_soulshatterpact_017.png
+│   │   │       │   │   │   ├── fx_f4_soulshatterpact_018.png
+│   │   │       │   │   │   ├── fx_f4_soulshatterpact_019.png
+│   │   │       │   │   │   └── fx_f4_soulshatterpact_020.png
+│   │   │       │   │   ├── fx_heavenlystrike
+│   │   │       │   │   │   ├── fx_heavenlystrike_000.png
+│   │   │       │   │   │   ├── fx_heavenlystrike_001.png
+│   │   │       │   │   │   ├── fx_heavenlystrike_002.png
+│   │   │       │   │   │   ├── fx_heavenlystrike_003.png
+│   │   │       │   │   │   ├── fx_heavenlystrike_004.png
+│   │   │       │   │   │   ├── fx_heavenlystrike_005.png
+│   │   │       │   │   │   ├── fx_heavenlystrike_006.png
+│   │   │       │   │   │   ├── fx_heavenlystrike_007.png
+│   │   │       │   │   │   ├── fx_heavenlystrike_008.png
+│   │   │       │   │   │   ├── fx_heavenlystrike_009.png
+│   │   │       │   │   │   └── fx_heavenlystrike_010.png
+│   │   │       │   │   ├── fx_impact
+│   │   │       │   │   │   ├── fx_impactbluemedium_000.png
+│   │   │       │   │   │   ├── fx_impactbluemedium_001.png
+│   │   │       │   │   │   ├── fx_impactbluemedium_002.png
+│   │   │       │   │   │   ├── fx_impactbluemedium_003.png
+│   │   │       │   │   │   ├── fx_impactbluemedium_004.png
+│   │   │       │   │   │   ├── fx_impactorangebig_000.png
+│   │   │       │   │   │   ├── fx_impactorangebig_001.png
+│   │   │       │   │   │   ├── fx_impactorangebig_002.png
+│   │   │       │   │   │   ├── fx_impactorangebig_003.png
+│   │   │       │   │   │   ├── fx_impactorangebig_004.png
+│   │   │       │   │   │   ├── fx_impactorangebig_005.png
+│   │   │       │   │   │   ├── fx_impactorangebig_006.png
+│   │   │       │   │   │   ├── fx_impactorangemedium_000.png
+│   │   │       │   │   │   ├── fx_impactorangemedium_001.png
+│   │   │       │   │   │   ├── fx_impactorangemedium_002.png
+│   │   │       │   │   │   ├── fx_impactorangemedium_003.png
+│   │   │       │   │   │   ├── fx_impactorangemedium_004.png
+│   │   │       │   │   │   └── fx_impactorangemedium_005.png
+│   │   │       │   │   ├── fx_martyrdom
+│   │   │       │   │   │   ├── fx_martyrdom_001.png
+│   │   │       │   │   │   ├── fx_martyrdom_002.png
+│   │   │       │   │   │   ├── fx_martyrdom_003.png
+│   │   │       │   │   │   ├── fx_martyrdom_004.png
+│   │   │       │   │   │   ├── fx_martyrdom_005.png
+│   │   │       │   │   │   ├── fx_martyrdom_006.png
+│   │   │       │   │   │   ├── fx_martyrdom_007.png
+│   │   │       │   │   │   ├── fx_martyrdom_008.png
+│   │   │       │   │   │   ├── fx_martyrdom_009.png
+│   │   │       │   │   │   ├── fx_martyrdom_010.png
+│   │   │       │   │   │   ├── fx_martyrdom_011.png
+│   │   │       │   │   │   ├── fx_martyrdom_012.png
+│   │   │       │   │   │   ├── fx_martyrdom_013.png
+│   │   │       │   │   │   ├── fx_martyrdom_014.png
+│   │   │       │   │   │   ├── fx_martyrdom_015.png
+│   │   │       │   │   │   ├── fx_martyrdom_016.png
+│   │   │       │   │   │   ├── fx_martyrdom_017.png
+│   │   │       │   │   │   └── fx_martyrdom_018.png
+│   │   │       │   │   ├── icon_f1_beamshock
+│   │   │       │   │   │   ├── icon_f1_beamshock_000.png
+│   │   │       │   │   │   ├── icon_f1_beamshock_001.png
+│   │   │       │   │   │   ├── icon_f1_beamshock_002.png
+│   │   │       │   │   │   ├── icon_f1_beamshock_003.png
+│   │   │       │   │   │   ├── icon_f1_beamshock_004.png
+│   │   │       │   │   │   ├── icon_f1_beamshock_005.png
+│   │   │       │   │   │   ├── icon_f1_beamshock_active_000.png
+│   │   │       │   │   │   ├── icon_f1_beamshock_active_001.png
+│   │   │       │   │   │   ├── icon_f1_beamshock_active_002.png
+│   │   │       │   │   │   ├── icon_f1_beamshock_active_003.png
+│   │   │       │   │   │   ├── icon_f1_beamshock_active_004.png
+│   │   │       │   │   │   ├── icon_f1_beamshock_active_005.png
+│   │   │       │   │   │   ├── icon_f1_beamshock_active_006.png
+│   │   │       │   │   │   ├── icon_f1_beamshock_active_007.png
+│   │   │       │   │   │   └── icon_f1_beamshock_active_008.png
+│   │   │       │   │   ├── icon_f1_sundropelixir
+│   │   │       │   │   │   ├── icon_f1_sundropelixir_000.png
+│   │   │       │   │   │   ├── icon_f1_sundropelixir_001.png
+│   │   │       │   │   │   ├── icon_f1_sundropelixir_002.png
+│   │   │       │   │   │   ├── icon_f1_sundropelixir_003.png
+│   │   │       │   │   │   ├── icon_f1_sundropelixir_active_000.png
+│   │   │       │   │   │   ├── icon_f1_sundropelixir_active_001.png
+│   │   │       │   │   │   ├── icon_f1_sundropelixir_active_002.png
+│   │   │       │   │   │   ├── icon_f1_sundropelixir_active_003.png
+│   │   │       │   │   │   ├── icon_f1_sundropelixir_active_004.png
+│   │   │       │   │   │   ├── icon_f1_sundropelixir_active_005.png
+│   │   │       │   │   │   ├── icon_f1_sundropelixir_active_006.png
+│   │   │       │   │   │   ├── icon_f1_sundropelixir_active_007.png
+│   │   │       │   │   │   ├── icon_f1_sundropelixir_active_008.png
+│   │   │       │   │   │   ├── icon_f1_sundropelixir_active_009.png
+│   │   │       │   │   │   ├── icon_f1_sundropelixir_active_010.png
+│   │   │       │   │   │   ├── icon_f1_sundropelixir_active_011.png
+│   │   │       │   │   │   ├── icon_f1_sundropelixir_active_012.png
+│   │   │       │   │   │   ├── icon_f1_sundropelixir_active_013.png
+│   │   │       │   │   │   └── icon_f1_sundropelixir_active_014.png
+│   │   │       │   │   ├── icon_f1_truestrike
+│   │   │       │   │   │   ├── icon_f1_truestrike_000.png
+│   │   │       │   │   │   ├── icon_f1_truestrike_001.png
+│   │   │       │   │   │   ├── icon_f1_truestrike_002.png
+│   │   │       │   │   │   ├── icon_f1_truestrike_003.png
+│   │   │       │   │   │   ├── icon_f1_truestrike_active_000.png
+│   │   │       │   │   │   ├── icon_f1_truestrike_active_001.png
+│   │   │       │   │   │   ├── icon_f1_truestrike_active_002.png
+│   │   │       │   │   │   ├── icon_f1_truestrike_active_003.png
+│   │   │       │   │   │   ├── icon_f1_truestrike_active_004.png
+│   │   │       │   │   │   ├── icon_f1_truestrike_active_005.png
+│   │   │       │   │   │   ├── icon_f1_truestrike_active_006.png
+│   │   │       │   │   │   ├── icon_f1_truestrike_active_007.png
+│   │   │       │   │   │   ├── icon_f1_truestrike_active_008.png
+│   │   │       │   │   │   ├── icon_f1_truestrike_active_009.png
+│   │   │       │   │   │   ├── icon_f1_truestrike_active_010.png
+│   │   │       │   │   │   ├── icon_f1_truestrike_active_011.png
+│   │   │       │   │   │   ├── icon_f1_truestrike_active_012.png
+│   │   │       │   │   │   ├── icon_f1_truestrike_active_013.png
+│   │   │       │   │   │   ├── icon_f1_truestrike_active_014.png
+│   │   │       │   │   │   ├── icon_f1_truestrike_active_015.png
+│   │   │       │   │   │   ├── icon_f1_truestrike_active_016.png
+│   │   │       │   │   │   ├── icon_f1_truestrike_active_017.png
+│   │   │       │   │   │   └── icon_f1_truestrike_active_018.png
+│   │   │       │   │   ├── icon_f4_curseofagony
+│   │   │       │   │   │   ├── icon_f4_curseofagony_000.png
+│   │   │       │   │   │   ├── icon_f4_curseofagony_001.png
+│   │   │       │   │   │   ├── icon_f4_curseofagony_002.png
+│   │   │       │   │   │   ├── icon_f4_curseofagony_active_000.png
+│   │   │       │   │   │   ├── icon_f4_curseofagony_active_001.png
+│   │   │       │   │   │   ├── icon_f4_curseofagony_active_002.png
+│   │   │       │   │   │   ├── icon_f4_curseofagony_active_003.png
+│   │   │       │   │   │   ├── icon_f4_curseofagony_active_004.png
+│   │   │       │   │   │   ├── icon_f4_curseofagony_active_005.png
+│   │   │       │   │   │   ├── icon_f4_curseofagony_active_006.png
+│   │   │       │   │   │   ├── icon_f4_curseofagony_active_007.png
+│   │   │       │   │   │   ├── icon_f4_curseofagony_active_008.png
+│   │   │       │   │   │   └── icon_f4_curseofagony_active_009.png
+│   │   │       │   │   └── icon_f4_wraithlingswarm
+│   │   │       │   │       ├── icon_f4_wraithlingswarm_000.png
+│   │   │       │   │       ├── icon_f4_wraithlingswarm_001.png
+│   │   │       │   │       ├── icon_f4_wraithlingswarm_002.png
+│   │   │       │   │       ├── icon_f4_wraithlingswarm_active_000.png
+│   │   │       │   │       ├── icon_f4_wraithlingswarm_active_001.png
+│   │   │       │   │       ├── icon_f4_wraithlingswarm_active_002.png
+│   │   │       │   │       ├── icon_f4_wraithlingswarm_active_003.png
+│   │   │       │   │       ├── icon_f4_wraithlingswarm_active_004.png
+│   │   │       │   │       ├── icon_f4_wraithlingswarm_active_005.png
+│   │   │       │   │       ├── icon_f4_wraithlingswarm_active_006.png
+│   │   │       │   │       ├── icon_f4_wraithlingswarm_active_007.png
+│   │   │       │   │       ├── icon_f4_wraithlingswarm_active_008.png
+│   │   │       │   │       └── icon_f4_wraithlingswarm_active_009.png
+│   │   │       │   ├── neutral_spell.png
+│   │   │       │   └── neutral_unit_h.png
+│   │   │       ├── ui
+│   │   │       │   ├── button_end_turn_enemy.png
+│   │   │       │   ├── button_primary.png
+│   │   │       │   ├── general_portrait_image_hex_f1-third@2x.png
+│   │   │       │   ├── general_portrait_image_hex_f4-third@2x.png
+│   │   │       │   ├── icon_mana.png
+│   │   │       │   ├── icon_mana_inactive.png
+│   │   │       │   ├── notification_quest_small.png
+│   │   │       │   ├── tile_board.png
+│   │   │       │   ├── tile_grid.png
+│   │   │       │   ├── tile_grid_red.png
+│   │   │       │   ├── tooltip_left@2x.png
+│   │   │       │   └── tooltip_right@2x.png
+│   │   │       └── units
+│   │   │           ├── f1_3rdgeneral
+│   │   │           │   ├── f1_3rdgeneral_attack_000.png
+│   │   │           │   ├── f1_3rdgeneral_attack_001.png
+│   │   │           │   ├── f1_3rdgeneral_attack_002.png
+│   │   │           │   ├── f1_3rdgeneral_attack_003.png
+│   │   │           │   ├── f1_3rdgeneral_attack_004.png
+│   │   │           │   ├── f1_3rdgeneral_attack_005.png
+│   │   │           │   ├── f1_3rdgeneral_attack_006.png
+│   │   │           │   ├── f1_3rdgeneral_attack_007.png
+│   │   │           │   ├── f1_3rdgeneral_attack_008.png
+│   │   │           │   ├── f1_3rdgeneral_attack_009.png
+│   │   │           │   ├── f1_3rdgeneral_attack_010.png
+│   │   │           │   ├── f1_3rdgeneral_attack_011.png
+│   │   │           │   ├── f1_3rdgeneral_attack_012.png
+│   │   │           │   ├── f1_3rdgeneral_attack_013.png
+│   │   │           │   ├── f1_3rdgeneral_attack_014.png
+│   │   │           │   ├── f1_3rdgeneral_attack_015.png
+│   │   │           │   ├── f1_3rdgeneral_attack_016.png
+│   │   │           │   ├── f1_3rdgeneral_attack_017.png
+│   │   │           │   ├── f1_3rdgeneral_attack_018.png
+│   │   │           │   ├── f1_3rdgeneral_attack_019.png
+│   │   │           │   ├── f1_3rdgeneral_attack_020.png
+│   │   │           │   ├── f1_3rdgeneral_attack_021.png
+│   │   │           │   ├── f1_3rdgeneral_attack_022.png
+│   │   │           │   ├── f1_3rdgeneral_attack_023.png
+│   │   │           │   ├── f1_3rdgeneral_attack_024.png
+│   │   │           │   ├── f1_3rdgeneral_attack_025.png
+│   │   │           │   ├── f1_3rdgeneral_attack_026.png
+│   │   │           │   ├── f1_3rdgeneral_attack_027.png
+│   │   │           │   ├── f1_3rdgeneral_attack_028.png
+│   │   │           │   ├── f1_3rdgeneral_attack_029.png
+│   │   │           │   ├── f1_3rdgeneral_attack_030.png
+│   │   │           │   ├── f1_3rdgeneral_attack_031.png
+│   │   │           │   ├── f1_3rdgeneral_breathing_000.png
+│   │   │           │   ├── f1_3rdgeneral_breathing_001.png
+│   │   │           │   ├── f1_3rdgeneral_breathing_002.png
+│   │   │           │   ├── f1_3rdgeneral_breathing_003.png
+│   │   │           │   ├── f1_3rdgeneral_breathing_004.png
+│   │   │           │   ├── f1_3rdgeneral_breathing_005.png
+│   │   │           │   ├── f1_3rdgeneral_breathing_006.png
+│   │   │           │   ├── f1_3rdgeneral_breathing_007.png
+│   │   │           │   ├── f1_3rdgeneral_breathing_008.png
+│   │   │           │   ├── f1_3rdgeneral_breathing_009.png
+│   │   │           │   ├── f1_3rdgeneral_breathing_010.png
+│   │   │           │   ├── f1_3rdgeneral_breathing_011.png
+│   │   │           │   ├── f1_3rdgeneral_breathing_012.png
+│   │   │           │   ├── f1_3rdgeneral_breathing_013.png
+│   │   │           │   ├── f1_3rdgeneral_castend_000.png
+│   │   │           │   ├── f1_3rdgeneral_castend_001.png
+│   │   │           │   ├── f1_3rdgeneral_castend_002.png
+│   │   │           │   ├── f1_3rdgeneral_castend_003.png
+│   │   │           │   ├── f1_3rdgeneral_castend_004.png
+│   │   │           │   ├── f1_3rdgeneral_castend_005.png
+│   │   │           │   ├── f1_3rdgeneral_castend_006.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_000.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_001.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_002.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_003.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_004.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_005.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_006.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_007.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_008.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_009.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_010.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_011.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_012.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_013.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_014.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_015.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_016.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_017.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_018.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_019.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_020.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_021.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_022.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_023.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_024.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_025.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_026.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_027.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_028.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_029.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_030.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_031.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_032.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_033.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_034.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_035.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_036.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_037.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_038.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_039.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_040.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_041.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_042.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_043.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_044.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_045.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_046.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_047.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_048.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_049.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_050.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_051.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_052.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_053.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_054.png
+│   │   │           │   ├── f1_3rdgeneral_castendsample_055.png
+│   │   │           │   ├── f1_3rdgeneral_castloop_000.png
+│   │   │           │   ├── f1_3rdgeneral_castloop_001.png
+│   │   │           │   ├── f1_3rdgeneral_castloop_002.png
+│   │   │           │   ├── f1_3rdgeneral_castloop_003.png
+│   │   │           │   ├── f1_3rdgeneral_caststart_000.png
+│   │   │           │   ├── f1_3rdgeneral_caststart_001.png
+│   │   │           │   ├── f1_3rdgeneral_caststart_002.png
+│   │   │           │   ├── f1_3rdgeneral_caststart_003.png
+│   │   │           │   ├── f1_3rdgeneral_caststart_004.png
+│   │   │           │   ├── f1_3rdgeneral_caststart_005.png
+│   │   │           │   ├── f1_3rdgeneral_caststart_006.png
+│   │   │           │   ├── f1_3rdgeneral_death_000.png
+│   │   │           │   ├── f1_3rdgeneral_death_001.png
+│   │   │           │   ├── f1_3rdgeneral_death_002.png
+│   │   │           │   ├── f1_3rdgeneral_death_003.png
+│   │   │           │   ├── f1_3rdgeneral_death_004.png
+│   │   │           │   ├── f1_3rdgeneral_death_005.png
+│   │   │           │   ├── f1_3rdgeneral_death_006.png
+│   │   │           │   ├── f1_3rdgeneral_death_007.png
+│   │   │           │   ├── f1_3rdgeneral_death_008.png
+│   │   │           │   ├── f1_3rdgeneral_death_009.png
+│   │   │           │   ├── f1_3rdgeneral_death_010.png
+│   │   │           │   ├── f1_3rdgeneral_death_011.png
+│   │   │           │   ├── f1_3rdgeneral_hit_000.png
+│   │   │           │   ├── f1_3rdgeneral_hit_001.png
+│   │   │           │   ├── f1_3rdgeneral_hit_002.png
+│   │   │           │   ├── f1_3rdgeneral_idle_000.png
+│   │   │           │   ├── f1_3rdgeneral_idle_001.png
+│   │   │           │   ├── f1_3rdgeneral_idle_002.png
+│   │   │           │   ├── f1_3rdgeneral_idle_003.png
+│   │   │           │   ├── f1_3rdgeneral_idle_004.png
+│   │   │           │   ├── f1_3rdgeneral_idle_005.png
+│   │   │           │   ├── f1_3rdgeneral_idle_006.png
+│   │   │           │   ├── f1_3rdgeneral_idle_007.png
+│   │   │           │   ├── f1_3rdgeneral_idle_008.png
+│   │   │           │   ├── f1_3rdgeneral_idle_009.png
+│   │   │           │   ├── f1_3rdgeneral_idle_010.png
+│   │   │           │   ├── f1_3rdgeneral_idle_011.png
+│   │   │           │   ├── f1_3rdgeneral_idle_012.png
+│   │   │           │   ├── f1_3rdgeneral_idle_013.png
+│   │   │           │   ├── f1_3rdgeneral_idle_014.png
+│   │   │           │   ├── f1_3rdgeneral_idle_015.png
+│   │   │           │   ├── f1_3rdgeneral_run_000.png
+│   │   │           │   ├── f1_3rdgeneral_run_001.png
+│   │   │           │   ├── f1_3rdgeneral_run_002.png
+│   │   │           │   ├── f1_3rdgeneral_run_003.png
+│   │   │           │   ├── f1_3rdgeneral_run_004.png
+│   │   │           │   ├── f1_3rdgeneral_run_005.png
+│   │   │           │   ├── f1_3rdgeneral_run_006.png
+│   │   │           │   ├── f1_3rdgeneral_run_007.png
+│   │   │           │   ├── f1_3rdgeneral_run_008.png
+│   │   │           │   └── f1_3rdgeneral_run_009.png
+│   │   │           ├── f1_ironcliffeguardian
+│   │   │           │   ├── f1_ironcliffeguardian_attack_000.png
+│   │   │           │   ├── f1_ironcliffeguardian_attack_001.png
+│   │   │           │   ├── f1_ironcliffeguardian_attack_002.png
+│   │   │           │   ├── f1_ironcliffeguardian_attack_003.png
+│   │   │           │   ├── f1_ironcliffeguardian_attack_004.png
+│   │   │           │   ├── f1_ironcliffeguardian_attack_005.png
+│   │   │           │   ├── f1_ironcliffeguardian_attack_006.png
+│   │   │           │   ├── f1_ironcliffeguardian_attack_007.png
+│   │   │           │   ├── f1_ironcliffeguardian_attack_008.png
+│   │   │           │   ├── f1_ironcliffeguardian_attack_009.png
+│   │   │           │   ├── f1_ironcliffeguardian_attack_010.png
+│   │   │           │   ├── f1_ironcliffeguardian_attack_011.png
+│   │   │           │   ├── f1_ironcliffeguardian_attack_012.png
+│   │   │           │   ├── f1_ironcliffeguardian_attack_013.png
+│   │   │           │   ├── f1_ironcliffeguardian_attack_014.png
+│   │   │           │   ├── f1_ironcliffeguardian_attack_015.png
+│   │   │           │   ├── f1_ironcliffeguardian_attack_016.png
+│   │   │           │   ├── f1_ironcliffeguardian_attack_017.png
+│   │   │           │   ├── f1_ironcliffeguardian_breathing_000.png
+│   │   │           │   ├── f1_ironcliffeguardian_breathing_001.png
+│   │   │           │   ├── f1_ironcliffeguardian_breathing_002.png
+│   │   │           │   ├── f1_ironcliffeguardian_breathing_003.png
+│   │   │           │   ├── f1_ironcliffeguardian_breathing_004.png
+│   │   │           │   ├── f1_ironcliffeguardian_breathing_005.png
+│   │   │           │   ├── f1_ironcliffeguardian_breathing_006.png
+│   │   │           │   ├── f1_ironcliffeguardian_breathing_007.png
+│   │   │           │   ├── f1_ironcliffeguardian_breathing_008.png
+│   │   │           │   ├── f1_ironcliffeguardian_breathing_009.png
+│   │   │           │   ├── f1_ironcliffeguardian_breathing_010.png
+│   │   │           │   ├── f1_ironcliffeguardian_breathing_011.png
+│   │   │           │   ├── f1_ironcliffeguardian_breathing_012.png
+│   │   │           │   ├── f1_ironcliffeguardian_breathing_013.png
+│   │   │           │   ├── f1_ironcliffeguardian_death_000.png
+│   │   │           │   ├── f1_ironcliffeguardian_death_001.png
+│   │   │           │   ├── f1_ironcliffeguardian_death_002.png
+│   │   │           │   ├── f1_ironcliffeguardian_death_003.png
+│   │   │           │   ├── f1_ironcliffeguardian_death_004.png
+│   │   │           │   ├── f1_ironcliffeguardian_death_005.png
+│   │   │           │   ├── f1_ironcliffeguardian_death_006.png
+│   │   │           │   ├── f1_ironcliffeguardian_death_007.png
+│   │   │           │   ├── f1_ironcliffeguardian_death_008.png
+│   │   │           │   ├── f1_ironcliffeguardian_hit_000.png
+│   │   │           │   ├── f1_ironcliffeguardian_hit_001.png
+│   │   │           │   ├── f1_ironcliffeguardian_hit_002.png
+│   │   │           │   ├── f1_ironcliffeguardian_idle_000.png
+│   │   │           │   ├── f1_ironcliffeguardian_idle_001.png
+│   │   │           │   ├── f1_ironcliffeguardian_idle_002.png
+│   │   │           │   ├── f1_ironcliffeguardian_idle_003.png
+│   │   │           │   ├── f1_ironcliffeguardian_idle_004.png
+│   │   │           │   ├── f1_ironcliffeguardian_idle_005.png
+│   │   │           │   ├── f1_ironcliffeguardian_idle_006.png
+│   │   │           │   ├── f1_ironcliffeguardian_idle_007.png
+│   │   │           │   ├── f1_ironcliffeguardian_idle_008.png
+│   │   │           │   ├── f1_ironcliffeguardian_idle_009.png
+│   │   │           │   ├── f1_ironcliffeguardian_idle_010.png
+│   │   │           │   ├── f1_ironcliffeguardian_idle_011.png
+│   │   │           │   ├── f1_ironcliffeguardian_idle_012.png
+│   │   │           │   ├── f1_ironcliffeguardian_idle_013.png
+│   │   │           │   ├── f1_ironcliffeguardian_idle_014.png
+│   │   │           │   ├── f1_ironcliffeguardian_idle_015.png
+│   │   │           │   ├── f1_ironcliffeguardian_idle_016.png
+│   │   │           │   ├── f1_ironcliffeguardian_idle_017.png
+│   │   │           │   ├── f1_ironcliffeguardian_run_000.png
+│   │   │           │   ├── f1_ironcliffeguardian_run_001.png
+│   │   │           │   ├── f1_ironcliffeguardian_run_002.png
+│   │   │           │   ├── f1_ironcliffeguardian_run_003.png
+│   │   │           │   ├── f1_ironcliffeguardian_run_004.png
+│   │   │           │   ├── f1_ironcliffeguardian_run_005.png
+│   │   │           │   ├── f1_ironcliffeguardian_run_006.png
+│   │   │           │   └── f1_ironcliffeguardian_run_007.png
+│   │   │           ├── f1_silverguardsquire
+│   │   │           │   ├── f1_silverguardsquire_attack_000.png
+│   │   │           │   ├── f1_silverguardsquire_attack_001.png
+│   │   │           │   ├── f1_silverguardsquire_attack_002.png
+│   │   │           │   ├── f1_silverguardsquire_attack_003.png
+│   │   │           │   ├── f1_silverguardsquire_attack_004.png
+│   │   │           │   ├── f1_silverguardsquire_attack_005.png
+│   │   │           │   ├── f1_silverguardsquire_attack_006.png
+│   │   │           │   ├── f1_silverguardsquire_attack_007.png
+│   │   │           │   ├── f1_silverguardsquire_attack_008.png
+│   │   │           │   ├── f1_silverguardsquire_attack_009.png
+│   │   │           │   ├── f1_silverguardsquire_attack_010.png
+│   │   │           │   ├── f1_silverguardsquire_attack_011.png
+│   │   │           │   ├── f1_silverguardsquire_attack_012.png
+│   │   │           │   ├── f1_silverguardsquire_breathing_000.png
+│   │   │           │   ├── f1_silverguardsquire_breathing_001.png
+│   │   │           │   ├── f1_silverguardsquire_breathing_002.png
+│   │   │           │   ├── f1_silverguardsquire_breathing_003.png
+│   │   │           │   ├── f1_silverguardsquire_breathing_004.png
+│   │   │           │   ├── f1_silverguardsquire_breathing_005.png
+│   │   │           │   ├── f1_silverguardsquire_breathing_006.png
+│   │   │           │   ├── f1_silverguardsquire_breathing_007.png
+│   │   │           │   ├── f1_silverguardsquire_breathing_008.png
+│   │   │           │   ├── f1_silverguardsquire_breathing_009.png
+│   │   │           │   ├── f1_silverguardsquire_breathing_010.png
+│   │   │           │   ├── f1_silverguardsquire_breathing_011.png
+│   │   │           │   ├── f1_silverguardsquire_breathing_012.png
+│   │   │           │   ├── f1_silverguardsquire_breathing_013.png
+│   │   │           │   ├── f1_silverguardsquire_death_000.png
+│   │   │           │   ├── f1_silverguardsquire_death_001.png
+│   │   │           │   ├── f1_silverguardsquire_death_002.png
+│   │   │           │   ├── f1_silverguardsquire_death_003.png
+│   │   │           │   ├── f1_silverguardsquire_death_004.png
+│   │   │           │   ├── f1_silverguardsquire_death_005.png
+│   │   │           │   ├── f1_silverguardsquire_death_006.png
+│   │   │           │   ├── f1_silverguardsquire_death_007.png
+│   │   │           │   ├── f1_silverguardsquire_death_008.png
+│   │   │           │   ├── f1_silverguardsquire_death_009.png
+│   │   │           │   ├── f1_silverguardsquire_death_010.png
+│   │   │           │   ├── f1_silverguardsquire_hit_000.png
+│   │   │           │   ├── f1_silverguardsquire_hit_001.png
+│   │   │           │   ├── f1_silverguardsquire_hit_002.png
+│   │   │           │   ├── f1_silverguardsquire_idle_000.png
+│   │   │           │   ├── f1_silverguardsquire_idle_001.png
+│   │   │           │   ├── f1_silverguardsquire_idle_002.png
+│   │   │           │   ├── f1_silverguardsquire_idle_003.png
+│   │   │           │   ├── f1_silverguardsquire_idle_004.png
+│   │   │           │   ├── f1_silverguardsquire_idle_005.png
+│   │   │           │   ├── f1_silverguardsquire_idle_006.png
+│   │   │           │   ├── f1_silverguardsquire_idle_007.png
+│   │   │           │   ├── f1_silverguardsquire_idle_008.png
+│   │   │           │   ├── f1_silverguardsquire_idle_009.png
+│   │   │           │   ├── f1_silverguardsquire_run_000.png
+│   │   │           │   ├── f1_silverguardsquire_run_001.png
+│   │   │           │   ├── f1_silverguardsquire_run_002.png
+│   │   │           │   ├── f1_silverguardsquire_run_003.png
+│   │   │           │   ├── f1_silverguardsquire_run_004.png
+│   │   │           │   ├── f1_silverguardsquire_run_005.png
+│   │   │           │   ├── f1_silverguardsquire_run_006.png
+│   │   │           │   └── f1_silverguardsquire_run_007.png
+│   │   │           ├── f1_tank
+│   │   │           │   ├── f1_tank_attack_000.png
+│   │   │           │   ├── f1_tank_attack_001.png
+│   │   │           │   ├── f1_tank_attack_002.png
+│   │   │           │   ├── f1_tank_attack_003.png
+│   │   │           │   ├── f1_tank_attack_004.png
+│   │   │           │   ├── f1_tank_attack_005.png
+│   │   │           │   ├── f1_tank_attack_006.png
+│   │   │           │   ├── f1_tank_attack_007.png
+│   │   │           │   ├── f1_tank_attack_008.png
+│   │   │           │   ├── f1_tank_attack_009.png
+│   │   │           │   ├── f1_tank_attack_010.png
+│   │   │           │   ├── f1_tank_attack_011.png
+│   │   │           │   ├── f1_tank_attack_012.png
+│   │   │           │   ├── f1_tank_attack_013.png
+│   │   │           │   ├── f1_tank_attack_014.png
+│   │   │           │   ├── f1_tank_attack_015.png
+│   │   │           │   ├── f1_tank_attack_016.png
+│   │   │           │   ├── f1_tank_attack_017.png
+│   │   │           │   ├── f1_tank_attack_018.png
+│   │   │           │   ├── f1_tank_breathing_000.png
+│   │   │           │   ├── f1_tank_breathing_001.png
+│   │   │           │   ├── f1_tank_breathing_002.png
+│   │   │           │   ├── f1_tank_breathing_003.png
+│   │   │           │   ├── f1_tank_breathing_004.png
+│   │   │           │   ├── f1_tank_breathing_005.png
+│   │   │           │   ├── f1_tank_breathing_006.png
+│   │   │           │   ├── f1_tank_breathing_007.png
+│   │   │           │   ├── f1_tank_breathing_008.png
+│   │   │           │   ├── f1_tank_breathing_009.png
+│   │   │           │   ├── f1_tank_breathing_010.png
+│   │   │           │   ├── f1_tank_breathing_011.png
+│   │   │           │   ├── f1_tank_breathing_012.png
+│   │   │           │   ├── f1_tank_breathing_013.png
+│   │   │           │   ├── f1_tank_death_000.png
+│   │   │           │   ├── f1_tank_death_001.png
+│   │   │           │   ├── f1_tank_death_002.png
+│   │   │           │   ├── f1_tank_death_003.png
+│   │   │           │   ├── f1_tank_death_004.png
+│   │   │           │   ├── f1_tank_death_005.png
+│   │   │           │   ├── f1_tank_death_006.png
+│   │   │           │   ├── f1_tank_death_007.png
+│   │   │           │   ├── f1_tank_death_008.png
+│   │   │           │   ├── f1_tank_death_009.png
+│   │   │           │   ├── f1_tank_death_010.png
+│   │   │           │   ├── f1_tank_death_011.png
+│   │   │           │   ├── f1_tank_hit_000.png
+│   │   │           │   ├── f1_tank_hit_001.png
+│   │   │           │   ├── f1_tank_hit_002.png
+│   │   │           │   ├── f1_tank_hit_003.png
+│   │   │           │   ├── f1_tank_hit_004.png
+│   │   │           │   ├── f1_tank_idle_000.png
+│   │   │           │   ├── f1_tank_idle_001.png
+│   │   │           │   ├── f1_tank_idle_002.png
+│   │   │           │   ├── f1_tank_idle_003.png
+│   │   │           │   ├── f1_tank_idle_004.png
+│   │   │           │   ├── f1_tank_idle_005.png
+│   │   │           │   ├── f1_tank_idle_006.png
+│   │   │           │   ├── f1_tank_idle_007.png
+│   │   │           │   ├── f1_tank_idle_008.png
+│   │   │           │   ├── f1_tank_idle_009.png
+│   │   │           │   ├── f1_tank_idle_010.png
+│   │   │           │   ├── f1_tank_run_000.png
+│   │   │           │   ├── f1_tank_run_001.png
+│   │   │           │   ├── f1_tank_run_002.png
+│   │   │           │   ├── f1_tank_run_003.png
+│   │   │           │   ├── f1_tank_run_004.png
+│   │   │           │   ├── f1_tank_run_005.png
+│   │   │           │   ├── f1_tank_run_006.png
+│   │   │           │   └── f1_tank_run_007.png
+│   │   │           ├── f4_3rdgeneral
+│   │   │           │   ├── f4_3rdgeneral_attack_000.png
+│   │   │           │   ├── f4_3rdgeneral_attack_001.png
+│   │   │           │   ├── f4_3rdgeneral_attack_002.png
+│   │   │           │   ├── f4_3rdgeneral_attack_003.png
+│   │   │           │   ├── f4_3rdgeneral_attack_004.png
+│   │   │           │   ├── f4_3rdgeneral_attack_005.png
+│   │   │           │   ├── f4_3rdgeneral_attack_006.png
+│   │   │           │   ├── f4_3rdgeneral_attack_007.png
+│   │   │           │   ├── f4_3rdgeneral_attack_008.png
+│   │   │           │   ├── f4_3rdgeneral_attack_009.png
+│   │   │           │   ├── f4_3rdgeneral_attack_010.png
+│   │   │           │   ├── f4_3rdgeneral_attack_011.png
+│   │   │           │   ├── f4_3rdgeneral_attack_012.png
+│   │   │           │   ├── f4_3rdgeneral_attack_013.png
+│   │   │           │   ├── f4_3rdgeneral_attack_014.png
+│   │   │           │   ├── f4_3rdgeneral_attack_015.png
+│   │   │           │   ├── f4_3rdgeneral_attack_016.png
+│   │   │           │   ├── f4_3rdgeneral_attack_017.png
+│   │   │           │   ├── f4_3rdgeneral_attack_018.png
+│   │   │           │   ├── f4_3rdgeneral_attack_019.png
+│   │   │           │   ├── f4_3rdgeneral_attack_020.png
+│   │   │           │   ├── f4_3rdgeneral_attack_021.png
+│   │   │           │   ├── f4_3rdgeneral_attack_022.png
+│   │   │           │   ├── f4_3rdgeneral_attack_023.png
+│   │   │           │   ├── f4_3rdgeneral_attack_024.png
+│   │   │           │   ├── f4_3rdgeneral_attack_025.png
+│   │   │           │   ├── f4_3rdgeneral_attack_026.png
+│   │   │           │   ├── f4_3rdgeneral_attack_027.png
+│   │   │           │   ├── f4_3rdgeneral_attack_028.png
+│   │   │           │   ├── f4_3rdgeneral_attack_029.png
+│   │   │           │   ├── f4_3rdgeneral_attack_030.png
+│   │   │           │   ├── f4_3rdgeneral_attack_031.png
+│   │   │           │   ├── f4_3rdgeneral_attack_032.png
+│   │   │           │   ├── f4_3rdgeneral_breathing_000.png
+│   │   │           │   ├── f4_3rdgeneral_breathing_001.png
+│   │   │           │   ├── f4_3rdgeneral_breathing_002.png
+│   │   │           │   ├── f4_3rdgeneral_breathing_003.png
+│   │   │           │   ├── f4_3rdgeneral_breathing_004.png
+│   │   │           │   ├── f4_3rdgeneral_breathing_005.png
+│   │   │           │   ├── f4_3rdgeneral_breathing_006.png
+│   │   │           │   ├── f4_3rdgeneral_breathing_007.png
+│   │   │           │   ├── f4_3rdgeneral_breathing_008.png
+│   │   │           │   ├── f4_3rdgeneral_breathing_009.png
+│   │   │           │   ├── f4_3rdgeneral_breathing_010.png
+│   │   │           │   ├── f4_3rdgeneral_breathing_011.png
+│   │   │           │   ├── f4_3rdgeneral_breathing_012.png
+│   │   │           │   ├── f4_3rdgeneral_breathing_013.png
+│   │   │           │   ├── f4_3rdgeneral_cast_000.png
+│   │   │           │   ├── f4_3rdgeneral_cast_001.png
+│   │   │           │   ├── f4_3rdgeneral_cast_002.png
+│   │   │           │   ├── f4_3rdgeneral_cast_003.png
+│   │   │           │   ├── f4_3rdgeneral_cast_004.png
+│   │   │           │   ├── f4_3rdgeneral_cast_005.png
+│   │   │           │   ├── f4_3rdgeneral_cast_006.png
+│   │   │           │   ├── f4_3rdgeneral_cast_007.png
+│   │   │           │   ├── f4_3rdgeneral_cast_008.png
+│   │   │           │   ├── f4_3rdgeneral_cast_009.png
+│   │   │           │   ├── f4_3rdgeneral_cast_010.png
+│   │   │           │   ├── f4_3rdgeneral_cast_011.png
+│   │   │           │   ├── f4_3rdgeneral_cast_012.png
+│   │   │           │   ├── f4_3rdgeneral_cast_013.png
+│   │   │           │   ├── f4_3rdgeneral_cast_014.png
+│   │   │           │   ├── f4_3rdgeneral_cast_015.png
+│   │   │           │   ├── f4_3rdgeneral_cast_016.png
+│   │   │           │   ├── f4_3rdgeneral_castend_000.png
+│   │   │           │   ├── f4_3rdgeneral_castend_001.png
+│   │   │           │   ├── f4_3rdgeneral_castend_002.png
+│   │   │           │   ├── f4_3rdgeneral_castend_003.png
+│   │   │           │   ├── f4_3rdgeneral_castend_004.png
+│   │   │           │   ├── f4_3rdgeneral_castloop_000.png
+│   │   │           │   ├── f4_3rdgeneral_castloop_001.png
+│   │   │           │   ├── f4_3rdgeneral_castloop_002.png
+│   │   │           │   ├── f4_3rdgeneral_castloop_003.png
+│   │   │           │   ├── f4_3rdgeneral_caststart_000.png
+│   │   │           │   ├── f4_3rdgeneral_caststart_001.png
+│   │   │           │   ├── f4_3rdgeneral_caststart_002.png
+│   │   │           │   ├── f4_3rdgeneral_caststart_003.png
+│   │   │           │   ├── f4_3rdgeneral_caststart_004.png
+│   │   │           │   ├── f4_3rdgeneral_death_000.png
+│   │   │           │   ├── f4_3rdgeneral_death_001.png
+│   │   │           │   ├── f4_3rdgeneral_death_002.png
+│   │   │           │   ├── f4_3rdgeneral_death_003.png
+│   │   │           │   ├── f4_3rdgeneral_death_004.png
+│   │   │           │   ├── f4_3rdgeneral_death_005.png
+│   │   │           │   ├── f4_3rdgeneral_death_006.png
+│   │   │           │   ├── f4_3rdgeneral_death_007.png
+│   │   │           │   ├── f4_3rdgeneral_death_008.png
+│   │   │           │   ├── f4_3rdgeneral_death_009.png
+│   │   │           │   ├── f4_3rdgeneral_death_010.png
+│   │   │           │   ├── f4_3rdgeneral_hit_000.png
+│   │   │           │   ├── f4_3rdgeneral_hit_001.png
+│   │   │           │   ├── f4_3rdgeneral_hit_002.png
+│   │   │           │   ├── f4_3rdgeneral_idle_000.png
+│   │   │           │   ├── f4_3rdgeneral_idle_001.png
+│   │   │           │   ├── f4_3rdgeneral_idle_002.png
+│   │   │           │   ├── f4_3rdgeneral_idle_003.png
+│   │   │           │   ├── f4_3rdgeneral_idle_004.png
+│   │   │           │   ├── f4_3rdgeneral_idle_005.png
+│   │   │           │   ├── f4_3rdgeneral_idle_006.png
+│   │   │           │   ├── f4_3rdgeneral_idle_007.png
+│   │   │           │   ├── f4_3rdgeneral_idle_008.png
+│   │   │           │   ├── f4_3rdgeneral_idle_009.png
+│   │   │           │   ├── f4_3rdgeneral_idle_010.png
+│   │   │           │   ├── f4_3rdgeneral_idle_011.png
+│   │   │           │   ├── f4_3rdgeneral_idle_012.png
+│   │   │           │   ├── f4_3rdgeneral_idle_013.png
+│   │   │           │   ├── f4_3rdgeneral_idle_014.png
+│   │   │           │   ├── f4_3rdgeneral_idle_015.png
+│   │   │           │   ├── f4_3rdgeneral_run_000.png
+│   │   │           │   ├── f4_3rdgeneral_run_001.png
+│   │   │           │   ├── f4_3rdgeneral_run_002.png
+│   │   │           │   ├── f4_3rdgeneral_run_003.png
+│   │   │           │   ├── f4_3rdgeneral_run_004.png
+│   │   │           │   ├── f4_3rdgeneral_run_005.png
+│   │   │           │   ├── f4_3rdgeneral_run_006.png
+│   │   │           │   ├── f4_3rdgeneral_run_007.png
+│   │   │           │   ├── f4_3rdgeneral_run_008.png
+│   │   │           │   └── f4_3rdgeneral_run_009.png
+│   │   │           ├── f4_bloodmoon
+│   │   │           │   ├── f4_bloodmoon_attack_000.png
+│   │   │           │   ├── f4_bloodmoon_attack_001.png
+│   │   │           │   ├── f4_bloodmoon_attack_002.png
+│   │   │           │   ├── f4_bloodmoon_attack_003.png
+│   │   │           │   ├── f4_bloodmoon_attack_004.png
+│   │   │           │   ├── f4_bloodmoon_attack_005.png
+│   │   │           │   ├── f4_bloodmoon_attack_006.png
+│   │   │           │   ├── f4_bloodmoon_attack_007.png
+│   │   │           │   ├── f4_bloodmoon_attack_008.png
+│   │   │           │   ├── f4_bloodmoon_attack_009.png
+│   │   │           │   ├── f4_bloodmoon_attack_010.png
+│   │   │           │   ├── f4_bloodmoon_attack_011.png
+│   │   │           │   ├── f4_bloodmoon_breathing_000.png
+│   │   │           │   ├── f4_bloodmoon_breathing_001.png
+│   │   │           │   ├── f4_bloodmoon_breathing_002.png
+│   │   │           │   ├── f4_bloodmoon_breathing_003.png
+│   │   │           │   ├── f4_bloodmoon_breathing_004.png
+│   │   │           │   ├── f4_bloodmoon_breathing_005.png
+│   │   │           │   ├── f4_bloodmoon_breathing_006.png
+│   │   │           │   ├── f4_bloodmoon_breathing_007.png
+│   │   │           │   ├── f4_bloodmoon_breathing_008.png
+│   │   │           │   ├── f4_bloodmoon_breathing_009.png
+│   │   │           │   ├── f4_bloodmoon_breathing_010.png
+│   │   │           │   ├── f4_bloodmoon_breathing_011.png
+│   │   │           │   ├── f4_bloodmoon_breathing_012.png
+│   │   │           │   ├── f4_bloodmoon_breathing_013.png
+│   │   │           │   ├── f4_bloodmoon_death_000.png
+│   │   │           │   ├── f4_bloodmoon_death_001.png
+│   │   │           │   ├── f4_bloodmoon_death_002.png
+│   │   │           │   ├── f4_bloodmoon_death_003.png
+│   │   │           │   ├── f4_bloodmoon_death_004.png
+│   │   │           │   ├── f4_bloodmoon_death_005.png
+│   │   │           │   ├── f4_bloodmoon_death_006.png
+│   │   │           │   ├── f4_bloodmoon_death_007.png
+│   │   │           │   ├── f4_bloodmoon_hit_000.png
+│   │   │           │   ├── f4_bloodmoon_hit_001.png
+│   │   │           │   ├── f4_bloodmoon_hit_002.png
+│   │   │           │   ├── f4_bloodmoon_idle_000.png
+│   │   │           │   ├── f4_bloodmoon_idle_001.png
+│   │   │           │   ├── f4_bloodmoon_idle_002.png
+│   │   │           │   ├── f4_bloodmoon_idle_003.png
+│   │   │           │   ├── f4_bloodmoon_idle_004.png
+│   │   │           │   ├── f4_bloodmoon_idle_005.png
+│   │   │           │   ├── f4_bloodmoon_idle_006.png
+│   │   │           │   ├── f4_bloodmoon_idle_007.png
+│   │   │           │   ├── f4_bloodmoon_idle_008.png
+│   │   │           │   ├── f4_bloodmoon_idle_009.png
+│   │   │           │   ├── f4_bloodmoon_idle_010.png
+│   │   │           │   ├── f4_bloodmoon_idle_011.png
+│   │   │           │   ├── f4_bloodmoon_run_000.png
+│   │   │           │   ├── f4_bloodmoon_run_001.png
+│   │   │           │   ├── f4_bloodmoon_run_002.png
+│   │   │           │   ├── f4_bloodmoon_run_003.png
+│   │   │           │   ├── f4_bloodmoon_run_004.png
+│   │   │           │   ├── f4_bloodmoon_run_005.png
+│   │   │           │   ├── f4_bloodmoon_run_006.png
+│   │   │           │   └── f4_bloodmoon_run_007.png
+│   │   │           ├── f4_crawler
+│   │   │           │   ├── f4_crawler_attack_000.png
+│   │   │           │   ├── f4_crawler_attack_001.png
+│   │   │           │   ├── f4_crawler_attack_002.png
+│   │   │           │   ├── f4_crawler_attack_003.png
+│   │   │           │   ├── f4_crawler_attack_004.png
+│   │   │           │   ├── f4_crawler_attack_005.png
+│   │   │           │   ├── f4_crawler_attack_006.png
+│   │   │           │   ├── f4_crawler_attack_007.png
+│   │   │           │   ├── f4_crawler_attack_008.png
+│   │   │           │   ├── f4_crawler_attack_009.png
+│   │   │           │   ├── f4_crawler_breathing_000.png
+│   │   │           │   ├── f4_crawler_breathing_001.png
+│   │   │           │   ├── f4_crawler_breathing_002.png
+│   │   │           │   ├── f4_crawler_breathing_003.png
+│   │   │           │   ├── f4_crawler_breathing_004.png
+│   │   │           │   ├── f4_crawler_breathing_005.png
+│   │   │           │   ├── f4_crawler_breathing_006.png
+│   │   │           │   ├── f4_crawler_breathing_007.png
+│   │   │           │   ├── f4_crawler_breathing_008.png
+│   │   │           │   ├── f4_crawler_breathing_009.png
+│   │   │           │   ├── f4_crawler_breathing_010.png
+│   │   │           │   ├── f4_crawler_breathing_011.png
+│   │   │           │   ├── f4_crawler_breathing_012.png
+│   │   │           │   ├── f4_crawler_breathing_013.png
+│   │   │           │   ├── f4_crawler_damage_000.png
+│   │   │           │   ├── f4_crawler_damage_001.png
+│   │   │           │   ├── f4_crawler_damage_002.png
+│   │   │           │   ├── f4_crawler_death_000.png
+│   │   │           │   ├── f4_crawler_death_001.png
+│   │   │           │   ├── f4_crawler_death_002.png
+│   │   │           │   ├── f4_crawler_death_003.png
+│   │   │           │   ├── f4_crawler_death_004.png
+│   │   │           │   ├── f4_crawler_death_005.png
+│   │   │           │   ├── f4_crawler_death_006.png
+│   │   │           │   ├── f4_crawler_death_007.png
+│   │   │           │   ├── f4_crawler_idle_000.png
+│   │   │           │   ├── f4_crawler_idle_001.png
+│   │   │           │   ├── f4_crawler_idle_002.png
+│   │   │           │   ├── f4_crawler_idle_003.png
+│   │   │           │   ├── f4_crawler_idle_004.png
+│   │   │           │   ├── f4_crawler_idle_005.png
+│   │   │           │   ├── f4_crawler_idle_006.png
+│   │   │           │   ├── f4_crawler_idle_007.png
+│   │   │           │   ├── f4_crawler_idle_008.png
+│   │   │           │   ├── f4_crawler_idle_009.png
+│   │   │           │   ├── f4_crawler_idle_010.png
+│   │   │           │   ├── f4_crawler_idle_011.png
+│   │   │           │   ├── f4_crawler_run_000.png
+│   │   │           │   ├── f4_crawler_run_001.png
+│   │   │           │   ├── f4_crawler_run_002.png
+│   │   │           │   ├── f4_crawler_run_003.png
+│   │   │           │   ├── f4_crawler_run_004.png
+│   │   │           │   └── f4_crawler_run_005.png
+│   │   │           ├── f4_engulfingshadow
+│   │   │           │   ├── f4_engulfingshadow_attack_000.png
+│   │   │           │   ├── f4_engulfingshadow_attack_001.png
+│   │   │           │   ├── f4_engulfingshadow_attack_002.png
+│   │   │           │   ├── f4_engulfingshadow_attack_003.png
+│   │   │           │   ├── f4_engulfingshadow_attack_004.png
+│   │   │           │   ├── f4_engulfingshadow_attack_005.png
+│   │   │           │   ├── f4_engulfingshadow_attack_006.png
+│   │   │           │   ├── f4_engulfingshadow_attack_007.png
+│   │   │           │   ├── f4_engulfingshadow_attack_008.png
+│   │   │           │   ├── f4_engulfingshadow_attack_009.png
+│   │   │           │   ├── f4_engulfingshadow_attack_010.png
+│   │   │           │   ├── f4_engulfingshadow_attack_011.png
+│   │   │           │   ├── f4_engulfingshadow_attack_012.png
+│   │   │           │   ├── f4_engulfingshadow_breathing_000.png
+│   │   │           │   ├── f4_engulfingshadow_breathing_001.png
+│   │   │           │   ├── f4_engulfingshadow_breathing_002.png
+│   │   │           │   ├── f4_engulfingshadow_breathing_003.png
+│   │   │           │   ├── f4_engulfingshadow_breathing_004.png
+│   │   │           │   ├── f4_engulfingshadow_breathing_005.png
+│   │   │           │   ├── f4_engulfingshadow_breathing_006.png
+│   │   │           │   ├── f4_engulfingshadow_breathing_007.png
+│   │   │           │   ├── f4_engulfingshadow_breathing_008.png
+│   │   │           │   ├── f4_engulfingshadow_breathing_009.png
+│   │   │           │   ├── f4_engulfingshadow_breathing_010.png
+│   │   │           │   ├── f4_engulfingshadow_breathing_011.png
+│   │   │           │   ├── f4_engulfingshadow_breathing_012.png
+│   │   │           │   ├── f4_engulfingshadow_breathing_013.png
+│   │   │           │   ├── f4_engulfingshadow_death_000.png
+│   │   │           │   ├── f4_engulfingshadow_death_001.png
+│   │   │           │   ├── f4_engulfingshadow_death_002.png
+│   │   │           │   ├── f4_engulfingshadow_death_003.png
+│   │   │           │   ├── f4_engulfingshadow_death_004.png
+│   │   │           │   ├── f4_engulfingshadow_death_005.png
+│   │   │           │   ├── f4_engulfingshadow_death_006.png
+│   │   │           │   ├── f4_engulfingshadow_death_007.png
+│   │   │           │   ├── f4_engulfingshadow_death_008.png
+│   │   │           │   ├── f4_engulfingshadow_hit_000.png
+│   │   │           │   ├── f4_engulfingshadow_hit_001.png
+│   │   │           │   ├── f4_engulfingshadow_hit_002.png
+│   │   │           │   ├── f4_engulfingshadow_idle_000.png
+│   │   │           │   ├── f4_engulfingshadow_idle_001.png
+│   │   │           │   ├── f4_engulfingshadow_idle_002.png
+│   │   │           │   ├── f4_engulfingshadow_idle_003.png
+│   │   │           │   ├── f4_engulfingshadow_idle_004.png
+│   │   │           │   ├── f4_engulfingshadow_idle_005.png
+│   │   │           │   ├── f4_engulfingshadow_idle_006.png
+│   │   │           │   ├── f4_engulfingshadow_idle_007.png
+│   │   │           │   ├── f4_engulfingshadow_idle_008.png
+│   │   │           │   ├── f4_engulfingshadow_idle_009.png
+│   │   │           │   ├── f4_engulfingshadow_idle_010.png
+│   │   │           │   ├── f4_engulfingshadow_idle_011.png
+│   │   │           │   ├── f4_engulfingshadow_idle_012.png
+│   │   │           │   ├── f4_engulfingshadow_idle_013.png
+│   │   │           │   ├── f4_engulfingshadow_run_000.png
+│   │   │           │   ├── f4_engulfingshadow_run_001.png
+│   │   │           │   ├── f4_engulfingshadow_run_002.png
+│   │   │           │   ├── f4_engulfingshadow_run_003.png
+│   │   │           │   ├── f4_engulfingshadow_run_004.png
+│   │   │           │   └── f4_engulfingshadow_run_005.png
+│   │   │           ├── f4_gloomchaser
+│   │   │           │   ├── f4_gloomchaser_attack_000.png
+│   │   │           │   ├── f4_gloomchaser_attack_001.png
+│   │   │           │   ├── f4_gloomchaser_attack_002.png
+│   │   │           │   ├── f4_gloomchaser_attack_003.png
+│   │   │           │   ├── f4_gloomchaser_attack_004.png
+│   │   │           │   ├── f4_gloomchaser_attack_005.png
+│   │   │           │   ├── f4_gloomchaser_attack_006.png
+│   │   │           │   ├── f4_gloomchaser_attack_007.png
+│   │   │           │   ├── f4_gloomchaser_attack_008.png
+│   │   │           │   ├── f4_gloomchaser_attack_009.png
+│   │   │           │   ├── f4_gloomchaser_attack_010.png
+│   │   │           │   ├── f4_gloomchaser_attack_011.png
+│   │   │           │   ├── f4_gloomchaser_breathing_000.png
+│   │   │           │   ├── f4_gloomchaser_breathing_001.png
+│   │   │           │   ├── f4_gloomchaser_breathing_002.png
+│   │   │           │   ├── f4_gloomchaser_breathing_003.png
+│   │   │           │   ├── f4_gloomchaser_breathing_004.png
+│   │   │           │   ├── f4_gloomchaser_breathing_005.png
+│   │   │           │   ├── f4_gloomchaser_breathing_006.png
+│   │   │           │   ├── f4_gloomchaser_breathing_007.png
+│   │   │           │   ├── f4_gloomchaser_breathing_008.png
+│   │   │           │   ├── f4_gloomchaser_breathing_009.png
+│   │   │           │   ├── f4_gloomchaser_breathing_010.png
+│   │   │           │   ├── f4_gloomchaser_breathing_011.png
+│   │   │           │   ├── f4_gloomchaser_breathing_012.png
+│   │   │           │   ├── f4_gloomchaser_breathing_013.png
+│   │   │           │   ├── f4_gloomchaser_damage_000.png
+│   │   │           │   ├── f4_gloomchaser_damage_001.png
+│   │   │           │   ├── f4_gloomchaser_damage_002.png
+│   │   │           │   ├── f4_gloomchaser_death_000.png
+│   │   │           │   ├── f4_gloomchaser_death_001.png
+│   │   │           │   ├── f4_gloomchaser_death_002.png
+│   │   │           │   ├── f4_gloomchaser_death_003.png
+│   │   │           │   ├── f4_gloomchaser_death_004.png
+│   │   │           │   ├── f4_gloomchaser_death_005.png
+│   │   │           │   ├── f4_gloomchaser_death_006.png
+│   │   │           │   ├── f4_gloomchaser_death_007.png
+│   │   │           │   ├── f4_gloomchaser_death_008.png
+│   │   │           │   ├── f4_gloomchaser_idle_000.png
+│   │   │           │   ├── f4_gloomchaser_idle_001.png
+│   │   │           │   ├── f4_gloomchaser_idle_002.png
+│   │   │           │   ├── f4_gloomchaser_idle_003.png
+│   │   │           │   ├── f4_gloomchaser_idle_004.png
+│   │   │           │   ├── f4_gloomchaser_idle_005.png
+│   │   │           │   ├── f4_gloomchaser_idle_006.png
+│   │   │           │   ├── f4_gloomchaser_idle_007.png
+│   │   │           │   ├── f4_gloomchaser_idle_008.png
+│   │   │           │   ├── f4_gloomchaser_idle_009.png
+│   │   │           │   ├── f4_gloomchaser_idle_010.png
+│   │   │           │   ├── f4_gloomchaser_idle_011.png
+│   │   │           │   ├── f4_gloomchaser_projectile_000.png
+│   │   │           │   ├── f4_gloomchaser_projectile_001.png
+│   │   │           │   ├── f4_gloomchaser_projectile_002.png
+│   │   │           │   ├── f4_gloomchaser_projectile_003.png
+│   │   │           │   ├── f4_gloomchaser_projectile_004.png
+│   │   │           │   ├── f4_gloomchaser_run_000.png
+│   │   │           │   ├── f4_gloomchaser_run_001.png
+│   │   │           │   ├── f4_gloomchaser_run_002.png
+│   │   │           │   ├── f4_gloomchaser_run_003.png
+│   │   │           │   ├── f4_gloomchaser_run_004.png
+│   │   │           │   ├── f4_gloomchaser_run_005.png
+│   │   │           │   ├── f4_gloomchaser_run_006.png
+│   │   │           │   ├── f4_gloomchaser_run_007.png
+│   │   │           │   ├── f4_gloomchaser_run_008.png
+│   │   │           │   ├── f4_gloomchaser_run_009.png
+│   │   │           │   ├── f4_gloomchaser_run_010.png
+│   │   │           │   └── f4_gloomchaser_run_011.png
+│   │   │           ├── f4_gor
+│   │   │           │   ├── f4_gor_attack_000.png
+│   │   │           │   ├── f4_gor_attack_001.png
+│   │   │           │   ├── f4_gor_attack_002.png
+│   │   │           │   ├── f4_gor_attack_003.png
+│   │   │           │   ├── f4_gor_attack_004.png
+│   │   │           │   ├── f4_gor_attack_005.png
+│   │   │           │   ├── f4_gor_attack_006.png
+│   │   │           │   ├── f4_gor_attack_007.png
+│   │   │           │   ├── f4_gor_attack_008.png
+│   │   │           │   ├── f4_gor_attack_009.png
+│   │   │           │   ├── f4_gor_attack_010.png
+│   │   │           │   ├── f4_gor_attack_011.png
+│   │   │           │   ├── f4_gor_attack_012.png
+│   │   │           │   ├── f4_gor_attack_013.png
+│   │   │           │   ├── f4_gor_attack_014.png
+│   │   │           │   ├── f4_gor_attack_015.png
+│   │   │           │   ├── f4_gor_attack_016.png
+│   │   │           │   ├── f4_gor_attack_017.png
+│   │   │           │   ├── f4_gor_attack_018.png
+│   │   │           │   ├── f4_gor_breathing_000.png
+│   │   │           │   ├── f4_gor_breathing_001.png
+│   │   │           │   ├── f4_gor_breathing_002.png
+│   │   │           │   ├── f4_gor_breathing_003.png
+│   │   │           │   ├── f4_gor_breathing_004.png
+│   │   │           │   ├── f4_gor_breathing_005.png
+│   │   │           │   ├── f4_gor_breathing_006.png
+│   │   │           │   ├── f4_gor_breathing_007.png
+│   │   │           │   ├── f4_gor_breathing_008.png
+│   │   │           │   ├── f4_gor_breathing_009.png
+│   │   │           │   ├── f4_gor_breathing_010.png
+│   │   │           │   ├── f4_gor_breathing_011.png
+│   │   │           │   ├── f4_gor_death_000.png
+│   │   │           │   ├── f4_gor_death_001.png
+│   │   │           │   ├── f4_gor_death_002.png
+│   │   │           │   ├── f4_gor_death_003.png
+│   │   │           │   ├── f4_gor_death_004.png
+│   │   │           │   ├── f4_gor_death_005.png
+│   │   │           │   ├── f4_gor_death_006.png
+│   │   │           │   ├── f4_gor_death_007.png
+│   │   │           │   ├── f4_gor_death_008.png
+│   │   │           │   ├── f4_gor_death_009.png
+│   │   │           │   ├── f4_gor_hit_000.png
+│   │   │           │   ├── f4_gor_hit_001.png
+│   │   │           │   ├── f4_gor_hit_002.png
+│   │   │           │   ├── f4_gor_idle_000.png
+│   │   │           │   ├── f4_gor_idle_001.png
+│   │   │           │   ├── f4_gor_idle_002.png
+│   │   │           │   ├── f4_gor_idle_003.png
+│   │   │           │   ├── f4_gor_idle_004.png
+│   │   │           │   ├── f4_gor_idle_005.png
+│   │   │           │   ├── f4_gor_idle_006.png
+│   │   │           │   ├── f4_gor_idle_007.png
+│   │   │           │   ├── f4_gor_idle_008.png
+│   │   │           │   ├── f4_gor_idle_009.png
+│   │   │           │   ├── f4_gor_idle_010.png
+│   │   │           │   ├── f4_gor_idle_011.png
+│   │   │           │   ├── f4_gor_run_000.png
+│   │   │           │   ├── f4_gor_run_001.png
+│   │   │           │   ├── f4_gor_run_002.png
+│   │   │           │   ├── f4_gor_run_003.png
+│   │   │           │   ├── f4_gor_run_004.png
+│   │   │           │   ├── f4_gor_run_005.png
+│   │   │           │   ├── f4_gor_run_006.png
+│   │   │           │   └── f4_gor_run_007.png
+│   │   │           ├── f4_nightsorrow
+│   │   │           │   ├── f4_nightsorrow_attack_000.png
+│   │   │           │   ├── f4_nightsorrow_attack_001.png
+│   │   │           │   ├── f4_nightsorrow_attack_002.png
+│   │   │           │   ├── f4_nightsorrow_attack_003.png
+│   │   │           │   ├── f4_nightsorrow_attack_004.png
+│   │   │           │   ├── f4_nightsorrow_attack_005.png
+│   │   │           │   ├── f4_nightsorrow_attack_006.png
+│   │   │           │   ├── f4_nightsorrow_attack_007.png
+│   │   │           │   ├── f4_nightsorrow_attack_008.png
+│   │   │           │   ├── f4_nightsorrow_attack_009.png
+│   │   │           │   ├── f4_nightsorrow_attack_010.png
+│   │   │           │   ├── f4_nightsorrow_attack_011.png
+│   │   │           │   ├── f4_nightsorrow_attack_012.png
+│   │   │           │   ├── f4_nightsorrow_attack_013.png
+│   │   │           │   ├── f4_nightsorrow_breathing_000.png
+│   │   │           │   ├── f4_nightsorrow_breathing_001.png
+│   │   │           │   ├── f4_nightsorrow_breathing_002.png
+│   │   │           │   ├── f4_nightsorrow_breathing_003.png
+│   │   │           │   ├── f4_nightsorrow_breathing_004.png
+│   │   │           │   ├── f4_nightsorrow_breathing_005.png
+│   │   │           │   ├── f4_nightsorrow_breathing_006.png
+│   │   │           │   ├── f4_nightsorrow_breathing_007.png
+│   │   │           │   ├── f4_nightsorrow_breathing_008.png
+│   │   │           │   ├── f4_nightsorrow_breathing_009.png
+│   │   │           │   ├── f4_nightsorrow_breathing_010.png
+│   │   │           │   ├── f4_nightsorrow_breathing_011.png
+│   │   │           │   ├── f4_nightsorrow_breathing_012.png
+│   │   │           │   ├── f4_nightsorrow_breathing_013.png
+│   │   │           │   ├── f4_nightsorrow_death_000.png
+│   │   │           │   ├── f4_nightsorrow_death_001.png
+│   │   │           │   ├── f4_nightsorrow_death_002.png
+│   │   │           │   ├── f4_nightsorrow_death_003.png
+│   │   │           │   ├── f4_nightsorrow_death_004.png
+│   │   │           │   ├── f4_nightsorrow_death_005.png
+│   │   │           │   ├── f4_nightsorrow_death_006.png
+│   │   │           │   ├── f4_nightsorrow_death_007.png
+│   │   │           │   ├── f4_nightsorrow_death_008.png
+│   │   │           │   ├── f4_nightsorrow_death_009.png
+│   │   │           │   ├── f4_nightsorrow_death_010.png
+│   │   │           │   ├── f4_nightsorrow_hit_000.png
+│   │   │           │   ├── f4_nightsorrow_hit_001.png
+│   │   │           │   ├── f4_nightsorrow_hit_002.png
+│   │   │           │   ├── f4_nightsorrow_idle_000.png
+│   │   │           │   ├── f4_nightsorrow_idle_001.png
+│   │   │           │   ├── f4_nightsorrow_idle_002.png
+│   │   │           │   ├── f4_nightsorrow_idle_003.png
+│   │   │           │   ├── f4_nightsorrow_idle_004.png
+│   │   │           │   ├── f4_nightsorrow_idle_005.png
+│   │   │           │   ├── f4_nightsorrow_idle_006.png
+│   │   │           │   ├── f4_nightsorrow_idle_007.png
+│   │   │           │   ├── f4_nightsorrow_idle_008.png
+│   │   │           │   ├── f4_nightsorrow_idle_009.png
+│   │   │           │   ├── f4_nightsorrow_idle_010.png
+│   │   │           │   ├── f4_nightsorrow_idle_011.png
+│   │   │           │   ├── f4_nightsorrow_run_000.png
+│   │   │           │   ├── f4_nightsorrow_run_001.png
+│   │   │           │   ├── f4_nightsorrow_run_002.png
+│   │   │           │   ├── f4_nightsorrow_run_003.png
+│   │   │           │   ├── f4_nightsorrow_run_004.png
+│   │   │           │   ├── f4_nightsorrow_run_005.png
+│   │   │           │   ├── f4_nightsorrow_run_006.png
+│   │   │           │   └── f4_nightsorrow_run_007.png
+│   │   │           ├── f4_shadowdancer
+│   │   │           │   ├── f4_shadowdancer_attack_000.png
+│   │   │           │   ├── f4_shadowdancer_attack_001.png
+│   │   │           │   ├── f4_shadowdancer_attack_002.png
+│   │   │           │   ├── f4_shadowdancer_attack_003.png
+│   │   │           │   ├── f4_shadowdancer_attack_004.png
+│   │   │           │   ├── f4_shadowdancer_attack_005.png
+│   │   │           │   ├── f4_shadowdancer_attack_006.png
+│   │   │           │   ├── f4_shadowdancer_attack_007.png
+│   │   │           │   ├── f4_shadowdancer_attack_008.png
+│   │   │           │   ├── f4_shadowdancer_attack_009.png
+│   │   │           │   ├── f4_shadowdancer_attack_010.png
+│   │   │           │   ├── f4_shadowdancer_attack_011.png
+│   │   │           │   ├── f4_shadowdancer_breathing_000.png
+│   │   │           │   ├── f4_shadowdancer_breathing_001.png
+│   │   │           │   ├── f4_shadowdancer_breathing_002.png
+│   │   │           │   ├── f4_shadowdancer_breathing_003.png
+│   │   │           │   ├── f4_shadowdancer_breathing_004.png
+│   │   │           │   ├── f4_shadowdancer_breathing_005.png
+│   │   │           │   ├── f4_shadowdancer_breathing_006.png
+│   │   │           │   ├── f4_shadowdancer_breathing_007.png
+│   │   │           │   ├── f4_shadowdancer_breathing_008.png
+│   │   │           │   ├── f4_shadowdancer_breathing_009.png
+│   │   │           │   ├── f4_shadowdancer_breathing_010.png
+│   │   │           │   ├── f4_shadowdancer_breathing_011.png
+│   │   │           │   ├── f4_shadowdancer_breathing_012.png
+│   │   │           │   ├── f4_shadowdancer_breathing_013.png
+│   │   │           │   ├── f4_shadowdancer_death_000.png
+│   │   │           │   ├── f4_shadowdancer_death_001.png
+│   │   │           │   ├── f4_shadowdancer_death_002.png
+│   │   │           │   ├── f4_shadowdancer_death_003.png
+│   │   │           │   ├── f4_shadowdancer_death_004.png
+│   │   │           │   ├── f4_shadowdancer_death_005.png
+│   │   │           │   ├── f4_shadowdancer_death_006.png
+│   │   │           │   ├── f4_shadowdancer_death_007.png
+│   │   │           │   ├── f4_shadowdancer_death_008.png
+│   │   │           │   ├── f4_shadowdancer_hit_000.png
+│   │   │           │   ├── f4_shadowdancer_hit_001.png
+│   │   │           │   ├── f4_shadowdancer_hit_002.png
+│   │   │           │   ├── f4_shadowdancer_idle_000.png
+│   │   │           │   ├── f4_shadowdancer_idle_001.png
+│   │   │           │   ├── f4_shadowdancer_idle_002.png
+│   │   │           │   ├── f4_shadowdancer_idle_003.png
+│   │   │           │   ├── f4_shadowdancer_idle_004.png
+│   │   │           │   ├── f4_shadowdancer_idle_005.png
+│   │   │           │   ├── f4_shadowdancer_idle_006.png
+│   │   │           │   ├── f4_shadowdancer_idle_007.png
+│   │   │           │   ├── f4_shadowdancer_idle_008.png
+│   │   │           │   ├── f4_shadowdancer_idle_009.png
+│   │   │           │   ├── f4_shadowdancer_idle_010.png
+│   │   │           │   ├── f4_shadowdancer_idle_011.png
+│   │   │           │   ├── f4_shadowdancer_run_000.png
+│   │   │           │   ├── f4_shadowdancer_run_001.png
+│   │   │           │   ├── f4_shadowdancer_run_002.png
+│   │   │           │   ├── f4_shadowdancer_run_003.png
+│   │   │           │   ├── f4_shadowdancer_run_004.png
+│   │   │           │   ├── f4_shadowdancer_run_005.png
+│   │   │           │   ├── f4_shadowdancer_run_006.png
+│   │   │           │   └── f4_shadowdancer_run_007.png
+│   │   │           ├── f4_tier2general
+│   │   │           │   ├── f4_tier2general_attack_000.png
+│   │   │           │   ├── f4_tier2general_attack_001.png
+│   │   │           │   ├── f4_tier2general_attack_002.png
+│   │   │           │   ├── f4_tier2general_attack_003.png
+│   │   │           │   ├── f4_tier2general_attack_004.png
+│   │   │           │   ├── f4_tier2general_attack_005.png
+│   │   │           │   ├── f4_tier2general_attack_006.png
+│   │   │           │   ├── f4_tier2general_attack_007.png
+│   │   │           │   ├── f4_tier2general_attack_008.png
+│   │   │           │   ├── f4_tier2general_attack_009.png
+│   │   │           │   ├── f4_tier2general_attack_010.png
+│   │   │           │   ├── f4_tier2general_attack_011.png
+│   │   │           │   ├── f4_tier2general_attack_012.png
+│   │   │           │   ├── f4_tier2general_attack_013.png
+│   │   │           │   ├── f4_tier2general_attack_014.png
+│   │   │           │   ├── f4_tier2general_attack_015.png
+│   │   │           │   ├── f4_tier2general_attack_016.png
+│   │   │           │   ├── f4_tier2general_attack_017.png
+│   │   │           │   ├── f4_tier2general_attack_018.png
+│   │   │           │   ├── f4_tier2general_attack_019.png
+│   │   │           │   ├── f4_tier2general_attack_020.png
+│   │   │           │   ├── f4_tier2general_attack_021.png
+│   │   │           │   ├── f4_tier2general_attack_022.png
+│   │   │           │   ├── f4_tier2general_attack_023.png
+│   │   │           │   ├── f4_tier2general_attack_024.png
+│   │   │           │   ├── f4_tier2general_breathing_000.png
+│   │   │           │   ├── f4_tier2general_breathing_001.png
+│   │   │           │   ├── f4_tier2general_breathing_002.png
+│   │   │           │   ├── f4_tier2general_breathing_003.png
+│   │   │           │   ├── f4_tier2general_breathing_004.png
+│   │   │           │   ├── f4_tier2general_breathing_005.png
+│   │   │           │   ├── f4_tier2general_breathing_006.png
+│   │   │           │   ├── f4_tier2general_breathing_007.png
+│   │   │           │   ├── f4_tier2general_breathing_008.png
+│   │   │           │   ├── f4_tier2general_breathing_009.png
+│   │   │           │   ├── f4_tier2general_breathing_010.png
+│   │   │           │   ├── f4_tier2general_breathing_011.png
+│   │   │           │   ├── f4_tier2general_breathing_012.png
+│   │   │           │   ├── f4_tier2general_breathing_013.png
+│   │   │           │   ├── f4_tier2general_cast_000.png
+│   │   │           │   ├── f4_tier2general_cast_001.png
+│   │   │           │   ├── f4_tier2general_cast_002.png
+│   │   │           │   ├── f4_tier2general_cast_003.png
+│   │   │           │   ├── f4_tier2general_cast_004.png
+│   │   │           │   ├── f4_tier2general_cast_005.png
+│   │   │           │   ├── f4_tier2general_cast_006.png
+│   │   │           │   ├── f4_tier2general_cast_007.png
+│   │   │           │   ├── f4_tier2general_cast_008.png
+│   │   │           │   ├── f4_tier2general_cast_009.png
+│   │   │           │   ├── f4_tier2general_cast_010.png
+│   │   │           │   ├── f4_tier2general_cast_011.png
+│   │   │           │   ├── f4_tier2general_cast_012.png
+│   │   │           │   ├── f4_tier2general_cast_013.png
+│   │   │           │   ├── f4_tier2general_cast_014.png
+│   │   │           │   ├── f4_tier2general_castend_000.png
+│   │   │           │   ├── f4_tier2general_castend_001.png
+│   │   │           │   ├── f4_tier2general_castend_002.png
+│   │   │           │   ├── f4_tier2general_castend_003.png
+│   │   │           │   ├── f4_tier2general_castloop_000.png
+│   │   │           │   ├── f4_tier2general_castloop_001.png
+│   │   │           │   ├── f4_tier2general_castloop_002.png
+│   │   │           │   ├── f4_tier2general_castloop_003.png
+│   │   │           │   ├── f4_tier2general_castloop_004.png
+│   │   │           │   ├── f4_tier2general_castloop_005.png
+│   │   │           │   ├── f4_tier2general_castloop_006.png
+│   │   │           │   ├── f4_tier2general_castloop_007.png
+│   │   │           │   ├── f4_tier2general_castloop_008.png
+│   │   │           │   ├── f4_tier2general_castloop_009.png
+│   │   │           │   ├── f4_tier2general_castloop_010.png
+│   │   │           │   ├── f4_tier2general_castloop_011.png
+│   │   │           │   ├── f4_tier2general_castloop_012.png
+│   │   │           │   ├── f4_tier2general_castloop_013.png
+│   │   │           │   ├── f4_tier2general_caststart_000.png
+│   │   │           │   ├── f4_tier2general_caststart_001.png
+│   │   │           │   ├── f4_tier2general_caststart_002.png
+│   │   │           │   ├── f4_tier2general_caststart_003.png
+│   │   │           │   ├── f4_tier2general_death_000.png
+│   │   │           │   ├── f4_tier2general_death_001.png
+│   │   │           │   ├── f4_tier2general_death_002.png
+│   │   │           │   ├── f4_tier2general_death_003.png
+│   │   │           │   ├── f4_tier2general_death_004.png
+│   │   │           │   ├── f4_tier2general_death_005.png
+│   │   │           │   ├── f4_tier2general_death_006.png
+│   │   │           │   ├── f4_tier2general_death_007.png
+│   │   │           │   ├── f4_tier2general_death_008.png
+│   │   │           │   ├── f4_tier2general_death_009.png
+│   │   │           │   ├── f4_tier2general_death_010.png
+│   │   │           │   ├── f4_tier2general_death_011.png
+│   │   │           │   ├── f4_tier2general_death_012.png
+│   │   │           │   ├── f4_tier2general_death_013.png
+│   │   │           │   ├── f4_tier2general_death_014.png
+│   │   │           │   ├── f4_tier2general_death_015.png
+│   │   │           │   ├── f4_tier2general_death_016.png
+│   │   │           │   ├── f4_tier2general_death_017.png
+│   │   │           │   ├── f4_tier2general_death_018.png
+│   │   │           │   ├── f4_tier2general_death_019.png
+│   │   │           │   ├── f4_tier2general_hit_000.png
+│   │   │           │   ├── f4_tier2general_hit_001.png
+│   │   │           │   ├── f4_tier2general_hit_002.png
+│   │   │           │   ├── f4_tier2general_idle_000.png
+│   │   │           │   ├── f4_tier2general_idle_001.png
+│   │   │           │   ├── f4_tier2general_idle_002.png
+│   │   │           │   ├── f4_tier2general_idle_003.png
+│   │   │           │   ├── f4_tier2general_idle_004.png
+│   │   │           │   ├── f4_tier2general_idle_005.png
+│   │   │           │   ├── f4_tier2general_idle_006.png
+│   │   │           │   ├── f4_tier2general_idle_007.png
+│   │   │           │   ├── f4_tier2general_idle_008.png
+│   │   │           │   ├── f4_tier2general_idle_009.png
+│   │   │           │   ├── f4_tier2general_idle_010.png
+│   │   │           │   ├── f4_tier2general_idle_011.png
+│   │   │           │   ├── f4_tier2general_idle_012.png
+│   │   │           │   ├── f4_tier2general_idle_013.png
+│   │   │           │   ├── f4_tier2general_idle_014.png
+│   │   │           │   ├── f4_tier2general_idle_015.png
+│   │   │           │   ├── f4_tier2general_idle_016.png
+│   │   │           │   ├── f4_tier2general_idle_017.png
+│   │   │           │   ├── f4_tier2general_idle_018.png
+│   │   │           │   ├── f4_tier2general_idle_019.png
+│   │   │           │   ├── f4_tier2general_run_000.png
+│   │   │           │   ├── f4_tier2general_run_001.png
+│   │   │           │   ├── f4_tier2general_run_002.png
+│   │   │           │   ├── f4_tier2general_run_003.png
+│   │   │           │   ├── f4_tier2general_run_004.png
+│   │   │           │   ├── f4_tier2general_run_005.png
+│   │   │           │   ├── f4_tier2general_run_006.png
+│   │   │           │   └── f4_tier2general_run_007.png
+│   │   │           ├── neutral_beastswamp
+│   │   │           │   ├── neutral_beastswamp_attack_000.png
+│   │   │           │   ├── neutral_beastswamp_attack_001.png
+│   │   │           │   ├── neutral_beastswamp_attack_002.png
+│   │   │           │   ├── neutral_beastswamp_attack_003.png
+│   │   │           │   ├── neutral_beastswamp_attack_004.png
+│   │   │           │   ├── neutral_beastswamp_attack_005.png
+│   │   │           │   ├── neutral_beastswamp_attack_006.png
+│   │   │           │   ├── neutral_beastswamp_attack_007.png
+│   │   │           │   ├── neutral_beastswamp_attack_008.png
+│   │   │           │   ├── neutral_beastswamp_attack_009.png
+│   │   │           │   ├── neutral_beastswamp_attack_010.png
+│   │   │           │   ├── neutral_beastswamp_attack_011.png
+│   │   │           │   ├── neutral_beastswamp_breathing_000.png
+│   │   │           │   ├── neutral_beastswamp_breathing_001.png
+│   │   │           │   ├── neutral_beastswamp_breathing_002.png
+│   │   │           │   ├── neutral_beastswamp_breathing_003.png
+│   │   │           │   ├── neutral_beastswamp_breathing_004.png
+│   │   │           │   ├── neutral_beastswamp_breathing_005.png
+│   │   │           │   ├── neutral_beastswamp_breathing_006.png
+│   │   │           │   ├── neutral_beastswamp_breathing_007.png
+│   │   │           │   ├── neutral_beastswamp_breathing_008.png
+│   │   │           │   ├── neutral_beastswamp_breathing_009.png
+│   │   │           │   ├── neutral_beastswamp_breathing_010.png
+│   │   │           │   ├── neutral_beastswamp_breathing_011.png
+│   │   │           │   ├── neutral_beastswamp_breathing_012.png
+│   │   │           │   ├── neutral_beastswamp_breathing_013.png
+│   │   │           │   ├── neutral_beastswamp_death_000.png
+│   │   │           │   ├── neutral_beastswamp_death_001.png
+│   │   │           │   ├── neutral_beastswamp_death_002.png
+│   │   │           │   ├── neutral_beastswamp_death_003.png
+│   │   │           │   ├── neutral_beastswamp_death_004.png
+│   │   │           │   ├── neutral_beastswamp_death_005.png
+│   │   │           │   ├── neutral_beastswamp_death_006.png
+│   │   │           │   ├── neutral_beastswamp_death_007.png
+│   │   │           │   ├── neutral_beastswamp_hit_000.png
+│   │   │           │   ├── neutral_beastswamp_hit_001.png
+│   │   │           │   ├── neutral_beastswamp_hit_002.png
+│   │   │           │   ├── neutral_beastswamp_idle_000.png
+│   │   │           │   ├── neutral_beastswamp_idle_001.png
+│   │   │           │   ├── neutral_beastswamp_idle_002.png
+│   │   │           │   ├── neutral_beastswamp_idle_003.png
+│   │   │           │   ├── neutral_beastswamp_idle_004.png
+│   │   │           │   ├── neutral_beastswamp_idle_005.png
+│   │   │           │   ├── neutral_beastswamp_idle_006.png
+│   │   │           │   ├── neutral_beastswamp_idle_007.png
+│   │   │           │   ├── neutral_beastswamp_idle_008.png
+│   │   │           │   ├── neutral_beastswamp_idle_009.png
+│   │   │           │   ├── neutral_beastswamp_idle_010.png
+│   │   │           │   ├── neutral_beastswamp_idle_011.png
+│   │   │           │   ├── neutral_beastswamp_run_000.png
+│   │   │           │   ├── neutral_beastswamp_run_001.png
+│   │   │           │   ├── neutral_beastswamp_run_002.png
+│   │   │           │   ├── neutral_beastswamp_run_003.png
+│   │   │           │   ├── neutral_beastswamp_run_004.png
+│   │   │           │   ├── neutral_beastswamp_run_005.png
+│   │   │           │   ├── neutral_beastswamp_run_006.png
+│   │   │           │   ├── neutral_beastswamp_run_007.png
+│   │   │           │   ├── neutral_beastswamp_run_008.png
+│   │   │           │   └── neutral_beastswamp_run_009.png
+│   │   │           ├── neutral_golemrunesand
+│   │   │           │   ├── neutral_golemrunesand_attack_000.png
+│   │   │           │   ├── neutral_golemrunesand_attack_001.png
+│   │   │           │   ├── neutral_golemrunesand_attack_002.png
+│   │   │           │   ├── neutral_golemrunesand_attack_003.png
+│   │   │           │   ├── neutral_golemrunesand_attack_004.png
+│   │   │           │   ├── neutral_golemrunesand_attack_005.png
+│   │   │           │   ├── neutral_golemrunesand_attack_006.png
+│   │   │           │   ├── neutral_golemrunesand_attack_007.png
+│   │   │           │   ├── neutral_golemrunesand_attack_008.png
+│   │   │           │   ├── neutral_golemrunesand_attack_009.png
+│   │   │           │   ├── neutral_golemrunesand_attack_010.png
+│   │   │           │   ├── neutral_golemrunesand_attack_011.png
+│   │   │           │   ├── neutral_golemrunesand_breathing_000.png
+│   │   │           │   ├── neutral_golemrunesand_breathing_001.png
+│   │   │           │   ├── neutral_golemrunesand_breathing_002.png
+│   │   │           │   ├── neutral_golemrunesand_breathing_003.png
+│   │   │           │   ├── neutral_golemrunesand_breathing_004.png
+│   │   │           │   ├── neutral_golemrunesand_breathing_005.png
+│   │   │           │   ├── neutral_golemrunesand_breathing_006.png
+│   │   │           │   ├── neutral_golemrunesand_breathing_007.png
+│   │   │           │   ├── neutral_golemrunesand_breathing_008.png
+│   │   │           │   ├── neutral_golemrunesand_breathing_009.png
+│   │   │           │   ├── neutral_golemrunesand_breathing_010.png
+│   │   │           │   ├── neutral_golemrunesand_breathing_011.png
+│   │   │           │   ├── neutral_golemrunesand_breathing_012.png
+│   │   │           │   ├── neutral_golemrunesand_breathing_013.png
+│   │   │           │   ├── neutral_golemrunesand_death_000.png
+│   │   │           │   ├── neutral_golemrunesand_death_001.png
+│   │   │           │   ├── neutral_golemrunesand_death_002.png
+│   │   │           │   ├── neutral_golemrunesand_death_003.png
+│   │   │           │   ├── neutral_golemrunesand_death_004.png
+│   │   │           │   ├── neutral_golemrunesand_death_005.png
+│   │   │           │   ├── neutral_golemrunesand_death_006.png
+│   │   │           │   ├── neutral_golemrunesand_death_007.png
+│   │   │           │   ├── neutral_golemrunesand_death_008.png
+│   │   │           │   ├── neutral_golemrunesand_hit_000.png
+│   │   │           │   ├── neutral_golemrunesand_hit_001.png
+│   │   │           │   ├── neutral_golemrunesand_hit_002.png
+│   │   │           │   ├── neutral_golemrunesand_idle_000.png
+│   │   │           │   ├── neutral_golemrunesand_idle_001.png
+│   │   │           │   ├── neutral_golemrunesand_idle_002.png
+│   │   │           │   ├── neutral_golemrunesand_idle_003.png
+│   │   │           │   ├── neutral_golemrunesand_idle_004.png
+│   │   │           │   ├── neutral_golemrunesand_idle_005.png
+│   │   │           │   ├── neutral_golemrunesand_idle_006.png
+│   │   │           │   ├── neutral_golemrunesand_idle_007.png
+│   │   │           │   ├── neutral_golemrunesand_idle_008.png
+│   │   │           │   ├── neutral_golemrunesand_idle_009.png
+│   │   │           │   ├── neutral_golemrunesand_idle_010.png
+│   │   │           │   ├── neutral_golemrunesand_idle_011.png
+│   │   │           │   ├── neutral_golemrunesand_idle_012.png
+│   │   │           │   ├── neutral_golemrunesand_idle_013.png
+│   │   │           │   ├── neutral_golemrunesand_run_000.png
+│   │   │           │   ├── neutral_golemrunesand_run_001.png
+│   │   │           │   ├── neutral_golemrunesand_run_002.png
+│   │   │           │   ├── neutral_golemrunesand_run_003.png
+│   │   │           │   ├── neutral_golemrunesand_run_004.png
+│   │   │           │   ├── neutral_golemrunesand_run_005.png
+│   │   │           │   ├── neutral_golemrunesand_run_006.png
+│   │   │           │   └── neutral_golemrunesand_run_007.png
+│   │   │           ├── neutral_monster_explodingdemon
+│   │   │           │   ├── neutral_monster_explodingdemon_attack_000.png
+│   │   │           │   ├── neutral_monster_explodingdemon_attack_001.png
+│   │   │           │   ├── neutral_monster_explodingdemon_attack_002.png
+│   │   │           │   ├── neutral_monster_explodingdemon_attack_003.png
+│   │   │           │   ├── neutral_monster_explodingdemon_attack_004.png
+│   │   │           │   ├── neutral_monster_explodingdemon_attack_005.png
+│   │   │           │   ├── neutral_monster_explodingdemon_attack_006.png
+│   │   │           │   ├── neutral_monster_explodingdemon_attack_007.png
+│   │   │           │   ├── neutral_monster_explodingdemon_breathing_000.png
+│   │   │           │   ├── neutral_monster_explodingdemon_breathing_001.png
+│   │   │           │   ├── neutral_monster_explodingdemon_breathing_002.png
+│   │   │           │   ├── neutral_monster_explodingdemon_breathing_003.png
+│   │   │           │   ├── neutral_monster_explodingdemon_breathing_004.png
+│   │   │           │   ├── neutral_monster_explodingdemon_breathing_005.png
+│   │   │           │   ├── neutral_monster_explodingdemon_breathing_006.png
+│   │   │           │   ├── neutral_monster_explodingdemon_breathing_007.png
+│   │   │           │   ├── neutral_monster_explodingdemon_breathing_008.png
+│   │   │           │   ├── neutral_monster_explodingdemon_breathing_009.png
+│   │   │           │   ├── neutral_monster_explodingdemon_breathing_010.png
+│   │   │           │   ├── neutral_monster_explodingdemon_breathing_011.png
+│   │   │           │   ├── neutral_monster_explodingdemon_breathing_012.png
+│   │   │           │   ├── neutral_monster_explodingdemon_breathing_013.png
+│   │   │           │   ├── neutral_monster_explodingdemon_death_000.png
+│   │   │           │   ├── neutral_monster_explodingdemon_death_001.png
+│   │   │           │   ├── neutral_monster_explodingdemon_death_002.png
+│   │   │           │   ├── neutral_monster_explodingdemon_death_003.png
+│   │   │           │   ├── neutral_monster_explodingdemon_death_004.png
+│   │   │           │   ├── neutral_monster_explodingdemon_death_005.png
+│   │   │           │   ├── neutral_monster_explodingdemon_death_006.png
+│   │   │           │   ├── neutral_monster_explodingdemon_explode_000.png
+│   │   │           │   ├── neutral_monster_explodingdemon_explode_001.png
+│   │   │           │   ├── neutral_monster_explodingdemon_explode_002.png
+│   │   │           │   ├── neutral_monster_explodingdemon_explode_003.png
+│   │   │           │   ├── neutral_monster_explodingdemon_explode_004.png
+│   │   │           │   ├── neutral_monster_explodingdemon_explode_005.png
+│   │   │           │   ├── neutral_monster_explodingdemon_explode_006.png
+│   │   │           │   ├── neutral_monster_explodingdemon_explode_007.png
+│   │   │           │   ├── neutral_monster_explodingdemon_explode_008.png
+│   │   │           │   ├── neutral_monster_explodingdemon_explode_009.png
+│   │   │           │   ├── neutral_monster_explodingdemon_explode_010.png
+│   │   │           │   ├── neutral_monster_explodingdemon_explode_011.png
+│   │   │           │   ├── neutral_monster_explodingdemon_explode_012.png
+│   │   │           │   ├── neutral_monster_explodingdemon_explode_013.png
+│   │   │           │   ├── neutral_monster_explodingdemon_explode_014.png
+│   │   │           │   ├── neutral_monster_explodingdemon_explode_015.png
+│   │   │           │   ├── neutral_monster_explodingdemon_explode_016.png
+│   │   │           │   ├── neutral_monster_explodingdemon_explode_017.png
+│   │   │           │   ├── neutral_monster_explodingdemon_explode_018.png
+│   │   │           │   ├── neutral_monster_explodingdemon_hit_000.png
+│   │   │           │   ├── neutral_monster_explodingdemon_hit_001.png
+│   │   │           │   ├── neutral_monster_explodingdemon_hit_002.png
+│   │   │           │   ├── neutral_monster_explodingdemon_idle_000.png
+│   │   │           │   ├── neutral_monster_explodingdemon_idle_001.png
+│   │   │           │   ├── neutral_monster_explodingdemon_idle_002.png
+│   │   │           │   ├── neutral_monster_explodingdemon_idle_003.png
+│   │   │           │   ├── neutral_monster_explodingdemon_idle_004.png
+│   │   │           │   ├── neutral_monster_explodingdemon_idle_005.png
+│   │   │           │   ├── neutral_monster_explodingdemon_idle_006.png
+│   │   │           │   ├── neutral_monster_explodingdemon_idle_007.png
+│   │   │           │   ├── neutral_monster_explodingdemon_idle_008.png
+│   │   │           │   ├── neutral_monster_explodingdemon_idle_009.png
+│   │   │           │   ├── neutral_monster_explodingdemon_idle_010.png
+│   │   │           │   ├── neutral_monster_explodingdemon_idle_011.png
+│   │   │           │   ├── neutral_monster_explodingdemon_run_000.png
+│   │   │           │   ├── neutral_monster_explodingdemon_run_001.png
+│   │   │           │   ├── neutral_monster_explodingdemon_run_002.png
+│   │   │           │   ├── neutral_monster_explodingdemon_run_003.png
+│   │   │           │   ├── neutral_monster_explodingdemon_run_004.png
+│   │   │           │   ├── neutral_monster_explodingdemon_run_005.png
+│   │   │           │   ├── neutral_monster_explodingdemon_run_006.png
+│   │   │           │   └── neutral_monster_explodingdemon_run_007.png
+│   │   │           ├── neutral_monsterflamewing
+│   │   │           │   ├── neutral_monsterflamewing_attack_000.png
+│   │   │           │   ├── neutral_monsterflamewing_attack_001.png
+│   │   │           │   ├── neutral_monsterflamewing_attack_002.png
+│   │   │           │   ├── neutral_monsterflamewing_attack_003.png
+│   │   │           │   ├── neutral_monsterflamewing_attack_004.png
+│   │   │           │   ├── neutral_monsterflamewing_attack_005.png
+│   │   │           │   ├── neutral_monsterflamewing_attack_006.png
+│   │   │           │   ├── neutral_monsterflamewing_attack_007.png
+│   │   │           │   ├── neutral_monsterflamewing_attack_008.png
+│   │   │           │   ├── neutral_monsterflamewing_attack_009.png
+│   │   │           │   ├── neutral_monsterflamewing_attack_010.png
+│   │   │           │   ├── neutral_monsterflamewing_attack_011.png
+│   │   │           │   ├── neutral_monsterflamewing_attack_012.png
+│   │   │           │   ├── neutral_monsterflamewing_attack_013.png
+│   │   │           │   ├── neutral_monsterflamewing_breathing_000.png
+│   │   │           │   ├── neutral_monsterflamewing_breathing_001.png
+│   │   │           │   ├── neutral_monsterflamewing_breathing_002.png
+│   │   │           │   ├── neutral_monsterflamewing_breathing_003.png
+│   │   │           │   ├── neutral_monsterflamewing_breathing_004.png
+│   │   │           │   ├── neutral_monsterflamewing_breathing_005.png
+│   │   │           │   ├── neutral_monsterflamewing_breathing_006.png
+│   │   │           │   ├── neutral_monsterflamewing_breathing_007.png
+│   │   │           │   ├── neutral_monsterflamewing_breathing_008.png
+│   │   │           │   ├── neutral_monsterflamewing_breathing_009.png
+│   │   │           │   ├── neutral_monsterflamewing_breathing_010.png
+│   │   │           │   ├── neutral_monsterflamewing_breathing_011.png
+│   │   │           │   ├── neutral_monsterflamewing_breathing_012.png
+│   │   │           │   ├── neutral_monsterflamewing_breathing_013.png
+│   │   │           │   ├── neutral_monsterflamewing_breathing_014.png
+│   │   │           │   ├── neutral_monsterflamewing_death_000.png
+│   │   │           │   ├── neutral_monsterflamewing_death_001.png
+│   │   │           │   ├── neutral_monsterflamewing_death_002.png
+│   │   │           │   ├── neutral_monsterflamewing_death_003.png
+│   │   │           │   ├── neutral_monsterflamewing_death_004.png
+│   │   │           │   ├── neutral_monsterflamewing_death_005.png
+│   │   │           │   ├── neutral_monsterflamewing_death_006.png
+│   │   │           │   ├── neutral_monsterflamewing_death_007.png
+│   │   │           │   ├── neutral_monsterflamewing_death_008.png
+│   │   │           │   ├── neutral_monsterflamewing_death_009.png
+│   │   │           │   ├── neutral_monsterflamewing_hurt_000.png
+│   │   │           │   ├── neutral_monsterflamewing_hurt_001.png
+│   │   │           │   ├── neutral_monsterflamewing_hurt_002.png
+│   │   │           │   ├── neutral_monsterflamewing_idle_000.png
+│   │   │           │   ├── neutral_monsterflamewing_idle_001.png
+│   │   │           │   ├── neutral_monsterflamewing_idle_002.png
+│   │   │           │   ├── neutral_monsterflamewing_idle_003.png
+│   │   │           │   ├── neutral_monsterflamewing_idle_004.png
+│   │   │           │   ├── neutral_monsterflamewing_idle_005.png
+│   │   │           │   ├── neutral_monsterflamewing_idle_006.png
+│   │   │           │   ├── neutral_monsterflamewing_idle_007.png
+│   │   │           │   ├── neutral_monsterflamewing_idle_008.png
+│   │   │           │   ├── neutral_monsterflamewing_idle_009.png
+│   │   │           │   ├── neutral_monsterflamewing_run_000.png
+│   │   │           │   ├── neutral_monsterflamewing_run_001.png
+│   │   │           │   ├── neutral_monsterflamewing_run_002.png
+│   │   │           │   ├── neutral_monsterflamewing_run_003.png
+│   │   │           │   ├── neutral_monsterflamewing_run_004.png
+│   │   │           │   ├── neutral_monsterflamewing_run_005.png
+│   │   │           │   ├── neutral_monsterflamewing_run_006.png
+│   │   │           │   └── neutral_monsterflamewing_run_007.png
+│   │   │           └── neutral_saberspinemk2
+│   │   │               ├── neutral_saberspinemk2_attack_000.png
+│   │   │               ├── neutral_saberspinemk2_attack_001.png
+│   │   │               ├── neutral_saberspinemk2_attack_002.png
+│   │   │               ├── neutral_saberspinemk2_attack_003.png
+│   │   │               ├── neutral_saberspinemk2_attack_004.png
+│   │   │               ├── neutral_saberspinemk2_attack_005.png
+│   │   │               ├── neutral_saberspinemk2_attack_006.png
+│   │   │               ├── neutral_saberspinemk2_attack_007.png
+│   │   │               ├── neutral_saberspinemk2_attack_008.png
+│   │   │               ├── neutral_saberspinemk2_attack_009.png
+│   │   │               ├── neutral_saberspinemk2_breathing_000.png
+│   │   │               ├── neutral_saberspinemk2_breathing_001.png
+│   │   │               ├── neutral_saberspinemk2_breathing_002.png
+│   │   │               ├── neutral_saberspinemk2_breathing_003.png
+│   │   │               ├── neutral_saberspinemk2_breathing_004.png
+│   │   │               ├── neutral_saberspinemk2_breathing_005.png
+│   │   │               ├── neutral_saberspinemk2_breathing_006.png
+│   │   │               ├── neutral_saberspinemk2_breathing_007.png
+│   │   │               ├── neutral_saberspinemk2_breathing_008.png
+│   │   │               ├── neutral_saberspinemk2_breathing_009.png
+│   │   │               ├── neutral_saberspinemk2_death_000.png
+│   │   │               ├── neutral_saberspinemk2_death_001.png
+│   │   │               ├── neutral_saberspinemk2_death_002.png
+│   │   │               ├── neutral_saberspinemk2_death_003.png
+│   │   │               ├── neutral_saberspinemk2_death_004.png
+│   │   │               ├── neutral_saberspinemk2_death_005.png
+│   │   │               ├── neutral_saberspinemk2_death_006.png
+│   │   │               ├── neutral_saberspinemk2_death_007.png
+│   │   │               ├── neutral_saberspinemk2_hit_000.png
+│   │   │               ├── neutral_saberspinemk2_hit_001.png
+│   │   │               ├── neutral_saberspinemk2_hit_002.png
+│   │   │               ├── neutral_saberspinemk2_idle_000.png
+│   │   │               ├── neutral_saberspinemk2_idle_001.png
+│   │   │               ├── neutral_saberspinemk2_idle_002.png
+│   │   │               ├── neutral_saberspinemk2_idle_003.png
+│   │   │               ├── neutral_saberspinemk2_idle_004.png
+│   │   │               ├── neutral_saberspinemk2_idle_005.png
+│   │   │               ├── neutral_saberspinemk2_idle_006.png
+│   │   │               ├── neutral_saberspinemk2_idle_007.png
+│   │   │               ├── neutral_saberspinemk2_idle_008.png
+│   │   │               ├── neutral_saberspinemk2_idle_009.png
+│   │   │               ├── neutral_saberspinemk2_run_000.png
+│   │   │               ├── neutral_saberspinemk2_run_001.png
+│   │   │               ├── neutral_saberspinemk2_run_002.png
+│   │   │               ├── neutral_saberspinemk2_run_003.png
+│   │   │               ├── neutral_saberspinemk2_run_004.png
+│   │   │               ├── neutral_saberspinemk2_run_005.png
+│   │   │               ├── neutral_saberspinemk2_run_006.png
+│   │   │               └── neutral_saberspinemk2_run_007.png
+│   │   └── js
+│   │       ├── cardgame.js
+│   │       ├── core.js
+│   │       ├── core.js.map
+│   │       ├── hexi.js
+│   │       ├── hexi.min.js
+│   │       ├── jquery.3.4.1.js
+│   │       ├── modules.js
+│   │       └── pixi.min.js
+│   ├── commands
+│   │   ├── BasicCommands.java
+│   │   ├── CheckMessageIsNotNullOnTell.java
+│   │   └── DummyTell.java
+│   ├── controllers
+│   │   └── GameScreenController.java // When gamescreen is opened in browser, HTML request is made in the backend server. Play framework looks at the URL and looks up the routes file "./conf/routes" and calls index method of class which returns the HTML of actual game page (at "./app/views/gamescreen.scala.html").
+│   ├── demo
+│   │   ├── CommandDemo.java
+│   │   └── Loaders_2024_Check.java
+│   ├── events
+│   │   ├── CardClicked.java
+│   │   ├── EndTurnClicked.java
+│   │   ├── EventProcessor.java
+│   │   ├── Heartbeat.java
+│   │   ├── Initalize.java
+│   │   ├── OtherClicked.java
+│   │   ├── TileClicked.java
+│   │   ├── UnitMoving.java
+│   │   └── UnitStopped.java
+│   ├── structures
+│   │   ├── GameState.java
+│   │   ├── User.java
+│   │   └── basic
+│   │       ├── BetterUnit.java
+│   │       ├── BigCard.java
+│   │       ├── Card.java
+│   │       ├── EffectAnimation.java
+│   │       ├── ImageCorrection.java
+│   │       ├── MiniCard.java
+│   │       ├── Player.java
+│   │       ├── Position.java
+│   │       ├── Tile.java
+│   │       ├── Unit.java
+│   │       ├── UnitAnimation.java
+│   │       ├── UnitAnimationSet.java
+│   │       └── UnitAnimationType.java
+│   ├── utils
+│   │   ├── BasicObjectBuilders.java
+│   │   ├── ImageListForPreLoad.java
+│   │   ├── OrderedCardLoader.java
+│   │   └── StaticConfFiles.java
+│   └── views
+│       └── gamescreen.scala.html // HTML of actual game page. It opens websocket connection, goes back to gamescreen controller and calls socket method which then creates new game actor.
+├── bin
+├── build.sbt
+├── conf
+│   ├── application.conf
+│   ├── gameconfs
+│   │   ├── avatars
+│   │   │   ├── avatar1.json
+│   │   │   └── avatar2.json
+│   │   ├── cards
+│   │   │   ├── 1_1_c_u_bad_omen.json
+│   │   │   ├── 1_2_c_s_hornoftheforsaken.json
+│   │   │   ├── 1_3_c_u_gloom_chaser.json
+│   │   │   ├── 1_4_c_u_shadow_watcher.json
+│   │   │   ├── 1_5_c_s_wraithling_swarm.json
+│   │   │   ├── 1_6_c_u_nightsorrow_assassin.json
+│   │   │   ├── 1_7_c_u_rock_pulveriser.json
+│   │   │   ├── 1_8_c_s_dark_terminus.json
+│   │   │   ├── 1_9_c_u_bloodmoon_priestess.json
+│   │   │   ├── 1_a1_c_u_shadowdancer.json
+│   │   │   ├── 2_1_c_u_skyrock_golem.json
+│   │   │   ├── 2_2_c_u_swamp_entangler.json
+│   │   │   ├── 2_3_c_u_silverguard_knight.json
+│   │   │   ├── 2_4_c_u_saberspine_tiger.json
+│   │   │   ├── 2_5_c_s_beamshock.json
+│   │   │   ├── 2_6_c_u_young_flamewing.json
+│   │   │   ├── 2_7_c_u_silverguard_squire.json
+│   │   │   ├── 2_8_c_u_ironcliff_guardian.json
+│   │   │   ├── 2_9_c_s_sundrop_elixir.json
+│   │   │   └── 2_a1_c_s_truestrike.json
+│   │   ├── effects
+│   │   │   ├── f1_buff.json
+│   │   │   ├── f1_inmolation.json
+│   │   │   ├── f1_martyrdom.json
+│   │   │   ├── f1_projectiles.json
+│   │   │   ├── f1_soulshatter.json
+│   │   │   ├── f1_summon.json
+│   │   │   └── f1_wraithsummon.json
+│   │   ├── f1_soulshatter.json
+│   │   ├── grid.json
+│   │   ├── tile.json
+│   │   └── units
+│   │       ├── bad_omen.json
+│   │       ├── bloodmoon_priestess.json
+│   │       ├── gloom_chaser.json
+│   │       ├── ironcliff_guardian.json
+│   │       ├── nightsorrow_assassin.json
+│   │       ├── rock_pulveriser.json
+│   │       ├── saberspine_tiger.json
+│   │       ├── shadow_watcher.json
+│   │       ├── shadowdancer.json
+│   │       ├── silverguard_knight.json
+│   │       ├── silverguard_squire.json
+│   │       ├── skyrock_golem.json
+│   │       ├── swamp_entangler.json
+│   │       ├── wraithling.json
+│   │       └── young_flamewing.json
+│   ├── logback.xml
+│   └── routes
+├── logs
+│   └── application.log
+├── null
+│   └── Coursier
+│       └── cache
+│           └── v1
+├── project
+│   ├── build.properties
+│   ├── plugins.sbt
+│   ├── project
+│   │   └── target
+│   └── target
+├── public
+│   └── images
+├── sbt
+├── sbt-dist
+│   ├── bin
+│   │   ├── sbt
+│   │   ├── sbt-launch-lib.bash
+│   │   ├── sbt-launch.jar
+│   │   └── sbt.bat
+│   └── conf
+│       ├── sbtconfig.txt
+│       └── sbtopts
+├── sbt.bat
+├── scripts
+│   └── test-sbt
+├── target
+│   └── streams
+│       └── _global
+│           └── ivyConfiguration
+│               └── _global
+│                   └── streams
+│                       └── out
+└── test
+    └── InitalizationTest.java

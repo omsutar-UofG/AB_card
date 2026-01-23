@@ -1,0 +1,24 @@
+{
+	"id": 2,
+	"cardname": "Young Flamewing",
+	"manacost": 4,
+	"miniCard": {
+		"cardTextures": [
+			"assets/game/extra/cards/card_background.png",
+			"assets/game/extra/cards/card_background_highlight.png"
+		],
+		"animationFrames": [],
+		"fps": 10,
+		"index": 0
+	},
+	"bigCard": {
+		"rulesTextRows": ["Flying"],
+		"cardTextures": [
+			"assets/game/extra/cards/neutral_unit_h.png"
+		],
+		"attack": 5,
+		"health": 4
+	},
+	"isCreature": true,
+	"unitConfig": "conf/gameconfs/units/young_flamewing.json"
+}

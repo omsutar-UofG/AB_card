@@ -1,0 +1,36 @@
+{
+	"animationTextures": [
+			"assets/game/extra/cards/minicards/fx_f4_bbs_abyssalscar/fx_f4_bbs_abyssalscar_000.png",
+"assets/game/extra/cards/minicards/fx_f4_bbs_abyssalscar/fx_f4_bbs_abyssalscar_001.png",
+"assets/game/extra/cards/minicards/fx_f4_bbs_abyssalscar/fx_f4_bbs_abyssalscar_002.png",
+"assets/game/extra/cards/minicards/fx_f4_bbs_abyssalscar/fx_f4_bbs_abyssalscar_003.png",
+"assets/game/extra/cards/minicards/fx_f4_bbs_abyssalscar/fx_f4_bbs_abyssalscar_004.png",
+"assets/game/extra/cards/minicards/fx_f4_bbs_abyssalscar/fx_f4_bbs_abyssalscar_005.png",
+"assets/game/extra/cards/minicards/fx_f4_bbs_abyssalscar/fx_f4_bbs_abyssalscar_006.png",
+"assets/game/extra/cards/minicards/fx_f4_bbs_abyssalscar/fx_f4_bbs_abyssalscar_007.png",
+"assets/game/extra/cards/minicards/fx_f4_bbs_abyssalscar/fx_f4_bbs_abyssalscar_008.png",
+"assets/game/extra/cards/minicards/fx_f4_bbs_abyssalscar/fx_f4_bbs_abyssalscar_009.png",
+"assets/game/extra/cards/minicards/fx_f4_bbs_abyssalscar/fx_f4_bbs_abyssalscar_010.png",
+"assets/game/extra/cards/minicards/fx_f4_bbs_abyssalscar/fx_f4_bbs_abyssalscar_011.png",
+"assets/game/extra/cards/minicards/fx_f4_bbs_abyssalscar/fx_f4_bbs_abyssalscar_012.png",
+"assets/game/extra/cards/minicards/fx_f4_bbs_abyssalscar/fx_f4_bbs_abyssalscar_013.png",
+"assets/game/extra/cards/minicards/fx_f4_bbs_abyssalscar/fx_f4_bbs_abyssalscar_014.png",
+"assets/game/extra/cards/minicards/fx_f4_bbs_abyssalscar/fx_f4_bbs_abyssalscar_015.png",
+"assets/game/extra/cards/minicards/fx_f4_bbs_abyssalscar/fx_f4_bbs_abyssalscar_016.png",
+"assets/game/extra/cards/minicards/fx_f4_bbs_abyssalscar/fx_f4_bbs_abyssalscar_017.png",
+"assets/game/extra/cards/minicards/fx_f4_bbs_abyssalscar/fx_f4_bbs_abyssalscar_018.png",
+"assets/game/extra/cards/minicards/fx_f4_bbs_abyssalscar/fx_f4_bbs_abyssalscar_019.png",
+"assets/game/extra/cards/minicards/fx_f4_bbs_abyssalscar/fx_f4_bbs_abyssalscar_020.png"
+	],
+	"correction": {
+		"imgWidth" : 52,
+    	"imgHeight" : 56,
+		"scale": 2.5,
+    	"offsetX": -8,
+    	"offsetY": -30,
+    	"spriteTopLeftX" : 0,
+    	"spriteTopLeftY" : 0,
+    	"reflected": false
+	},
+	"fps": 9
+}

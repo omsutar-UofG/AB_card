@@ -1,0 +1,37 @@
+{
+	"id": 0,
+	"cardname": "Wraithling Swarm",
+	"manacost": 3,
+	"miniCard": {
+		"cardTextures": [
+			"assets/game/extra/cards/card_background.png",
+			"assets/game/extra/cards/card_background_highlight.png"
+		],
+		"animationFrames": [
+"assets/game/extra/cards/minicards/icon_f4_wraithlingswarm/icon_f4_wraithlingswarm_active_000.png",
+"assets/game/extra/cards/minicards/icon_f4_wraithlingswarm/icon_f4_wraithlingswarm_active_001.png",
+"assets/game/extra/cards/minicards/icon_f4_wraithlingswarm/icon_f4_wraithlingswarm_active_002.png",
+"assets/game/extra/cards/minicards/icon_f4_wraithlingswarm/icon_f4_wraithlingswarm_active_003.png",
+"assets/game/extra/cards/minicards/icon_f4_wraithlingswarm/icon_f4_wraithlingswarm_active_004.png",
+"assets/game/extra/cards/minicards/icon_f4_wraithlingswarm/icon_f4_wraithlingswarm_active_005.png",
+"assets/game/extra/cards/minicards/icon_f4_wraithlingswarm/icon_f4_wraithlingswarm_active_006.png",
+"assets/game/extra/cards/minicards/icon_f4_wraithlingswarm/icon_f4_wraithlingswarm_active_007.png",
+"assets/game/extra/cards/minicards/icon_f4_wraithlingswarm/icon_f4_wraithlingswarm_active_008.png",
+"assets/game/extra/cards/minicards/icon_f4_wraithlingswarm/icon_f4_wraithlingswarm_active_009.png"
+		],
+		"fps": 10,
+		"index": 18
+	},
+	"bigCard": {
+		"rulesTextRows": [
+			"Summon three Wraithlings"
+		],
+		"cardTextures": [
+			"assets/game/extra/cards/neutral_spell.png"
+		],
+		"attack": -1,
+		"health": -1
+	},
+	"isCreature": false,
+	"unitConfig": null
+}
