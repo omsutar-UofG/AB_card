@@ -12,7 +12,7 @@ ITSD-DT2025-26-Template
 ├── README.md
 ├── app
 │   ├── actors
-│   │   └── GameActor.java // Main communication point where messages from frontend will arrive. It has Actor ref which creates a hashmap and maps a perticular message identifier with perticular class. If message received is "initialize" it responds by using `Initialize()` class. When actor is ready, it sends this message to front-end and send a set of images that are going to be used in the entire game.
+│   │   └── GameActor.java // Main communication class/point where messages from frontend will arrive. It has Actor ref (use to send commands to the front-end) which creates a hashmap and maps a perticular message identifier with perticular class. i.e. if message received is "Initalize" it responds by using `Initalize()` class. Afer this, it creates a new GameState (which currently is empty class). Then calls ImageListForPreload (it loads bunch of configuration files looking for different images). When actor is ready, it sends this message to front-end and send a set of images that are going to be used in the entire game (which are cached). Then sends message called "Initalize" which triggeres Initalize.java".
 │   ├── assets
 │   │   ├── game
 │   │   │   └── extra
@@ -1725,20 +1725,20 @@ ITSD-DT2025-26-Template
 │   │       ├── modules.js
 │   │       └── pixi.min.js
 │   ├── commands
-│   │   ├── BasicCommands.java
+│   │   ├── BasicCommands.java // Kind of like a untility class that has methods like drawTile, drawUnit, etc.
 │   │   ├── CheckMessageIsNotNullOnTell.java
 │   │   └── DummyTell.java
 │   ├── controllers
 │   │   └── GameScreenController.java // When gamescreen is opened in browser, HTML request is made in the backend server. Play framework looks at the URL and looks up the routes file "./conf/routes" and calls index method of class which returns the HTML of actual game page (at "./app/views/gamescreen.scala.html").
 │   ├── demo
-│   │   ├── CommandDemo.java
+│   │   ├── CommandDemo.java // Manually calling different commands to illustrate how these different commands work.
 │   │   └── Loaders_2024_Check.java
 │   ├── events
 │   │   ├── CardClicked.java
 │   │   ├── EndTurnClicked.java
-│   │   ├── EventProcessor.java
-│   │   ├── Heartbeat.java
-│   │   ├── Initalize.java
+│   │   ├── EventProcessor.java // only has `public void processEvent(ActorRef out, GameState gameState, JsonNode message);`.
+│   │   ├── Heartbeat.java // Called when message received is "heartbeat". It basically implies that front-end is running and it hasn't received any interaction.
+│   │   ├── Initalize.java // For not it is empty class, to implement game logic. It is generic class that implemnts EventProcessor interfeace.
 │   │   ├── OtherClicked.java
 │   │   ├── TileClicked.java
 │   │   ├── UnitMoving.java
@@ -1746,7 +1746,7 @@ ITSD-DT2025-26-Template
 │   ├── structures
 │   │   ├── GameState.java
 │   │   ├── User.java
-│   │   └── basic
+│   │   └── basic // Basic/core objects used in the game
 │   │       ├── BetterUnit.java
 │   │       ├── BigCard.java
 │   │       ├── Card.java
@@ -1761,12 +1761,12 @@ ITSD-DT2025-26-Template
 │   │       ├── UnitAnimationSet.java
 │   │       └── UnitAnimationType.java
 │   ├── utils
-│   │   ├── BasicObjectBuilders.java
+│   │   ├── BasicObjectBuilders.java // Has methods to load stuff. It takes configuration file (json in "./conf/gameconf/" be it card, effect or unit to be load).
 │   │   ├── ImageListForPreLoad.java
 │   │   ├── OrderedCardLoader.java
-│   │   └── StaticConfFiles.java
+│   │   └── StaticConfFiles.java // Contains lot of static variables for every single config file (path) to avoid mistyping big paths of config files.
 │   └── views
-│       └── gamescreen.scala.html // HTML of actual game page. It opens websocket connection, goes back to gamescreen controller and calls socket method which then creates new game actor.
+│       └── gamescreen.scala.html // HTML of actual game page. It opens websocket connection, goes back to gamescreencontroller and calls socket method which then creates new game actor.
 ├── bin
 ├── build.sbt
 ├── conf
