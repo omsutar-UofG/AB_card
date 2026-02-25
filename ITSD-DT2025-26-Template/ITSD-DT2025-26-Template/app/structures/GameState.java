@@ -1,5 +1,9 @@
 package structures;
 
+import structures.basic.Player;
+import structures.basic.Tile;
+
+
 /**
  * This class can be used to hold information about the on-going game.
  * Its created with the GameActor.
@@ -13,5 +17,12 @@ public class GameState {
 	public boolean gameInitalised = false;
 	
 	public boolean something = false;
+
+	// Creating grid of array to store `Tile` objects.
+	public Tile[][] board = new Tile[9][6];
+
+	// Creating both Player objects
+	public Player humanPlayer;
+	public Player aiPlayer;
 	
 }

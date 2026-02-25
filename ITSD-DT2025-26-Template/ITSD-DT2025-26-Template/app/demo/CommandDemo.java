@@ -168,7 +168,7 @@ public class CommandDemo {
 		BasicCommands.setPlayer1Health(out, humanPlayer);
 		try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
 
-		// setPlayer1Health
+		// setPlayer2Health
 		BasicCommands.addPlayer1Notification(out, "setPlayer2Health", 2);
 		Player aiPlayer = new Player(20, 0);
 		BasicCommands.setPlayer2Health(out, aiPlayer);
@@ -231,9 +231,9 @@ public class CommandDemo {
 		// Test New Stuff from the 2024 Template
 		//-------------------------------------------------------
 		
-		BasicCommands.addPlayer1Notification(out, "2024 Loader Check", 2);
-		try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
-		Loaders_2024_Check.test(out); // moved 2024 tests in here
+		// BasicCommands.addPlayer1Notification(out, "2024 Loader Check", 2);
+		// try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
+		// Loaders_2024_Check.test(out); // moved 2024 tests in here
 		
 
 

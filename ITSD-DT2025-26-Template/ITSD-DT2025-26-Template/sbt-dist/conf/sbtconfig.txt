@@ -1,14 +1,17 @@
 # Set the java args to high
-
+ 
 -Xmx512M
-
--XX:MaxPermSize=256m
-
+ 
 -XX:ReservedCodeCacheSize=128m
-
-
-
+ 
+ 
 # Set the extra SBT options
-
+ 
 -Dsbt.log.format=true
-
+-Dsbt.log.noformat=true
+ 
+--add-opens=java.base/java.lang=ALL-UNNAMED
+--add-opens=java.base/java.lang.reflect=ALL-UNNAMED
+--add-opens=java.base/java.io=ALL-UNNAMED
+--add-opens=java.base/sun.net.www.protocol.file=ALL-UNNAMED
+ 
