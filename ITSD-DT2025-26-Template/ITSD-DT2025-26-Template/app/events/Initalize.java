@@ -26,22 +26,11 @@ import utils.StaticConfFiles;
  */
 public class Initalize implements EventProcessor{
 
-	@Override
-	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
-		// hello this is a change
-		
-		gameState.gameInitalised = true;
-		
-		gameState.something = true;
-		
-		// User 1 makes a change
-		//ommandDemo.executeDemo(out); // this executes the command demo, comment out this when implementing your solution
-		//Loaders_2024_Check.test(out);
-
-		// Sending notification called to draw tiles.
+	public void drawTiles(ActorRef out, GameState gameState, JsonNode message) {
+		// NOTIFICATION: Drawing tiles.
 		BasicCommands.addPlayer1Notification(out, "Drawing tiles", 2);
 		try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
-
+		
 		// Drawing tiles (horizontally) (to draw tiles vertially swap for loops of x and y)
 		for (int y = 0 ; y < 6 ; ++y) {
 			for (int x = 0 ; x < 9 ; ++x) {
@@ -57,8 +46,10 @@ public class Initalize implements EventProcessor{
 				try {Thread.sleep(10);} catch (InterruptedException e) {e.printStackTrace();}
 			}
 		}
+	}
 
-		// Player Cards
+	public void setPlayersStats(ActorRef out, GameState gameState, JsonNode message) {
+		// NOTIFICATION: Setting player 1 health and mana
 		BasicCommands.addPlayer1Notification(out, "Setting player 1 health and mana", 2);
 		try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
 
@@ -69,7 +60,7 @@ public class Initalize implements EventProcessor{
 		try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
 
 		// Loading player 1 Mana
-		for (int m = 0; m<10; m++) {
+		for (int m = 1; m<10; m++) {
 			BasicCommands.addPlayer1Notification(out, "setPlayer1Mana ("+m+")", 1);
 			gameState.humanPlayer.setMana(m);
 			BasicCommands.setPlayer1Mana(out, gameState.humanPlayer);
@@ -83,13 +74,29 @@ public class Initalize implements EventProcessor{
 		try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
 
 		// Loading player 2 Mana
-		for (int m = 0; m<10; m++) {
+		for (int m = 1; m<10; m++) {
 			BasicCommands.addPlayer1Notification(out, "setPlayer2Mana ("+m+")", 1);
 			gameState.aiPlayer.setMana(m);
 			BasicCommands.setPlayer2Mana(out, gameState.aiPlayer);
 			try {Thread.sleep(100);} catch (InterruptedException e) {e.printStackTrace();}
 		}
+	}
 
+	@Override
+	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
+		
+		gameState.gameInitalised = true;
+		gameState.something = true;
+		
+		//CommandDemo.executeDemo(out); // this executes the command demo, comment out this when implementing your solution
+		//Loaders_2024_Check.test(out);
+
+		// Draw tiles
+		drawTiles(out, gameState, message);
+		
+		// Setting players stats
+		setPlayersStats(out, gameState, message);
+		
 
 	}
 
