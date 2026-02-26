@@ -126,6 +126,7 @@ public class Initalize implements EventProcessor{
 		// Draw avatar
 		drawAvatarUnits(out, gameState, message, gameState.board[1][2], gameState.board[6][2]);
 
+		// testing changes
 	}
 
 }
