@@ -7,7 +7,9 @@ import commands.BasicCommands;
 import demo.CommandDemo;
 import demo.Loaders_2024_Check;
 import structures.GameState;
+import structures.basic.ImageCorrection;
 import structures.basic.Player;
+import structures.basic.Position;
 import structures.basic.Tile;
 import structures.basic.Unit;
 import utils.BasicObjectBuilders;
@@ -30,10 +32,10 @@ public class Initalize implements EventProcessor{
 	private static final int boardCols = 9;
 	private static final int maxHealth = 20;
 
-	public void drawTiles(ActorRef out, GameState gameState, JsonNode message) {
+	private void drawTiles(ActorRef out, GameState gameState, JsonNode message) {
 		// NOTIFICATION: Drawing tiles.
 		BasicCommands.addPlayer1Notification(out, "Drawing tiles", 2);
-		try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
+		try {Thread.sleep(200);} catch (InterruptedException e) {e.printStackTrace();}
 		
 		// Drawing tiles (horizontally) (to draw tiles vertially swap for loops of x and y)
 		for (int y = 0 ; y < boardRows ; ++y) {
@@ -52,7 +54,7 @@ public class Initalize implements EventProcessor{
 		}
 	}
 
-	public void setPlayersStats(ActorRef out, GameState gameState, JsonNode message) {
+	private void setPlayersStats(ActorRef out, GameState gameState, JsonNode message) {
 		// NOTIFICATION: Setting player 1 health and mana
 		BasicCommands.addPlayer1Notification(out, "Setting player 1 health and mana", 2);
 		try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
@@ -89,6 +91,23 @@ public class Initalize implements EventProcessor{
 		}
 	}
 
+	private void drawAvtarUnits(ActorRef out, GameState gameState, JsonNode message, Tile humanUnitTile, Tile aiUnitTile) {
+		// NOTIFICATION: Draw Human Unit
+		BasicCommands.addPlayer1Notification(out, "Draw Human Unit", 2);
+		Unit humanUnit = BasicObjectBuilders.loadUnit(StaticConfFiles.humanAvatar, 0, Unit.class);
+		humanUnit.setPositionByTile(humanUnitTile); 
+		BasicCommands.drawUnit(out, humanUnit, humanUnitTile);
+		try {Thread.sleep(200);} catch (InterruptedException e) {e.printStackTrace();}
+
+		// NOTIFICATION: Draw AI Unit
+		BasicCommands.addPlayer1Notification(out, "Draw AI Unit", 2);
+		Unit aiUnit = BasicObjectBuilders.loadUnit(StaticConfFiles.aiAvatar, 0, Unit.class);
+		aiUnit.setPositionByTile(aiUnitTile);
+		BasicCommands.drawUnit(out, aiUnit, aiUnitTile);
+		try {Thread.sleep(200);} catch (InterruptedException e) {e.printStackTrace();}
+
+	}
+
 	@Override
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
 		
@@ -104,6 +123,8 @@ public class Initalize implements EventProcessor{
 		// Setting players stats
 		setPlayersStats(out, gameState, message);
 		
+		// Draw avtar
+		drawAvtarUnits(out, gameState, message, gameState.board[1][2], gameState.board[6][2]);
 
 	}
 
