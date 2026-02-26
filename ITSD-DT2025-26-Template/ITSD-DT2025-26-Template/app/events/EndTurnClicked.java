@@ -3,6 +3,7 @@ package events;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import akka.actor.ActorRef;
+import commands.BasicCommands;
 import structures.GameState;
 
 /**
@@ -20,7 +21,110 @@ public class EndTurnClicked implements EventProcessor{
 
 	@Override
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
+		// Defensive guard: ignore End Turn until initialization has fully created
+		// both players and the active-turn pointer.
+		if (!isTurnSystemReady(gameState)) {
+			BasicCommands.addPlayer1Notification(out, "Game is initializing...", 2);
+			return;
+		}
+
+		// The End Turn button is a player-side action. Do not allow manual turn
+		// skipping while the opponent turn is active.
+		if (gameState.activePlayer != gameState.humanPlayer) {
+			BasicCommands.addPlayer1Notification(out, "Opponent Turn", 2);
+			return;
+		}
 		
+		// 1. SC07: Mana Drain at End Turn
+		// Acceptance Criteria: On End Turn, remaining mana becomes 0.
+		if (gameState.activePlayer == gameState.humanPlayer) {
+			gameState.humanPlayer.setMana(0);
+			BasicCommands.setPlayer1Mana(out, gameState.humanPlayer);
+		} else {
+			gameState.aiPlayer.setMana(0);
+			BasicCommands.setPlayer2Mana(out, gameState.aiPlayer);
+		}
+		
+		// 2. SC08: End Turn Processing - Swap active player
+		if (gameState.activePlayer == gameState.humanPlayer) {
+			gameState.activePlayer = gameState.aiPlayer;
+			
+			// SC09: Turn Notification
+			BasicCommands.addPlayer1Notification(out, "Opponent Turn", 2);
+			
+		} else {
+			gameState.activePlayer = gameState.humanPlayer;
+			
+			// SC08: Turn-start logic for next player (Increment turn number when switching back to human)
+			gameState.turnNumber++;
+			
+			// SC09: Turn Notification
+			BasicCommands.addPlayer1Notification(out, "Your Turn", 2);
+		}
+		
+		// 3. Start Turn Logic for the NEW Active Player
+		// SC05: Gain mana equal to turn number + 1 (Capped at 9 usually, but story says turn+1)
+		int newMana = gameState.turnNumber + 1;
+		if (newMana > 9) newMana = 9; // Cap mana at 9 as per UI limitations usually
+		
+		gameState.activePlayer.setMana(newMana);
+		
+		if (gameState.activePlayer == gameState.humanPlayer) {
+			BasicCommands.setPlayer1Mana(out, gameState.humanPlayer);
+			// SC05: Draw 1 card at the start of each turn
+			drawCard(out, gameState, gameState.humanPlayer);
+		} else {
+			BasicCommands.setPlayer2Mana(out, gameState.aiPlayer);
+			// SC05: Draw 1 card for AI
+			drawCard(out, gameState, gameState.aiPlayer);
+		}
+		
+	}
+
+	/**
+	 * True only after initialize has finished wiring all turn-related references.
+	 */
+	private boolean isTurnSystemReady(GameState gameState) {
+		return gameState != null
+				&& gameState.gameInitalised
+				&& gameState.humanPlayer != null
+				&& gameState.aiPlayer != null
+				&& gameState.activePlayer != null;
+	}
+
+	/**
+	 * Helper method to draw a card for a player.
+	 * Implements SC06: Overdraw Rule.
+	 * (Duplicated from Initalize.java for isolation)
+	 */
+	private void drawCard(ActorRef out, GameState gameState, structures.basic.Player player) {
+		// Check if deck is empty
+		if (player.getDeck().isEmpty()) {
+			// BasicCommands.addPlayer1Notification(out, "Deck is empty!", 2);
+			return;
+		}
+		
+		// Get the top card
+		structures.basic.Card card = player.getDeck().get(0);
+		
+		// SC06: Overdraw Rule
+		// Acceptance Criteria: If hand size >= 6, drawn card is removed from deck without entering hand.
+		if (player.getHand().size() >= 6) {
+			// Burn the card (Remove from deck but don't add to hand)
+			player.removeCardFromDeck(card);
+			if (player == gameState.humanPlayer) {
+				BasicCommands.addPlayer1Notification(out, "Hand full! Card burned.", 2);
+			}
+			// Optional: Visualization of burning card could go here
+		} else {
+			// Normal Draw
+			player.removeCardFromDeck(card);
+			player.addCardToHand(card);
+			// Draw card on UI (only for Human player usually)
+			if (player == gameState.humanPlayer) {
+				BasicCommands.drawCard(out, card, player.getHand().indexOf(card) + 1, 0);
+			}
+		}
 	}
 
 }
