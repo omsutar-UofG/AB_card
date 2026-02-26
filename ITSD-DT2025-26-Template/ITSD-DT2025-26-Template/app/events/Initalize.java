@@ -26,14 +26,18 @@ import utils.StaticConfFiles;
  */
 public class Initalize implements EventProcessor{
 
+	private static final int boardRows = 5;
+	private static final int boardCols = 9;
+	private static final int maxHealth = 20;
+
 	public void drawTiles(ActorRef out, GameState gameState, JsonNode message) {
 		// NOTIFICATION: Drawing tiles.
 		BasicCommands.addPlayer1Notification(out, "Drawing tiles", 2);
 		try {Thread.sleep(2000);} catch (InterruptedException e) {e.printStackTrace();}
 		
 		// Drawing tiles (horizontally) (to draw tiles vertially swap for loops of x and y)
-		for (int y = 0 ; y < 6 ; ++y) {
-			for (int x = 0 ; x < 9 ; ++x) {
+		for (int y = 0 ; y < boardRows ; ++y) {
+			for (int x = 0 ; x < boardCols ; ++x) {
 
 				// Creating Tile object
 				Tile tile = BasicObjectBuilders.loadTile(x, y);
@@ -54,13 +58,14 @@ public class Initalize implements EventProcessor{
 		try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
 
 		// Loading player 1 health=20
-		gameState.humanPlayer = new Player(20, 0);
+		gameState.humanPlayer = new Player(maxHealth, 0);
 		BasicCommands.setPlayer1Health(out, gameState.humanPlayer);
 		System.out.println("Added health to player 1");
 		try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
 
 		// Loading player 1 Mana
-		for (int m = 1; m<10; m++) {
+		for (int m = 1; m <= 9; m++) {
+			// NOTIFICATION: setPlayer1Mana
 			BasicCommands.addPlayer1Notification(out, "setPlayer1Mana ("+m+")", 1);
 			gameState.humanPlayer.setMana(m);
 			BasicCommands.setPlayer1Mana(out, gameState.humanPlayer);
@@ -68,13 +73,15 @@ public class Initalize implements EventProcessor{
 		}
 
 		// Loading player 2 health=20
+		// NOTIFICATION: setPlayer2Health
 		BasicCommands.addPlayer1Notification(out, "setPlayer2Health", 2);
-		gameState.aiPlayer = new Player(20, 0);
+		gameState.aiPlayer = new Player(maxHealth, 0);
 		BasicCommands.setPlayer2Health(out, gameState.aiPlayer);
 		try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
 
 		// Loading player 2 Mana
-		for (int m = 1; m<10; m++) {
+		for (int m = 1; m <= 9; m++) {
+			// NOTIFICATION: setPlayer2Mana
 			BasicCommands.addPlayer1Notification(out, "setPlayer2Mana ("+m+")", 1);
 			gameState.aiPlayer.setMana(m);
 			BasicCommands.setPlayer2Mana(out, gameState.aiPlayer);

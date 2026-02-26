@@ -18,10 +18,10 @@ public class GameState {
 	
 	public boolean something = false;
 
-	// Creating grid of array to store `Tile` objects.
-	public Tile[][] board = new Tile[9][6];
+	// Grid of array to store `Tile` objects.
+	public Tile[][] board = new Tile[10][6]; // Creating board from index 1 (for both rows and cols)
 
-	// Creating both Player objects
+	// Both Player objects
 	public Player humanPlayer;
 	public Player aiPlayer;
 	
