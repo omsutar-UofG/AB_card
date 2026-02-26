@@ -91,7 +91,7 @@ public class Initalize implements EventProcessor{
 		}
 	}
 
-	private void drawAvtarUnits(ActorRef out, GameState gameState, JsonNode message, Tile humanUnitTile, Tile aiUnitTile) {
+	private void drawAvatarUnits(ActorRef out, GameState gameState, JsonNode message, Tile humanUnitTile, Tile aiUnitTile) {
 		// NOTIFICATION: Draw Human Unit
 		BasicCommands.addPlayer1Notification(out, "Draw Human Unit", 2);
 		Unit humanUnit = BasicObjectBuilders.loadUnit(StaticConfFiles.humanAvatar, 0, Unit.class);
@@ -123,8 +123,8 @@ public class Initalize implements EventProcessor{
 		// Setting players stats
 		setPlayersStats(out, gameState, message);
 		
-		// Draw avtar
-		drawAvtarUnits(out, gameState, message, gameState.board[1][2], gameState.board[6][2]);
+		// Draw avatar
+		drawAvatarUnits(out, gameState, message, gameState.board[1][2], gameState.board[6][2]);
 
 	}
 
