@@ -8,3 +8,15 @@ __MACOSX/
 __MACOSX/
 **/__MACOSX/
 ._*
+# IntelliJ
+.idea/
+*.iml
+
+# Logs
+logs/
+*.log
+
+# sbt / Scala / Play build outputs
+target/
+project/target/
+project/project/
