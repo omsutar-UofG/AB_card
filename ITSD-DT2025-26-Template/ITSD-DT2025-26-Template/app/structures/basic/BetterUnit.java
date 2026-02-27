@@ -12,9 +12,13 @@ public class BetterUnit extends Unit {
 	// Runtime combat values used by SC14/SC15.
 	int attack = 2;
 	int health = 20;
+	// SC25: cap healing to this value (for non-avatar units this is their summon/base health).
+	int maxHealth = 20;
 	// Runtime action restrictions for SC15.
 	boolean hasMoved = false;
 	boolean hasAttacked = false;
+	// SC27: number of upcoming owner turns this unit is stunned for.
+	int stunTurnsRemaining = 0;
 	// Basic interaction ranges for SC10/SC11/SC13/SC14.
 	int moveRange = 2;
 	int attackRange = 1;
@@ -60,6 +64,14 @@ public class BetterUnit extends Unit {
 		this.health = health;
 	}
 
+	public int getMaxHealth() {
+		return maxHealth;
+	}
+
+	public void setMaxHealth(int maxHealth) {
+		this.maxHealth = maxHealth;
+	}
+
 	public boolean isHasMoved() {
 		return hasMoved;
 	}
@@ -74,6 +86,14 @@ public class BetterUnit extends Unit {
 
 	public void setHasAttacked(boolean hasAttacked) {
 		this.hasAttacked = hasAttacked;
+	}
+
+	public int getStunTurnsRemaining() {
+		return stunTurnsRemaining;
+	}
+
+	public void setStunTurnsRemaining(int stunTurnsRemaining) {
+		this.stunTurnsRemaining = stunTurnsRemaining;
 	}
 
 	public int getMoveRange() {

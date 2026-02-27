@@ -154,6 +154,8 @@ public class Initalize implements EventProcessor{
 		humanUnit.setAvatar(true);
 		humanUnit.setAttack(avatarAttack);
 		humanUnit.setHealth(maxHealth);
+		humanUnit.setMaxHealth(maxHealth);
+		humanUnit.setStunTurnsRemaining(0);
 		humanUnit.setMoveRange(2);
 		humanUnit.setAttackRange(1);
 		humanUnit.setPositionByTile(humanUnitTile); 
@@ -172,6 +174,8 @@ public class Initalize implements EventProcessor{
 		aiUnit.setAvatar(true);
 		aiUnit.setAttack(avatarAttack);
 		aiUnit.setHealth(maxHealth);
+		aiUnit.setMaxHealth(maxHealth);
+		aiUnit.setStunTurnsRemaining(0);
 		aiUnit.setMoveRange(2);
 		aiUnit.setAttackRange(1);
 		aiUnit.setPositionByTile(aiUnitTile);
@@ -202,6 +206,8 @@ public class Initalize implements EventProcessor{
 		
 		// Draw avatar
 		drawAvatarUnits(out, gameState, message, gameState.board[1][2], gameState.board[6][2]);
+		// SC23/SC28: runtime ids for summoned units start after two avatars (0 and 1).
+		gameState.nextUnitId = 2;
 
 		// Initialization is complete; turn-related events are now safe to process.
 		gameState.gameInitalised = true;

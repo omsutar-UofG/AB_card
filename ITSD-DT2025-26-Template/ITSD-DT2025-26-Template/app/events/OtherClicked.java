@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import akka.actor.ActorRef;
 import game.SimpleBoardLogic;
+import game.SimpleCardLogic;
 import structures.GameState;
 
 /**
@@ -27,6 +28,7 @@ public class OtherClicked implements EventProcessor{
 		}
 		SimpleBoardLogic.clearSelectionAndHighlights(out, gameState);
 		SimpleBoardLogic.clearPendingAction(gameState);
+		SimpleCardLogic.clearCardSelectionAndHandHighlight(out, gameState);
 	}
 
 }

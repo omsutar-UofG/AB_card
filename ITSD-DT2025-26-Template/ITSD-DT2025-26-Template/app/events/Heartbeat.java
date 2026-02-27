@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import akka.actor.ActorRef;
 import commands.BasicCommands;
 import game.SimpleBoardLogic;
+import game.SimpleCardLogic;
 import structures.GameState;
 import structures.basic.Card;
 import structures.basic.Player;
@@ -63,6 +64,8 @@ public class Heartbeat implements EventProcessor{
 		// SC12: make sure no stale selection/highlight state leaks across turns.
 		SimpleBoardLogic.clearSelectionAndHighlights(out, gameState);
 		SimpleBoardLogic.clearPendingAction(gameState);
+		// SC21/SC12: clear card-selection highlight when control changes.
+		SimpleCardLogic.clearCardSelectionAndHandHighlight(out, gameState);
 
 		// SC05 + 2024-GameRules alignment:
 		// draw happens at END of AI turn (not at human turn start).

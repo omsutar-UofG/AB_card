@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import akka.actor.ActorRef;
 import commands.BasicCommands;
 import game.SimpleBoardLogic;
+import game.SimpleCardLogic;
 import game.SimpleBoardLogic.HighlightPlan;
 import structures.GameState;
 import structures.basic.BetterUnit;
@@ -52,6 +53,11 @@ public class TileClicked implements EventProcessor{
 
 		BetterUnit clickedUnit = SimpleBoardLogic.getUnitAt(gameState, tilex, tiley);
 		String clickedTileKey = SimpleBoardLogic.tileKey(tilex, tiley);
+
+		// SC23-SC28: if card targeting is active, tile click is consumed by card flow.
+		if (SimpleCardLogic.resolveSelectedCardOnTile(out, gameState, clickedTile, clickedUnit)) {
+			return;
+		}
 
 		// No current selection: selecting own unit should build highlights.
 		if (gameState.selectedUnitId == null) {

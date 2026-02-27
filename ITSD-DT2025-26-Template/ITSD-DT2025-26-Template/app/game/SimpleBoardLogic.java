@@ -137,10 +137,51 @@ public final class SimpleBoardLogic {
 	public static void resetActionFlagsForOwner(GameState gameState, int owner) {
 		for (BetterUnit unit : gameState.unitsById.values()) {
 			if (unit.getOwner() == owner) {
-				unit.setHasMoved(false);
-				unit.setHasAttacked(false);
+				// SC27:
+				// if stunned for this owner turn, consume the stun and lock actions for
+				// exactly this turn; otherwise refresh normal per-turn action rights.
+				if (unit.getStunTurnsRemaining() > 0) {
+					unit.setHasMoved(true);
+					unit.setHasAttacked(true);
+					unit.setStunTurnsRemaining(unit.getStunTurnsRemaining() - 1);
+				} else {
+					unit.setHasMoved(false);
+					unit.setHasAttacked(false);
+				}
 			}
 		}
+	}
+
+	/**
+	 * SC23/SC28 + 2024 GameRules:
+	 * Units can be summoned onto unoccupied tiles adjacent to any friendly unit.
+	 */
+	public static Set<String> computeAdjacentUnoccupiedTilesForOwner(GameState gameState, int owner) {
+		Set<String> result = new HashSet<String>();
+		for (BetterUnit unit : gameState.unitsById.values()) {
+			if (unit.getOwner() != owner || unit.getHealth() <= 0) {
+				continue;
+			}
+			int ux = unit.getPosition().getTilex();
+			int uy = unit.getPosition().getTiley();
+			for (int dx = -1; dx <= 1; dx++) {
+				for (int dy = -1; dy <= 1; dy++) {
+					if (dx == 0 && dy == 0) {
+						continue;
+					}
+					int tx = ux + dx;
+					int ty = uy + dy;
+					if (!inBoard(gameState, tx, ty)) {
+						continue;
+					}
+					String key = tileKey(tx, ty);
+					if (!gameState.unitIdByTile.containsKey(key)) {
+						result.add(key);
+					}
+				}
+			}
+		}
+		return result;
 	}
 
 	/**
@@ -374,6 +415,55 @@ public final class SimpleBoardLogic {
 
 		// SC20:
 		// Avatar damage/death always syncs to owning player's health UI.
+		if (target.isAvatar()) {
+			syncAvatarHealth(out, gameState, target);
+		}
+	}
+
+	/**
+	 * SC24/SC26:
+	 * Apply spell damage directly to a target unit (without attacker animation).
+	 */
+	public static void applySpellDamage(ActorRef out, GameState gameState, BetterUnit target, int damage) {
+		if (!isUnitAlive(target)) {
+			return;
+		}
+		int clampedDamage = Math.max(0, damage);
+		int nextHealth = Math.max(0, target.getHealth() - clampedDamage);
+		target.setHealth(nextHealth);
+		BasicCommands.setUnitHealth(out, target, nextHealth);
+
+		if (nextHealth > 0) {
+			int hitAnimationMs = BasicCommands.playUnitAnimation(out, target, UnitAnimationType.hit);
+			waitForAnimation(hitAnimationMs, DEFAULT_IMPACT_WAIT_MS);
+		} else {
+			int deathAnimationMs = BasicCommands.playUnitAnimation(out, target, UnitAnimationType.death);
+			waitForAnimation(deathAnimationMs, DEFAULT_DEATH_WAIT_MS);
+			if (!target.isAvatar()) {
+				BasicCommands.deleteUnit(out, target);
+				removeUnitFromIndexes(gameState, target);
+			}
+		}
+
+		if (target.isAvatar()) {
+			syncAvatarHealth(out, gameState, target);
+		}
+	}
+
+	/**
+	 * SC25:
+	 * Heal a target unit without exceeding its configured max health.
+	 */
+	public static void applyHeal(ActorRef out, GameState gameState, BetterUnit target, int amount) {
+		if (target == null || target.getHealth() <= 0) {
+			return;
+		}
+		int cap = Math.max(1, target.getMaxHealth());
+		int healAmount = Math.max(0, amount);
+		int nextHealth = Math.min(cap, target.getHealth() + healAmount);
+		target.setHealth(nextHealth);
+		BasicCommands.setUnitHealth(out, target, nextHealth);
+
 		if (target.isAvatar()) {
 			syncAvatarHealth(out, gameState, target);
 		}

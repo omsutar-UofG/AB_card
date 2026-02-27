@@ -53,5 +53,12 @@ public class GameState {
 	public boolean actionLocked = false;
 	public Integer pendingMoveUnitId = null;
 	public Integer pendingAttackTargetUnitId = null;
+
+	// SC21-SC29: selected hand card state for card highlight/targeting flow.
+	public Integer selectedCardHandPosition = null; // 1-based hand index [1..6]
+	public String selectedCardTargetMode = null;
+
+	// SC23/SC28: runtime id generator for newly summoned units.
+	public int nextUnitId = 2;
 	
 }

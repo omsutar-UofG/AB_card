@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import akka.actor.ActorRef;
 import commands.BasicCommands;
 import game.SimpleBoardLogic;
+import game.SimpleCardLogic;
 import structures.GameState;
 
 /**
@@ -43,6 +44,8 @@ public class EndTurnClicked implements EventProcessor{
 		// SC12: clear active highlights/selection when ending the turn.
 		SimpleBoardLogic.clearSelectionAndHighlights(out, gameState);
 		SimpleBoardLogic.clearPendingAction(gameState);
+		// SC21/SC12: clear any selected-card highlight state on turn boundary.
+		SimpleCardLogic.clearCardSelectionAndHandHighlight(out, gameState);
 		
 		// 1) SC07: Mana Drain at End Turn.
 		// The ending player is human in this event path.
