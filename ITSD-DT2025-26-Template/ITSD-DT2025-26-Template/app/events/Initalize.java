@@ -31,6 +31,7 @@ public class Initalize implements EventProcessor{
 	private static final int boardRows = 5;
 	private static final int boardCols = 9;
 	private static final int maxHealth = 20;
+	private static final int avatarAttack = 2;
 
 	private void drawTiles(ActorRef out, GameState gameState, JsonNode message) {
 		// NOTIFICATION: Drawing tiles.
@@ -144,16 +145,22 @@ public class Initalize implements EventProcessor{
 	private void drawAvatarUnits(ActorRef out, GameState gameState, JsonNode message, Tile humanUnitTile, Tile aiUnitTile) {
 		// NOTIFICATION: Draw Human Unit
 		BasicCommands.addPlayer1Notification(out, "Draw Human Unit", 2);
+		// SC04: Spawn human avatar on starting tile with visible base stats.
 		Unit humanUnit = BasicObjectBuilders.loadUnit(StaticConfFiles.humanAvatar, 0, Unit.class);
 		humanUnit.setPositionByTile(humanUnitTile); 
 		BasicCommands.drawUnit(out, humanUnit, humanUnitTile);
+		BasicCommands.setUnitAttack(out, humanUnit, avatarAttack);
+		BasicCommands.setUnitHealth(out, humanUnit, maxHealth);
 		try {Thread.sleep(200);} catch (InterruptedException e) {e.printStackTrace();}
 
 		// NOTIFICATION: Draw AI Unit
 		BasicCommands.addPlayer1Notification(out, "Draw AI Unit", 2);
-		Unit aiUnit = BasicObjectBuilders.loadUnit(StaticConfFiles.aiAvatar, 0, Unit.class);
+		// SC04: AI avatar must use a distinct unit id and show initial stats.
+		Unit aiUnit = BasicObjectBuilders.loadUnit(StaticConfFiles.aiAvatar, 1, Unit.class);
 		aiUnit.setPositionByTile(aiUnitTile);
 		BasicCommands.drawUnit(out, aiUnit, aiUnitTile);
+		BasicCommands.setUnitAttack(out, aiUnit, avatarAttack);
+		BasicCommands.setUnitHealth(out, aiUnit, maxHealth);
 		try {Thread.sleep(200);} catch (InterruptedException e) {e.printStackTrace();}
 
 	}

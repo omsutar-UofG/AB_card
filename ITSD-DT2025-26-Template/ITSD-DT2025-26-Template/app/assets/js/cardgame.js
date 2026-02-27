@@ -12,6 +12,16 @@ function initHexi(preloadImages) {
 	
 }
 
+// SC04 fix:
+// Cache unit stat updates when setUnitAttack/setUnitHealth arrives before drawUnit
+// has created UI labels for that unit.
+if (typeof pendingUnitAttackValues === "undefined") {
+	var pendingUnitAttackValues = new Map();
+}
+if (typeof pendingUnitHealthValues === "undefined") {
+	var pendingUnitHealthValues = new Map();
+}
+
 //2. The `load` function that will run while your files are loading
 
 function load(){
@@ -272,6 +282,10 @@ function drawUnit(message) {
 	//unit.on('click', unitClicked);
     unitContainer.addChild(unit);
 
+	var unitID = message.unit.id;
+	var baseAttackX = message.unit.correction.spriteTopLeftX+20;
+	var baseHealthX = message.unit.correction.spriteTopLeftX+message.tile.height-30;
+
 	// Draw attack value
 	var attackcircle = g.sprite("assets/game/extra/AttackCircle.png");
     attackcircle.setPosition(message.unit.correction.spriteTopLeftX+5, message.unit.correction.spriteTopLeftY+message.tile.height-25);
@@ -279,8 +293,13 @@ function drawUnit(message) {
     attackcircle.height = 40;
 	unitContainer.addChild(attackcircle);
 	
-	var attackText = new PIXI.Text('0', { font: '20px Roboto', fill: 'white', align: 'center' });
-	attackText.position.x = message.unit.correction.spriteTopLeftX+20;
+	// SC04 fix: if stat update arrives before drawUnit executes, apply cached value.
+	var attackValue = parseInt((message.unit.attack !== undefined && message.unit.attack !== null) ? message.unit.attack : 0);
+	if (pendingUnitAttackValues.has(unitID)) {
+		attackValue = parseInt(pendingUnitAttackValues.get(unitID));
+	}
+	var attackText = new PIXI.Text(String(attackValue), { font: '20px Roboto', fill: 'white', align: 'center' });
+	attackText.position.x = baseAttackX + (attackValue > 9 ? -5 : 0);
 	attackText.position.y = message.unit.correction.spriteTopLeftY+message.tile.height-15;
 	unitContainer.addChild(attackText);
 	
@@ -291,8 +310,13 @@ function drawUnit(message) {
     healthcircle.height = 40;
 	unitContainer.addChild(healthcircle);
 	
-	var healthText = new PIXI.Text('0', { font: '20px Roboto', fill: 'white', align: 'center' });
-	healthText.position.x = message.unit.correction.spriteTopLeftX+message.tile.height-30;
+	// SC04 fix: if stat update arrives before drawUnit executes, apply cached value.
+	var healthValue = parseInt((message.unit.health !== undefined && message.unit.health !== null) ? message.unit.health : 0);
+	if (pendingUnitHealthValues.has(unitID)) {
+		healthValue = parseInt(pendingUnitHealthValues.get(unitID));
+	}
+	var healthText = new PIXI.Text(String(healthValue), { font: '20px Roboto', fill: 'white', align: 'center' });
+	healthText.position.x = baseHealthX + (healthValue > 9 ? -5 : 0);
 	healthText.position.y = message.unit.correction.spriteTopLeftY+message.tile.height-15;
 	unitContainer.addChild(healthText);
 
@@ -301,10 +325,12 @@ function drawUnit(message) {
 
 	g.stage.addChild(unitContainer);
 
-	spriteContainers.set(message.unit.id, unitContainer);
-	sprites.set(message.unit.id, unit);
-	healthLabels.set(message.unit.id, healthText);
-	attackLabels.set(message.unit.id, attackText);
+	spriteContainers.set(unitID, unitContainer);
+	sprites.set(unitID, unit);
+	healthLabels.set(unitID, healthText);
+	attackLabels.set(unitID, attackText);
+	pendingUnitAttackValues.delete(unitID);
+	pendingUnitHealthValues.delete(unitID);
 	
 	
 	
@@ -546,32 +572,44 @@ function executeProjectileMoveStep(projectile) {
 
 function setUnitHealth(message) {
 	var unitID = message.unit.id;
-	var health = message.health;
+	var health = parseInt(message.health);
 	
-	
-	var oldHealth = parseInt(healthLabels.get(unitID).text);
-	healthLabels.get(unitID).text = health;
+	// SC04 fix: drawUnit uses queue; cache health if label is not ready yet.
+	if (!healthLabels.has(unitID)) {
+		pendingUnitHealthValues.set(unitID, health);
+		return;
+	}
+
+	var healthLabel = healthLabels.get(unitID);
+	var oldHealth = parseInt(healthLabel.text);
+	healthLabel.text = String(health);
 	
 	if (health>9 && oldHealth<10) {
-		healthLabels.get(unitID).position.x = healthLabels.get(unitID).position.x-5;
+		healthLabel.position.x = healthLabel.position.x-5;
 	} else if (health<10 && oldHealth>9) {
-		healthLabels.get(unitID).position.x = healthLabels.get(unitID).position.x+5;
+		healthLabel.position.x = healthLabel.position.x+5;
 	}
 	
 }
 
 function setUnitAttack(message) {
 	var unitID = message.unit.id;
-	var attack = message.attack;
+	var attack = parseInt(message.attack);
 	
-	
-	var oldAttack = parseInt(attackLabels.get(unitID).text);
-	attackLabels.get(unitID).text = attack;
+	// SC04 fix: drawUnit uses queue; cache attack if label is not ready yet.
+	if (!attackLabels.has(unitID)) {
+		pendingUnitAttackValues.set(unitID, attack);
+		return;
+	}
+
+	var attackLabel = attackLabels.get(unitID);
+	var oldAttack = parseInt(attackLabel.text);
+	attackLabel.text = String(attack);
 	
 	if (attack>9 && oldAttack<10) {
-		attackLabels.get(unitID).position.x = attackLabels.get(unitID).position.x-5;
+		attackLabel.position.x = attackLabel.position.x-5;
 	} else if (attack<10 && oldAttack>9) {
-		attackLabels.get(unitID).position.x = attackLabels.get(unitID).position.x+5;
+		attackLabel.position.x = attackLabel.position.x+5;
 	}
 	
 }
@@ -905,6 +943,9 @@ function deleteUnit(message) {
 	sprites.delete(message.unit.id);
 	attackLabels.delete(message.unit.id);
 	healthLabels.delete(message.unit.id);
+	// Keep cached stat maps consistent when a unit leaves the board.
+	pendingUnitAttackValues.delete(message.unit.id);
+	pendingUnitHealthValues.delete(message.unit.id);
 }
 
 
