@@ -12,7 +12,9 @@ function initHexi(preloadImages) {
 	
 }
 
-// Cache unit stats when setUnitAttack/setUnitHealth arrives before drawUnit labels exist.
+// SC04 fix:
+// Cache unit stat updates when setUnitAttack/setUnitHealth arrives before drawUnit
+// has created UI labels for that unit.
 if (typeof pendingUnitAttackValues === "undefined") {
 	var pendingUnitAttackValues = new Map();
 }
@@ -291,6 +293,7 @@ function drawUnit(message) {
     attackcircle.height = 40;
 	unitContainer.addChild(attackcircle);
 	
+	// SC04 fix: if stat update arrives before drawUnit executes, apply cached value.
 	var attackValue = parseInt((message.unit.attack !== undefined && message.unit.attack !== null) ? message.unit.attack : 0);
 	if (pendingUnitAttackValues.has(unitID)) {
 		attackValue = parseInt(pendingUnitAttackValues.get(unitID));
@@ -307,6 +310,7 @@ function drawUnit(message) {
     healthcircle.height = 40;
 	unitContainer.addChild(healthcircle);
 	
+	// SC04 fix: if stat update arrives before drawUnit executes, apply cached value.
 	var healthValue = parseInt((message.unit.health !== undefined && message.unit.health !== null) ? message.unit.health : 0);
 	if (pendingUnitHealthValues.has(unitID)) {
 		healthValue = parseInt(pendingUnitHealthValues.get(unitID));
@@ -569,8 +573,8 @@ function executeProjectileMoveStep(projectile) {
 function setUnitHealth(message) {
 	var unitID = message.unit.id;
 	var health = parseInt(message.health);
-
-	// drawUnit has not created the label yet: cache and apply later.
+	
+	// SC04 fix: drawUnit uses queue; cache health if label is not ready yet.
 	if (!healthLabels.has(unitID)) {
 		pendingUnitHealthValues.set(unitID, health);
 		return;
@@ -591,8 +595,8 @@ function setUnitHealth(message) {
 function setUnitAttack(message) {
 	var unitID = message.unit.id;
 	var attack = parseInt(message.attack);
-
-	// drawUnit has not created the label yet: cache and apply later.
+	
+	// SC04 fix: drawUnit uses queue; cache attack if label is not ready yet.
 	if (!attackLabels.has(unitID)) {
 		pendingUnitAttackValues.set(unitID, attack);
 		return;
@@ -933,15 +937,15 @@ function deleteCard(message) {
 }
 
 function deleteUnit(message) {
-	var unitID = message.unit.id;
-	var unitContainer = spriteContainers.get(unitID);
+	var unitContainer = spriteContainers.get(message.unit.id);
 	g.stage.removeChild(unitContainer);
-	spriteContainers.delete(unitID);
-	sprites.delete(unitID);
-	attackLabels.delete(unitID);
-	healthLabels.delete(unitID);
-	pendingUnitAttackValues.delete(unitID);
-	pendingUnitHealthValues.delete(unitID);
+	spriteContainers.delete(message.unit.id);
+	sprites.delete(message.unit.id);
+	attackLabels.delete(message.unit.id);
+	healthLabels.delete(message.unit.id);
+	// Keep cached stat maps consistent when a unit leaves the board.
+	pendingUnitAttackValues.delete(message.unit.id);
+	pendingUnitHealthValues.delete(message.unit.id);
 }
 
 
