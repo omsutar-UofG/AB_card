@@ -3,3 +3,8 @@
 __MACOSX/
 **/__MACOSX/
 ._*
+.DS_Store
+**/.DS_Store
+__MACOSX/
+**/__MACOSX/
+._*
