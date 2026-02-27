@@ -53,7 +53,7 @@ public class Heartbeat implements EventProcessor{
 
 	/**
 	 * Implements AI auto-pass for SC08 continuity:
-	 * 1) drain AI mana, 2) swap active player to human, 3) trigger human turn-start logic.
+	 * 1) drain AI mana, 2) draw for AI at end-turn, 3) swap active player to human.
 	 */
 	private void endAiTurnAndStartHumanTurn(ActorRef out, GameState gameState) {
 		// SC07 equivalent for AI: clear remaining mana at end of its turn.
@@ -64,12 +64,16 @@ public class Heartbeat implements EventProcessor{
 		SimpleBoardLogic.clearSelectionAndHighlights(out, gameState);
 		SimpleBoardLogic.clearPendingAction(gameState);
 
+		// SC05 + 2024-GameRules alignment:
+		// draw happens at END of AI turn (not at human turn start).
+		drawCardForPlayer(out, gameState, gameState.aiPlayer);
+
 		// SC08: hand control back to human and advance round counter.
 		gameState.activePlayer = gameState.humanPlayer;
 		gameState.turnNumber++;
 		BasicCommands.addPlayer1Notification(out, "Your Turn", 2);
 
-		// SC05: start-of-turn resources for human player (with agreed 9-mana cap).
+		// SC05: start-of-turn mana for human player (with agreed 9-mana cap).
 		int newMana = gameState.turnNumber + 1;
 		if (newMana > 9) {
 			newMana = 9;
@@ -77,31 +81,35 @@ public class Heartbeat implements EventProcessor{
 		gameState.humanPlayer.setMana(newMana);
 		BasicCommands.setPlayer1Mana(out, gameState.humanPlayer);
 
-		// SC05 + SC06: human draws one card, overdraw burns when hand is full.
-		drawCardForHuman(out, gameState.humanPlayer);
-
 		// SC15: refresh action limits for the side that just became active.
 		SimpleBoardLogic.resetActionFlagsForOwner(gameState, GameState.OWNER_HUMAN);
 	}
 
 	/**
-	 * Draw one card for human hand and apply the overdraw rule at hand size 6.
+	 * Draw one card for the player ending turn and apply SC06 overdraw rule.
 	 */
-	private void drawCardForHuman(ActorRef out, Player humanPlayer) {
-		if (humanPlayer.getDeck().isEmpty()) {
+	private void drawCardForPlayer(ActorRef out, GameState gameState, Player player) {
+		if (player.getDeck().isEmpty()) {
 			return;
 		}
 
-		Card card = humanPlayer.getDeck().get(0);
-		humanPlayer.removeCardFromDeck(card);
+		Card card = player.getDeck().get(0);
+		player.removeCardFromDeck(card);
 
-		if (humanPlayer.getHand().size() >= 6) {
-			BasicCommands.addPlayer1Notification(out, "Hand full! Card burned.", 2);
+		if (player.getHand().size() >= 6) {
+			// Only show burn message to human player.
+			if (player == gameState.humanPlayer) {
+				BasicCommands.addPlayer1Notification(out, "Hand full! Card burned.", 2);
+			}
 			return;
 		}
 
-		humanPlayer.addCardToHand(card);
-		BasicCommands.drawCard(out, card, humanPlayer.getHand().indexOf(card) + 1, 0);
+		player.addCardToHand(card);
+
+		// Only human hand is visible in UI.
+		if (player == gameState.humanPlayer) {
+			BasicCommands.drawCard(out, card, player.getHand().indexOf(card) + 1, 0);
+		}
 	}
 
 }

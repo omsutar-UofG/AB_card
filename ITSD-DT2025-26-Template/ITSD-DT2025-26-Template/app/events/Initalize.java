@@ -33,6 +33,7 @@ public class Initalize implements EventProcessor{
 	private static final int boardRows = 5;
 	private static final int boardCols = 9;
 	private static final int maxHealth = 20;
+	private static final int avatarAttack = 2;
 
 	private void drawTiles(ActorRef out, GameState gameState, JsonNode message) {
 		// NOTIFICATION: Drawing tiles.
@@ -148,10 +149,10 @@ public class Initalize implements EventProcessor{
 		BasicCommands.addPlayer1Notification(out, "Draw Human Unit", 2);
 		// loadUnit returns Unit as declared type; cast is safe because class token is BetterUnit.class.
 		BetterUnit humanUnit = (BetterUnit) BasicObjectBuilders.loadUnit(StaticConfFiles.humanAvatar, 0, BetterUnit.class);
-		// SC10-SC15: Initialize runtime combat/action fields for the human avatar.
+		// SC04 + SC10-SC15: initialize runtime combat/action fields for the human avatar.
 		humanUnit.setOwner(GameState.OWNER_HUMAN);
 		humanUnit.setAvatar(true);
-		humanUnit.setAttack(2);
+		humanUnit.setAttack(avatarAttack);
 		humanUnit.setHealth(maxHealth);
 		humanUnit.setMoveRange(2);
 		humanUnit.setAttackRange(1);
@@ -166,10 +167,10 @@ public class Initalize implements EventProcessor{
 		BasicCommands.addPlayer1Notification(out, "Draw AI Unit", 2);
 		// loadUnit returns Unit as declared type; cast is safe because class token is BetterUnit.class.
 		BetterUnit aiUnit = (BetterUnit) BasicObjectBuilders.loadUnit(StaticConfFiles.aiAvatar, 1, BetterUnit.class);
-		// SC10-SC15: Initialize runtime combat/action fields for the AI avatar.
+		// SC04 + SC10-SC15: initialize runtime combat/action fields for the AI avatar.
 		aiUnit.setOwner(GameState.OWNER_AI);
 		aiUnit.setAvatar(true);
-		aiUnit.setAttack(2);
+		aiUnit.setAttack(avatarAttack);
 		aiUnit.setHealth(maxHealth);
 		aiUnit.setMoveRange(2);
 		aiUnit.setAttackRange(1);
