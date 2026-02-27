@@ -6,8 +6,10 @@ import akka.actor.ActorRef;
 import commands.BasicCommands;
 import demo.CommandDemo;
 import demo.Loaders_2024_Check;
+import game.SimpleBoardLogic;
 import structures.GameState;
 import structures.basic.ImageCorrection;
+import structures.basic.BetterUnit;
 import structures.basic.Player;
 import structures.basic.Position;
 import structures.basic.Tile;
@@ -144,16 +146,38 @@ public class Initalize implements EventProcessor{
 	private void drawAvatarUnits(ActorRef out, GameState gameState, JsonNode message, Tile humanUnitTile, Tile aiUnitTile) {
 		// NOTIFICATION: Draw Human Unit
 		BasicCommands.addPlayer1Notification(out, "Draw Human Unit", 2);
-		Unit humanUnit = BasicObjectBuilders.loadUnit(StaticConfFiles.humanAvatar, 0, Unit.class);
+		// loadUnit returns Unit as declared type; cast is safe because class token is BetterUnit.class.
+		BetterUnit humanUnit = (BetterUnit) BasicObjectBuilders.loadUnit(StaticConfFiles.humanAvatar, 0, BetterUnit.class);
+		// SC10-SC15: Initialize runtime combat/action fields for the human avatar.
+		humanUnit.setOwner(GameState.OWNER_HUMAN);
+		humanUnit.setAvatar(true);
+		humanUnit.setAttack(2);
+		humanUnit.setHealth(maxHealth);
+		humanUnit.setMoveRange(2);
+		humanUnit.setAttackRange(1);
 		humanUnit.setPositionByTile(humanUnitTile); 
 		BasicCommands.drawUnit(out, humanUnit, humanUnitTile);
+		BasicCommands.setUnitAttack(out, humanUnit, humanUnit.getAttack());
+		BasicCommands.setUnitHealth(out, humanUnit, humanUnit.getHealth());
+		SimpleBoardLogic.registerUnit(gameState, humanUnit, humanUnitTile);
 		try {Thread.sleep(200);} catch (InterruptedException e) {e.printStackTrace();}
 
 		// NOTIFICATION: Draw AI Unit
 		BasicCommands.addPlayer1Notification(out, "Draw AI Unit", 2);
-		Unit aiUnit = BasicObjectBuilders.loadUnit(StaticConfFiles.aiAvatar, 0, Unit.class);
+		// loadUnit returns Unit as declared type; cast is safe because class token is BetterUnit.class.
+		BetterUnit aiUnit = (BetterUnit) BasicObjectBuilders.loadUnit(StaticConfFiles.aiAvatar, 1, BetterUnit.class);
+		// SC10-SC15: Initialize runtime combat/action fields for the AI avatar.
+		aiUnit.setOwner(GameState.OWNER_AI);
+		aiUnit.setAvatar(true);
+		aiUnit.setAttack(2);
+		aiUnit.setHealth(maxHealth);
+		aiUnit.setMoveRange(2);
+		aiUnit.setAttackRange(1);
 		aiUnit.setPositionByTile(aiUnitTile);
 		BasicCommands.drawUnit(out, aiUnit, aiUnitTile);
+		BasicCommands.setUnitAttack(out, aiUnit, aiUnit.getAttack());
+		BasicCommands.setUnitHealth(out, aiUnit, aiUnit.getHealth());
+		SimpleBoardLogic.registerUnit(gameState, aiUnit, aiUnitTile);
 		try {Thread.sleep(200);} catch (InterruptedException e) {e.printStackTrace();}
 
 	}

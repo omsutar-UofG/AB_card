@@ -3,6 +3,7 @@ package events;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import akka.actor.ActorRef;
+import game.SimpleBoardLogic;
 import structures.GameState;
 
 /**
@@ -21,9 +22,15 @@ public class UnitMoving implements EventProcessor{
 
 	@Override
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
-		
 		int unitid = message.get("id").asInt();
-		
+
+		if (!SimpleBoardLogic.isTurnSystemReady(gameState)) {
+			return;
+		}
+		// SC13/SC14: lock interaction while movement animation is running.
+		if (gameState.pendingMoveUnitId != null && gameState.pendingMoveUnitId == unitid) {
+			gameState.actionLocked = true;
+		}
 	}
 
 }

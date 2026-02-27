@@ -3,6 +3,7 @@ package events;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import akka.actor.ActorRef;
+import game.SimpleBoardLogic;
 import structures.GameState;
 
 /**
@@ -20,8 +21,12 @@ public class OtherClicked implements EventProcessor{
 
 	@Override
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
-		
-		
+		// SC12: Clicking any non-action area clears active highlights/selection.
+		if (!SimpleBoardLogic.isTurnSystemReady(gameState)) {
+			return;
+		}
+		SimpleBoardLogic.clearSelectionAndHighlights(out, gameState);
+		SimpleBoardLogic.clearPendingAction(gameState);
 	}
 
 }

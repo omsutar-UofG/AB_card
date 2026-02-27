@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import akka.actor.ActorRef;
 import commands.BasicCommands;
+import game.SimpleBoardLogic;
 import structures.GameState;
 
 /**
@@ -34,6 +35,14 @@ public class EndTurnClicked implements EventProcessor{
 			BasicCommands.addPlayer1Notification(out, "Opponent Turn", 2);
 			return;
 		}
+		// SC13/SC14: prevent ending turn while action pipeline is still running.
+		if (gameState.actionLocked) {
+			BasicCommands.addPlayer1Notification(out, "Action in progress", 2);
+			return;
+		}
+		// SC12: clear active highlights/selection when ending the turn.
+		SimpleBoardLogic.clearSelectionAndHighlights(out, gameState);
+		SimpleBoardLogic.clearPendingAction(gameState);
 		
 		// 1. SC07: Mana Drain at End Turn
 		// Acceptance Criteria: On End Turn, remaining mana becomes 0.
@@ -78,6 +87,9 @@ public class EndTurnClicked implements EventProcessor{
 			// SC05: Draw 1 card for AI
 			drawCard(out, gameState, gameState.aiPlayer);
 		}
+
+		// SC15: reset per-turn action restrictions for units on the new active side.
+		SimpleBoardLogic.resetActionFlagsForOwner(gameState, SimpleBoardLogic.ownerForActivePlayer(gameState));
 		
 	}
 

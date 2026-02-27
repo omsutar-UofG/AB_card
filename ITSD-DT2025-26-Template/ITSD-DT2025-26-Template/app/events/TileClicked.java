@@ -4,7 +4,12 @@ package events;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import akka.actor.ActorRef;
+import commands.BasicCommands;
+import game.SimpleBoardLogic;
+import game.SimpleBoardLogic.HighlightPlan;
 import structures.GameState;
+import structures.basic.BetterUnit;
+import structures.basic.Tile;
 
 /**
  * Indicates that the user has clicked an object on the game canvas, in this case a tile.
@@ -25,13 +30,135 @@ public class TileClicked implements EventProcessor{
 	@Override
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
 
+		// SC10-SC15: movement/attack interactions are valid only after full initialize.
+		if (!SimpleBoardLogic.isTurnSystemReady(gameState)) {
+			return;
+		}
+		// Only accept tile interactions on the human turn in this phase.
+		if (!SimpleBoardLogic.isHumanTurn(gameState)) {
+			return;
+		}
+		// SC13-SC14: avoid concurrent clicks while a move/attack chain is in flight.
+		if (gameState.actionLocked) {
+			return;
+		}
+
 		int tilex = message.get("tilex").asInt();
 		int tiley = message.get("tiley").asInt();
-		
-		if (gameState.something == true) {
-			// do some logic
+		Tile clickedTile = gameState.board[tilex][tiley];
+		if (clickedTile == null) {
+			return;
 		}
-		
+
+		BetterUnit clickedUnit = SimpleBoardLogic.getUnitAt(gameState, tilex, tiley);
+		String clickedTileKey = SimpleBoardLogic.tileKey(tilex, tiley);
+
+		// No current selection: selecting own unit should build highlights.
+		if (gameState.selectedUnitId == null) {
+			handleSelectionStart(out, gameState, clickedUnit);
+			return;
+		}
+
+		BetterUnit selectedUnit = gameState.unitsById.get(gameState.selectedUnitId);
+		if (selectedUnit == null) {
+			SimpleBoardLogic.clearSelectionAndHighlights(out, gameState);
+			return;
+		}
+
+		// Re-select another own unit to refresh movement/attack options.
+		if (clickedUnit != null
+				&& clickedUnit.getOwner() == GameState.OWNER_HUMAN
+				&& clickedUnit.getId() != selectedUnit.getId()) {
+			handleSelectionStart(out, gameState, clickedUnit);
+			return;
+		}
+
+		// SC13: click a valid move tile to start movement animation.
+		if (gameState.moveHighlightTiles.contains(clickedTileKey)
+				&& clickedUnit == null
+				&& !selectedUnit.isHasMoved()) {
+			startMoveAction(out, gameState, selectedUnit, clickedTile, null);
+			return;
+		}
+
+		// SC11 + SC14: click a valid red target tile to attack.
+		if (gameState.attackHighlightTiles.contains(clickedTileKey)
+				&& clickedUnit != null
+				&& clickedUnit.getOwner() == GameState.OWNER_AI
+				&& !selectedUnit.isHasAttacked()) {
+			handleAttackSelection(out, gameState, selectedUnit, clickedUnit, clickedTileKey);
+			return;
+		}
+
+		// SC12: any unrelated tile click clears current highlights and selection.
+		SimpleBoardLogic.clearSelectionAndHighlights(out, gameState);
+	}
+
+	/**
+	 * SC10/SC11: Entry point when player clicks on a tile with potential own-unit selection.
+	 */
+	private void handleSelectionStart(ActorRef out, GameState gameState, BetterUnit clickedUnit) {
+		if (clickedUnit == null || clickedUnit.getOwner() != GameState.OWNER_HUMAN) {
+			SimpleBoardLogic.clearSelectionAndHighlights(out, gameState);
+			return;
+		}
+		if (!SimpleBoardLogic.unitCanTakeAction(clickedUnit)) {
+			BasicCommands.addPlayer1Notification(out, "Unit already acted this turn", 2);
+			SimpleBoardLogic.clearSelectionAndHighlights(out, gameState);
+			return;
+		}
+
+		gameState.selectedUnitId = clickedUnit.getId();
+		HighlightPlan plan = SimpleBoardLogic.buildHighlightPlan(gameState, clickedUnit);
+		SimpleBoardLogic.applyHighlightPlan(out, gameState, plan);
+	}
+
+	/**
+	 * SC13: Shared movement start handler for plain move and move-then-attack chains.
+	 */
+	private void startMoveAction(
+			ActorRef out,
+			GameState gameState,
+			BetterUnit mover,
+			Tile destination,
+			Integer optionalAttackTargetUnitId) {
+		gameState.actionLocked = true;
+		gameState.pendingMoveUnitId = mover.getId();
+		gameState.pendingAttackTargetUnitId = optionalAttackTargetUnitId;
+		BasicCommands.moveUnitToTile(out, mover, destination);
+	}
+
+	/**
+	 * SC14:
+	 * - If target is adjacent now -> direct attack.
+	 * - If target is only reachable after move -> start move and defer attack to UnitStopped.
+	 */
+	private void handleAttackSelection(
+			ActorRef out,
+			GameState gameState,
+			BetterUnit attacker,
+			BetterUnit defender,
+			String defenderTileKey) {
+
+		// Direct adjacent attack path.
+		if (SimpleBoardLogic.isInAttackRange(attacker, defender)) {
+			gameState.actionLocked = true;
+			SimpleBoardLogic.executeAttack(out, gameState, attacker, defender);
+			attacker.setHasAttacked(true);
+			SimpleBoardLogic.clearPendingAction(gameState);
+			// SC12: clear highlights after completing an action.
+			SimpleBoardLogic.clearSelectionAndHighlights(out, gameState);
+			return;
+		}
+
+		// Move-and-attack path.
+		if (!attacker.isHasMoved()) {
+			String approachTileKey = gameState.approachTileByEnemyTile.get(defenderTileKey);
+			Tile approachTile = SimpleBoardLogic.getTileByKey(gameState, approachTileKey);
+			if (approachTile != null) {
+				startMoveAction(out, gameState, attacker, approachTile, defender.getId());
+			}
+		}
 	}
 
 }

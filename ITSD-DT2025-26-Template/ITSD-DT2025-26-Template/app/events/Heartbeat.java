@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 
 import akka.actor.ActorRef;
 import commands.BasicCommands;
+import game.SimpleBoardLogic;
 import structures.GameState;
 import structures.basic.Card;
 import structures.basic.Player;
@@ -59,6 +60,10 @@ public class Heartbeat implements EventProcessor{
 		gameState.aiPlayer.setMana(0);
 		BasicCommands.setPlayer2Mana(out, gameState.aiPlayer);
 
+		// SC12: make sure no stale selection/highlight state leaks across turns.
+		SimpleBoardLogic.clearSelectionAndHighlights(out, gameState);
+		SimpleBoardLogic.clearPendingAction(gameState);
+
 		// SC08: hand control back to human and advance round counter.
 		gameState.activePlayer = gameState.humanPlayer;
 		gameState.turnNumber++;
@@ -74,6 +79,9 @@ public class Heartbeat implements EventProcessor{
 
 		// SC05 + SC06: human draws one card, overdraw burns when hand is full.
 		drawCardForHuman(out, gameState.humanPlayer);
+
+		// SC15: refresh action limits for the side that just became active.
+		SimpleBoardLogic.resetActionFlagsForOwner(gameState, GameState.OWNER_HUMAN);
 	}
 
 	/**
