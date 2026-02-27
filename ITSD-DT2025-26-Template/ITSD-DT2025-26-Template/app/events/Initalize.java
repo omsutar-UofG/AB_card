@@ -68,8 +68,9 @@ public class Initalize implements EventProcessor{
 
 		// Loading player 1 health=20
 		gameState.humanPlayer = new Player(maxHealth, 0);
+		// 2025-26 Deck spec: 20-card deck = two copies of each configured card.
 		// Initialize Deck for Human Player
-		gameState.humanPlayer.setDeck(utils.OrderedCardLoader.getPlayer1Cards(1));
+		gameState.humanPlayer.setDeck(utils.OrderedCardLoader.getPlayer1Cards(2));
 		BasicCommands.setPlayer1Health(out, gameState.humanPlayer);
 		System.out.println("Added health to player 1");
 		try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
@@ -88,8 +89,9 @@ public class Initalize implements EventProcessor{
 		// NOTIFICATION: setPlayer2Health
 		BasicCommands.addPlayer1Notification(out, "setPlayer2Health", 2);
 		gameState.aiPlayer = new Player(maxHealth, 0);
+		// 2025-26 Deck spec: 20-card deck = two copies of each configured card.
 		// Initialize Deck for AI Player
-		gameState.aiPlayer.setDeck(utils.OrderedCardLoader.getPlayer2Cards(1));
+		gameState.aiPlayer.setDeck(utils.OrderedCardLoader.getPlayer2Cards(2));
 		BasicCommands.setPlayer2Health(out, gameState.aiPlayer);
 		try {Thread.sleep(1000);} catch (InterruptedException e) {e.printStackTrace();}
 
