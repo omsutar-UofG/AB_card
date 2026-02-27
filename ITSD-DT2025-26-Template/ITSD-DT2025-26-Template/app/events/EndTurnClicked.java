@@ -35,49 +35,26 @@ public class EndTurnClicked implements EventProcessor{
 			return;
 		}
 		
-		// 1. SC07: Mana Drain at End Turn
-		// Acceptance Criteria: On End Turn, remaining mana becomes 0.
-		if (gameState.activePlayer == gameState.humanPlayer) {
-			gameState.humanPlayer.setMana(0);
-			BasicCommands.setPlayer1Mana(out, gameState.humanPlayer);
-		} else {
-			gameState.aiPlayer.setMana(0);
-			BasicCommands.setPlayer2Mana(out, gameState.aiPlayer);
-		}
-		
-		// 2. SC08: End Turn Processing - Swap active player
-		if (gameState.activePlayer == gameState.humanPlayer) {
-			gameState.activePlayer = gameState.aiPlayer;
-			
-			// SC09: Turn Notification
-			BasicCommands.addPlayer1Notification(out, "Opponent Turn", 2);
-			
-		} else {
-			gameState.activePlayer = gameState.humanPlayer;
-			
-			// SC08: Turn-start logic for next player (Increment turn number when switching back to human)
-			gameState.turnNumber++;
-			
-			// SC09: Turn Notification
-			BasicCommands.addPlayer1Notification(out, "Your Turn", 2);
-		}
-		
-		// 3. Start Turn Logic for the NEW Active Player
-		// SC05: Gain mana equal to turn number + 1 (Capped at 9 usually, but story says turn+1)
+		// 1) SC07: Mana Drain at End Turn.
+		// The ending player is human in this event path.
+		gameState.humanPlayer.setMana(0);
+		BasicCommands.setPlayer1Mana(out, gameState.humanPlayer);
+
+		// 2) SC05 + 2024-GameRules alignment:
+		// draw happens at END of current player's turn (not at next-turn start).
+		drawCard(out, gameState, gameState.humanPlayer);
+
+		// 3) SC08: pass control to opponent.
+		gameState.activePlayer = gameState.aiPlayer;
+		BasicCommands.addPlayer1Notification(out, "Opponent Turn", 2);
+
+		// 4) SC05: next active player gains mana = turnNumber + 1 (cap 9).
 		int newMana = gameState.turnNumber + 1;
-		if (newMana > 9) newMana = 9; // Cap mana at 9 as per UI limitations usually
-		
-		gameState.activePlayer.setMana(newMana);
-		
-		if (gameState.activePlayer == gameState.humanPlayer) {
-			BasicCommands.setPlayer1Mana(out, gameState.humanPlayer);
-			// SC05: Draw 1 card at the start of each turn
-			drawCard(out, gameState, gameState.humanPlayer);
-		} else {
-			BasicCommands.setPlayer2Mana(out, gameState.aiPlayer);
-			// SC05: Draw 1 card for AI
-			drawCard(out, gameState, gameState.aiPlayer);
+		if (newMana > 9) {
+			newMana = 9;
 		}
+		gameState.aiPlayer.setMana(newMana);
+		BasicCommands.setPlayer2Mana(out, gameState.aiPlayer);
 		
 	}
 
@@ -93,9 +70,9 @@ public class EndTurnClicked implements EventProcessor{
 	}
 
 	/**
-	 * Helper method to draw a card for a player.
-	 * Implements SC06: Overdraw Rule.
-	 * (Duplicated from Initalize.java for isolation)
+	 * Draw one card for the specified player.
+	 * SC05 (rule-aligned): called when that player ENDs their turn.
+	 * SC06: if hand size is already 6, burn the drawn card.
 	 */
 	private void drawCard(ActorRef out, GameState gameState, structures.basic.Player player) {
 		// Check if deck is empty
