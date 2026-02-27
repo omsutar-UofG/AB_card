@@ -130,9 +130,9 @@ public class TileClicked implements EventProcessor{
 	}
 
 	/**
-	 * SC14:
-	 * - If target is adjacent now -> direct attack.
-	 * - If target is only reachable after move -> start move and defer attack to UnitStopped.
+	 * SC14 + SC16 + SC18:
+	 * - If target is in current range now -> resolve direct combat exchange.
+	 * - If target is only reachable after move -> start move and defer combat to UnitStopped.
 	 */
 	private void handleAttackSelection(
 			ActorRef out,
@@ -144,7 +144,8 @@ public class TileClicked implements EventProcessor{
 		// Direct adjacent attack path.
 		if (SimpleBoardLogic.isInAttackRange(attacker, defender)) {
 			gameState.actionLocked = true;
-			SimpleBoardLogic.executeAttack(out, gameState, attacker, defender);
+			// SC16/SC17/SC18/SC19/SC20: full combat exchange (including counter-attack checks).
+			SimpleBoardLogic.resolveCombatExchange(out, gameState, attacker, defender);
 			// 2024 GameRules: attacking before moving forfeits movement.
 			if (!attacker.isHasMoved()) {
 				attacker.setHasMoved(true);

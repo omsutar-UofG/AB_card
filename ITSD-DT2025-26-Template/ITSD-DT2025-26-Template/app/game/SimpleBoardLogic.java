@@ -14,19 +14,24 @@ import structures.basic.Tile;
 import structures.basic.UnitAnimationType;
 
 /**
- * Shared board and combat helpers for SC10-SC15.
+ * Shared board and combat helpers for SC10-SC20.
  *
  * This class centralizes:
  * - tile highlighting rules
  * - occupancy bookkeeping
  * - movement reachability checks
- * - immediate attack resolution
+ * - attack/counter-attack resolution
  */
 public final class SimpleBoardLogic {
 
 	public static final int TILE_MODE_NORMAL = 0;
 	public static final int TILE_MODE_MOVE_HIGHLIGHT = 1;
 	public static final int TILE_MODE_ATTACK_HIGHLIGHT = 2;
+	private static final int MIN_ANIMATION_WAIT_MS = 120;
+	private static final int DEFAULT_ATTACK_WAIT_MS = 250;
+	private static final int DEFAULT_IMPACT_WAIT_MS = 220;
+	private static final int DEFAULT_DEATH_WAIT_MS = 450;
+	private static final int MAX_ANIMATION_WAIT_MS = 900;
 
 	private SimpleBoardLogic() {}
 
@@ -207,36 +212,47 @@ public final class SimpleBoardLogic {
 	}
 
 	/**
-	 * SC14: Resolve one attack sequence and apply HP changes.
+	 * SC16 + SC17 + SC19 + SC20:
+	 * Resolve a one-way attack hit (animation + damage + death/avatar sync).
+	 *
+	 * Note:
+	 * - This method does not perform counter-attack.
+	 * - Counter-attack is handled in resolveCombatExchange(...).
 	 */
 	public static void executeAttack(ActorRef out, GameState gameState, BetterUnit attacker, BetterUnit defender) {
-		BasicCommands.playUnitAnimation(out, attacker, UnitAnimationType.attack);
+		if (!isUnitAlive(attacker) || !isUnitAlive(defender)) {
+			return;
+		}
+		// SC16: keep attack animation visible before processing hit/death.
+		int attackAnimationMs = BasicCommands.playUnitAnimation(out, attacker, UnitAnimationType.attack);
+		waitForAnimation(attackAnimationMs, DEFAULT_ATTACK_WAIT_MS);
+		applySingleHitDamage(out, gameState, attacker, defender);
+	}
 
-		int damage = Math.max(0, attacker.getAttack());
-		int nextHealth = defender.getHealth() - damage;
-		defender.setHealth(nextHealth);
-
-		if (nextHealth > 0) {
-			BasicCommands.playUnitAnimation(out, defender, UnitAnimationType.hit);
-			BasicCommands.setUnitHealth(out, defender, nextHealth);
-		} else {
-			BasicCommands.setUnitHealth(out, defender, 0);
-			BasicCommands.playUnitAnimation(out, defender, UnitAnimationType.death);
-			BasicCommands.deleteUnit(out, defender);
-			gameState.unitIdByTile.remove(tileKey(defender.getPosition().getTilex(), defender.getPosition().getTiley()));
-			gameState.unitsById.remove(defender.getId());
+	/**
+	 * SC16 + SC17 + SC18 + SC19 + SC20:
+	 * Full combat exchange for one click action:
+	 * 1) attacker hits defender
+	 * 2) if defender survives and can hit without moving, defender counter-attacks
+	 */
+	public static void resolveCombatExchange(ActorRef out, GameState gameState, BetterUnit attacker, BetterUnit defender) {
+		if (!isUnitAlive(attacker) || !isUnitAlive(defender)) {
+			return;
 		}
 
-		// Keep player-health card synced for avatar units.
-		if (defender.isAvatar()) {
-			int hp = Math.max(defender.getHealth(), 0);
-			if (defender.getOwner() == GameState.OWNER_HUMAN) {
-				gameState.humanPlayer.setHealth(hp);
-				BasicCommands.setPlayer1Health(out, gameState.humanPlayer);
-			} else {
-				gameState.aiPlayer.setHealth(hp);
-				BasicCommands.setPlayer2Health(out, gameState.aiPlayer);
-			}
+		// First strike from selected attacker.
+		executeAttack(out, gameState, attacker, defender);
+
+		BetterUnit refreshedAttacker = gameState.unitsById.get(attacker.getId());
+		BetterUnit refreshedDefender = gameState.unitsById.get(defender.getId());
+		if (!isUnitAlive(refreshedAttacker) || !isUnitAlive(refreshedDefender)) {
+			return;
+		}
+
+		// SC18 + 2024 GameRules:
+		// counter-attack only if defender survived and is already in range.
+		if (isInAttackRange(refreshedDefender, refreshedAttacker)) {
+			executeAttack(out, gameState, refreshedDefender, refreshedAttacker);
 		}
 	}
 
@@ -327,6 +343,76 @@ public final class SimpleBoardLogic {
 
 	private static boolean isTileInAttackRange(int dx, int dy, int range) {
 		return !(dx == 0 && dy == 0) && dx <= range && dy <= range;
+	}
+
+	/**
+	 * SC17 + SC19 + SC20:
+	 * Apply one hit value and update UI/state based on post-hit HP.
+	 */
+	private static void applySingleHitDamage(ActorRef out, GameState gameState, BetterUnit source, BetterUnit target) {
+		int damage = Math.max(0, source.getAttack());
+		int nextHealth = Math.max(0, target.getHealth() - damage);
+		target.setHealth(nextHealth);
+		BasicCommands.setUnitHealth(out, target, nextHealth);
+
+		if (nextHealth > 0) {
+			// SC16/SC17: keep hit reaction visible before next combat step.
+			int hitAnimationMs = BasicCommands.playUnitAnimation(out, target, UnitAnimationType.hit);
+			waitForAnimation(hitAnimationMs, DEFAULT_IMPACT_WAIT_MS);
+		} else {
+			// SC19: death should be seen before removing non-avatar units.
+			int deathAnimationMs = BasicCommands.playUnitAnimation(out, target, UnitAnimationType.death);
+			waitForAnimation(deathAnimationMs, DEFAULT_DEATH_WAIT_MS);
+
+			// SC19:
+			// non-avatar units are removed from board after death animation trigger.
+			if (!target.isAvatar()) {
+				BasicCommands.deleteUnit(out, target);
+				removeUnitFromIndexes(gameState, target);
+			}
+		}
+
+		// SC20:
+		// Avatar damage/death always syncs to owning player's health UI.
+		if (target.isAvatar()) {
+			syncAvatarHealth(out, gameState, target);
+		}
+	}
+
+	private static void removeUnitFromIndexes(GameState gameState, BetterUnit unit) {
+		gameState.unitIdByTile.remove(tileKey(unit.getPosition().getTilex(), unit.getPosition().getTiley()));
+		gameState.unitsById.remove(unit.getId());
+	}
+
+	private static void syncAvatarHealth(ActorRef out, GameState gameState, BetterUnit avatarUnit) {
+		int hp = Math.max(0, avatarUnit.getHealth());
+		if (avatarUnit.getOwner() == GameState.OWNER_HUMAN) {
+			gameState.humanPlayer.setHealth(hp);
+			BasicCommands.setPlayer1Health(out, gameState.humanPlayer);
+		} else {
+			gameState.aiPlayer.setHealth(hp);
+			BasicCommands.setPlayer2Health(out, gameState.aiPlayer);
+		}
+	}
+
+	private static boolean isUnitAlive(BetterUnit unit) {
+		return unit != null && unit.getHealth() > 0;
+	}
+
+	/**
+	 * SC16-SC20 visual sequencing helper:
+	 * Avoid immediate animation overwrite by spacing combat steps in backend dispatch order.
+	 */
+	private static void waitForAnimation(int estimatedMs, int fallbackMs) {
+		int waitMs = fallbackMs;
+		if (estimatedMs > 0) {
+			waitMs = Math.max(MIN_ANIMATION_WAIT_MS, Math.min(MAX_ANIMATION_WAIT_MS, estimatedMs));
+		}
+		try {
+			Thread.sleep(waitMs);
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
 	}
 
 	private static int[] parseKey(String key) {

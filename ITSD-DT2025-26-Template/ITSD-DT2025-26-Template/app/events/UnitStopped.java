@@ -49,11 +49,12 @@ public class UnitStopped implements EventProcessor{
 		SimpleBoardLogic.moveUnitStateToTile(gameState, mover, destination);
 		mover.setHasMoved(true);
 
-		// SC14: complete deferred attack for move-and-attack flow.
+		// SC14 + SC16-SC20: complete deferred combat for move-and-attack flow.
 		if (gameState.pendingAttackTargetUnitId != null) {
 			BetterUnit defender = gameState.unitsById.get(gameState.pendingAttackTargetUnitId);
 			if (defender != null && !mover.isHasAttacked()) {
-				SimpleBoardLogic.executeAttack(out, gameState, mover, defender);
+				// Use the same combat exchange pipeline as direct attacks (includes counter-attack).
+				SimpleBoardLogic.resolveCombatExchange(out, gameState, mover, defender);
 				mover.setHasAttacked(true);
 			}
 		}
