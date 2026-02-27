@@ -106,7 +106,7 @@ public class Heartbeat implements EventProcessor{
 
 		player.addCardToHand(card);
 
-		// Only human hand is visible in UI.
+		// Only human hand is visible in UI..
 		if (player == gameState.humanPlayer) {
 			BasicCommands.drawCard(out, card, player.getHand().indexOf(card) + 1, 0);
 		}
