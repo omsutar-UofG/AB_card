@@ -24,7 +24,7 @@ public class UnitMoving implements EventProcessor{
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
 		int unitid = message.get("id").asInt();
 
-		if (!SimpleBoardLogic.isTurnSystemReady(gameState)) {
+		if (!SimpleBoardLogic.isGameActive(gameState)) {
 			return;
 		}
 		// SC13/SC14: lock interaction while movement animation is running.

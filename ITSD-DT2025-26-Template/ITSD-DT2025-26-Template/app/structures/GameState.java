@@ -60,5 +60,21 @@ public class GameState {
 
 	// SC23/SC28: runtime id generator for newly summoned units.
 	public int nextUnitId = 2;
+
+	// SC40: terminal game-state latch and winner marker.
+	public boolean gameOver = false;
+	// 0 = none, 1 = human, 2 = ai
+	public int winnerOwner = 0;
+
+	// SC40/SC32/SC33: direct avatar lookup for trigger and win checks.
+	public Integer humanAvatarUnitId = null;
+	public Integer aiAvatarUnitId = null;
+
+	// SC33: Horn of the Forsaken (artifact) charges on human avatar.
+	public int humanHornCharges = 0;
+
+	// SC27 UX:
+	// units that are stun-locked for the CURRENT owner turn (used for player-facing notifications).
+	public Set<Integer> stunnedThisTurnUnitIds = new HashSet<Integer>();
 	
 }

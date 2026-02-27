@@ -73,6 +73,8 @@
 	let player2NotificationText = null;
 	
 	let playingEffects = [];
+	let gameEnded = false;
+	let gameOverOverlay = null;
 	
 	function init() {
 		openWebSocketConnection();
@@ -148,6 +150,9 @@
 					break;
 				case "drawProjectile":
 					drawProjectile(message);
+					break;
+				case "gameover":
+					showGameOverOverlay(message);
 					break;
                 default:
                     return console.log(message);

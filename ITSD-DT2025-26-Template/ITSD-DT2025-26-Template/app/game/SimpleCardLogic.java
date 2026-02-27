@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
 
 import akka.actor.ActorRef;
 import commands.BasicCommands;
@@ -30,6 +31,7 @@ public final class SimpleCardLogic {
 	public static final String TARGET_ALLY_UNIT = "ALLY_UNIT";
 	public static final String TARGET_ENEMY_UNIT = "ENEMY_UNIT";
 	public static final String TARGET_ENEMY_NON_AVATAR = "ENEMY_NON_AVATAR";
+	public static final String TARGET_SELF_AVATAR = "SELF_AVATAR";
 	public static final String TARGET_NONE = "NONE";
 
 	private static final int CARD_MODE_NORMAL = 0;
@@ -37,6 +39,26 @@ public final class SimpleCardLogic {
 	private static final int DEFAULT_NOTIFICATION_SECONDS = 2;
 	private static final int DEFAULT_EFFECT_WAIT_MS = 250;
 	private static final int MAX_SPELL_SUMMON_COUNT = 3;
+
+	/**
+	 * SC37 extension:
+	 * Immutable AI card-play decision for one card action.
+	 */
+	private static final class AiCardDecision {
+		final int handPosition;
+		final Card card;
+		final Tile targetTile;
+		final BetterUnit targetUnit;
+		final int score;
+
+		AiCardDecision(int handPosition, Card card, Tile targetTile, BetterUnit targetUnit, int score) {
+			this.handPosition = handPosition;
+			this.card = card;
+			this.targetTile = targetTile;
+			this.targetUnit = targetUnit;
+			this.score = score;
+		}
+	}
 
 	private SimpleCardLogic() {}
 
@@ -159,11 +181,306 @@ public final class SimpleCardLogic {
 			return true;
 		}
 
-		discardCardAndReorderHand(out, gameState.humanPlayer, gameState.selectedCardHandPosition);
+		discardCardAndReorderHand(out, gameState.humanPlayer, gameState.selectedCardHandPosition, true);
 		SimpleBoardLogic.clearHighlights(out, gameState);
 		gameState.selectedCardHandPosition = null;
 		gameState.selectedCardTargetMode = null;
 		return true;
+	}
+
+	/**
+	 * SC37 extension:
+	 * AI attempts to play at most one legal card during its turn.
+	 * Returns true only when a card was successfully played.
+	 */
+	public static boolean aiTryPlayOneCard(ActorRef out, GameState gameState) {
+		if (gameState == null || gameState.aiPlayer == null || gameState.gameOver) {
+			return false;
+		}
+
+		AiCardDecision decision = chooseBestAiCardDecision(gameState);
+		if (decision == null) {
+			return false;
+		}
+
+		int manaBefore = gameState.aiPlayer.getMana();
+		int manaAfter = manaBefore - decision.card.getManacost();
+		if (manaAfter < 0) {
+			return false;
+		}
+		gameState.aiPlayer.setMana(manaAfter);
+		BasicCommands.setPlayer2Mana(out, gameState.aiPlayer);
+
+		boolean effectApplied = executeCardEffectForOwner(
+				out,
+				gameState,
+				decision.card,
+				decision.targetTile,
+				decision.targetUnit,
+				GameState.OWNER_AI);
+		if (!effectApplied) {
+			gameState.aiPlayer.setMana(manaBefore);
+			BasicCommands.setPlayer2Mana(out, gameState.aiPlayer);
+			return false;
+		}
+
+		discardCardAndReorderHand(out, gameState.aiPlayer, decision.handPosition, false);
+		return true;
+	}
+
+	/**
+	 * SC37 extension:
+	 * Picks the highest-scoring legal card decision from the AI hand under current mana.
+	 */
+	private static AiCardDecision chooseBestAiCardDecision(GameState gameState) {
+		int aiMana = gameState.aiPlayer.getMana();
+		AiCardDecision best = null;
+		List<Card> hand = gameState.aiPlayer.getHand();
+
+		for (int i = 0; i < hand.size(); i++) {
+			Card card = hand.get(i);
+			if (card == null || card.getManacost() > aiMana) {
+				continue;
+			}
+			AiCardDecision candidate = buildAiDecisionForCard(gameState, card, i + 1);
+			if (candidate == null) {
+				continue;
+			}
+			if (best == null
+					|| candidate.score > best.score
+					|| (candidate.score == best.score && candidate.handPosition < best.handPosition)) {
+				best = candidate;
+			}
+		}
+		return best;
+	}
+
+	/**
+	 * SC37 extension:
+	 * Builds a concrete legal target selection and heuristic score for one AI card.
+	 */
+	private static AiCardDecision buildAiDecisionForCard(GameState gameState, Card card, int handPosition) {
+		if (card == null) {
+			return null;
+		}
+		String mode = resolveTargetMode(card);
+		if (TARGET_NONE.equals(mode)) {
+			return null;
+		}
+
+		String name = normalizeCardName(card);
+		int owner = GameState.OWNER_AI;
+
+		if (card.isCreature()) {
+			Tile tile = chooseBestSummonTileForOwner(gameState, owner);
+			if (tile == null) {
+				return null;
+			}
+			int unitAttack = card.getBigCard() != null ? card.getBigCard().getAttack() : 0;
+			int unitHealth = card.getBigCard() != null ? card.getBigCard().getHealth() : 0;
+			int score = 140 + card.getManacost() * 10 + unitAttack * 4 + unitHealth;
+			return new AiCardDecision(handPosition, card, tile, null, score);
+		}
+
+		if ("truestrike".equals(name)) {
+			BetterUnit target = chooseBestEnemyTargetForDamage(gameState, owner, 2);
+			if (target == null) {
+				return null;
+			}
+			Tile tile = gameState.board[target.getPosition().getTilex()][target.getPosition().getTiley()];
+			int score = computeDamageSpellScore(target, 2);
+			return new AiCardDecision(handPosition, card, tile, target, score);
+		}
+		if ("sundrop elixir".equals(name)) {
+			BetterUnit target = chooseBestAllyTargetForHeal(gameState, owner);
+			if (target == null) {
+				return null;
+			}
+			Tile tile = gameState.board[target.getPosition().getTilex()][target.getPosition().getTiley()];
+			int missing = Math.max(0, target.getMaxHealth() - target.getHealth());
+			int score = 120 + missing * 10 + (target.isAvatar() ? 20 : 0);
+			return new AiCardDecision(handPosition, card, tile, target, score);
+		}
+		if ("dark terminus".equals(name)) {
+			BetterUnit target = chooseBestEnemyTargetForDestroy(gameState, owner);
+			if (target == null) {
+				return null;
+			}
+			Tile tile = gameState.board[target.getPosition().getTilex()][target.getPosition().getTiley()];
+			int score = 260 + target.getAttack() * 12 + target.getHealth() * 2;
+			return new AiCardDecision(handPosition, card, tile, target, score);
+		}
+		if ("beamshock".equals(name)) {
+			BetterUnit target = chooseBestEnemyTargetForStun(gameState, owner);
+			if (target == null) {
+				return null;
+			}
+			Tile tile = gameState.board[target.getPosition().getTilex()][target.getPosition().getTiley()];
+			int score = 210 + target.getAttack() * 10 + (target.isHasAttacked() ? 0 : 12);
+			return new AiCardDecision(handPosition, card, tile, target, score);
+		}
+		if ("wraithling swarm".equals(name)) {
+			Tile tile = chooseBestSummonTileForOwner(gameState, owner);
+			if (tile == null) {
+				return null;
+			}
+			return new AiCardDecision(handPosition, card, tile, null, 170);
+		}
+		if ("horn of the forsaken".equals(name)) {
+			// AI artifact tracking is intentionally out of scope for current sprint.
+			return null;
+		}
+		return null;
+	}
+
+	/**
+	 * SC37 extension:
+	 * Picks an unoccupied legal summon tile adjacent to own units that is closest to enemy avatar.
+	 */
+	private static Tile chooseBestSummonTileForOwner(GameState gameState, int owner) {
+		Set<String> legalTiles = SimpleBoardLogic.computeAdjacentUnoccupiedTilesForOwner(gameState, owner);
+		if (legalTiles.isEmpty()) {
+			return null;
+		}
+		int enemyOwner = owner == GameState.OWNER_HUMAN ? GameState.OWNER_AI : GameState.OWNER_HUMAN;
+		BetterUnit enemyAvatar = SimpleBoardLogic.getAvatarUnitForOwner(gameState, enemyOwner);
+
+		Tile bestTile = null;
+		int bestDistance = Integer.MAX_VALUE;
+		int bestY = Integer.MAX_VALUE;
+		int bestX = Integer.MAX_VALUE;
+
+		List<String> sorted = sortedTileKeys(legalTiles);
+		for (String key : sorted) {
+			Tile candidate = SimpleBoardLogic.getTileByKey(gameState, key);
+			if (candidate == null) {
+				continue;
+			}
+			int cx = candidate.getTilex();
+			int cy = candidate.getTiley();
+			int distance = 0;
+			if (enemyAvatar != null) {
+				distance = Math.abs(cx - enemyAvatar.getPosition().getTilex())
+						+ Math.abs(cy - enemyAvatar.getPosition().getTiley());
+			}
+			if (bestTile == null
+					|| distance < bestDistance
+					|| (distance == bestDistance && (cy < bestY || (cy == bestY && cx < bestX)))) {
+				bestTile = candidate;
+				bestDistance = distance;
+				bestY = cy;
+				bestX = cx;
+			}
+		}
+		return bestTile;
+	}
+
+	/**
+	 * SC37 extension:
+	 * Selects an enemy target for fixed-damage spell use, prioritizing lethal and high-value threats.
+	 */
+	private static BetterUnit chooseBestEnemyTargetForDamage(GameState gameState, int casterOwner, int damage) {
+		int enemyOwner = casterOwner == GameState.OWNER_HUMAN ? GameState.OWNER_AI : GameState.OWNER_HUMAN;
+		BetterUnit best = null;
+		int bestScore = Integer.MIN_VALUE;
+		for (BetterUnit unit : gameState.unitsById.values()) {
+			if (unit.getOwner() != enemyOwner || unit.getHealth() <= 0) {
+				continue;
+			}
+			int score = computeDamageSpellScore(unit, damage);
+			if (best == null || score > bestScore || (score == bestScore && unit.getId() < best.getId())) {
+				best = unit;
+				bestScore = score;
+			}
+		}
+		return best;
+	}
+
+	/**
+	 * SC37 extension:
+	 * Score function for fixed-damage target selection.
+	 */
+	private static int computeDamageSpellScore(BetterUnit target, int damage) {
+		if (target == null) {
+			return Integer.MIN_VALUE;
+		}
+		if (target.isAvatar()) {
+			if (target.getHealth() <= damage) {
+				return 10000;
+			}
+			return 260 + (20 - target.getHealth()) * 6;
+		}
+		int killBonus = target.getHealth() <= damage ? 450 : 0;
+		return 200 + killBonus + target.getAttack() * 9 + (target.getMaxHealth() - target.getHealth());
+	}
+
+	/**
+	 * SC37 extension:
+	 * Selects highest-value enemy non-avatar target for destroy spell.
+	 */
+	private static BetterUnit chooseBestEnemyTargetForDestroy(GameState gameState, int casterOwner) {
+		int enemyOwner = casterOwner == GameState.OWNER_HUMAN ? GameState.OWNER_AI : GameState.OWNER_HUMAN;
+		BetterUnit best = null;
+		int bestScore = Integer.MIN_VALUE;
+		for (BetterUnit unit : gameState.unitsById.values()) {
+			if (unit.getOwner() != enemyOwner || unit.getHealth() <= 0 || unit.isAvatar()) {
+				continue;
+			}
+			int score = unit.getAttack() * 10 + unit.getHealth() * 2 + (unit.isProvoke() ? 15 : 0);
+			if (best == null || score > bestScore || (score == bestScore && unit.getId() < best.getId())) {
+				best = unit;
+				bestScore = score;
+			}
+		}
+		return best;
+	}
+
+	/**
+	 * SC37 extension:
+	 * Selects highest-impact enemy non-avatar target for stun spell.
+	 */
+	private static BetterUnit chooseBestEnemyTargetForStun(GameState gameState, int casterOwner) {
+		int enemyOwner = casterOwner == GameState.OWNER_HUMAN ? GameState.OWNER_AI : GameState.OWNER_HUMAN;
+		BetterUnit best = null;
+		int bestScore = Integer.MIN_VALUE;
+		for (BetterUnit unit : gameState.unitsById.values()) {
+			if (unit.getOwner() != enemyOwner || unit.getHealth() <= 0 || unit.isAvatar()) {
+				continue;
+			}
+			if (unit.getStunTurnsRemaining() > 0) {
+				continue;
+			}
+			int score = unit.getAttack() * 10 + unit.getHealth() + (unit.isProvoke() ? 20 : 0);
+			if (best == null || score > bestScore || (score == bestScore && unit.getId() < best.getId())) {
+				best = unit;
+				bestScore = score;
+			}
+		}
+		return best;
+	}
+
+	/**
+	 * SC37 extension:
+	 * Selects allied unit with the greatest missing HP for heal spell.
+	 */
+	private static BetterUnit chooseBestAllyTargetForHeal(GameState gameState, int owner) {
+		BetterUnit best = null;
+		int bestScore = Integer.MIN_VALUE;
+		for (BetterUnit unit : gameState.unitsById.values()) {
+			if (unit.getOwner() != owner || unit.getHealth() <= 0) {
+				continue;
+			}
+			int missing = unit.getMaxHealth() - unit.getHealth();
+			if (missing <= 0) {
+				continue;
+			}
+			int score = missing * 10 + (unit.isAvatar() ? 20 : 0);
+			if (best == null || score > bestScore || (score == bestScore && unit.getId() < best.getId())) {
+				best = unit;
+				bestScore = score;
+			}
+		}
+		return best;
 	}
 
 	/**
@@ -192,6 +509,15 @@ public final class SimpleCardLogic {
 
 		if (TARGET_SUMMON_TILE.equals(targetMode)) {
 			plan.moveTileKeys.addAll(SimpleBoardLogic.computeAdjacentUnoccupiedTilesForOwner(gameState, owner));
+			return plan;
+		}
+		if (TARGET_SELF_AVATAR.equals(targetMode)) {
+			BetterUnit avatar = SimpleBoardLogic.getAvatarUnitForOwner(gameState, owner);
+			if (avatar != null) {
+				plan.moveTileKeys.add(SimpleBoardLogic.tileKey(
+						avatar.getPosition().getTilex(),
+						avatar.getPosition().getTiley()));
+			}
 			return plan;
 		}
 
@@ -240,6 +566,12 @@ public final class SimpleCardLogic {
 					&& clickedUnit.getOwner() == GameState.OWNER_AI
 					&& !clickedUnit.isAvatar();
 		}
+		if (TARGET_SELF_AVATAR.equals(mode)) {
+			return gameState.moveHighlightTiles.contains(key)
+					&& clickedUnit != null
+					&& clickedUnit.getOwner() == GameState.OWNER_HUMAN
+					&& clickedUnit.isAvatar();
+		}
 		return false;
 	}
 
@@ -253,28 +585,49 @@ public final class SimpleCardLogic {
 			Card selectedCard,
 			Tile clickedTile,
 			BetterUnit clickedUnit) {
+		return executeCardEffectForOwner(
+				out,
+				gameState,
+				selectedCard,
+				clickedTile,
+				clickedUnit,
+				GameState.OWNER_HUMAN);
+	}
 
+	/**
+	 * SC23-SC29 + SC37 extension:
+	 * Shared effect dispatcher for both human and AI card execution.
+	 */
+	private static boolean executeCardEffectForOwner(
+			ActorRef out,
+			GameState gameState,
+			Card selectedCard,
+			Tile clickedTile,
+			BetterUnit clickedUnit,
+			int casterOwner) {
 		if (selectedCard.isCreature()) {
-			return summonCreatureFromCard(out, gameState, selectedCard, clickedTile, GameState.OWNER_HUMAN);
+			return summonCreatureFromCard(out, gameState, selectedCard, clickedTile, casterOwner);
 		}
 
 		String name = normalizeCardName(selectedCard);
 		if ("truestrike".equals(name)) {
-			return castTruestrike(out, gameState, clickedTile, clickedUnit);
+			return castTruestrikeForOwner(out, gameState, clickedTile, clickedUnit, casterOwner);
 		}
 		if ("sundrop elixir".equals(name)) {
-			return castSundropElixir(out, gameState, clickedTile, clickedUnit);
+			return castSundropElixirForOwner(out, gameState, clickedTile, clickedUnit, casterOwner);
 		}
 		if ("dark terminus".equals(name)) {
-			return castDarkTerminus(out, gameState, clickedTile, clickedUnit);
+			return castDarkTerminusForOwner(out, gameState, clickedTile, clickedUnit, casterOwner);
 		}
 		if ("beamshock".equals(name)) {
-			return castBeamshock(out, gameState, clickedTile, clickedUnit);
+			return castBeamshockForOwner(out, gameState, clickedTile, clickedUnit, casterOwner);
+		}
+		if ("horn of the forsaken".equals(name)) {
+			return castHornOfTheForsakenForOwner(out, gameState, clickedTile, clickedUnit, casterOwner);
 		}
 		if ("wraithling swarm".equals(name)) {
-			return castWraithlingSwarm(out, gameState, clickedTile);
+			return castWraithlingSwarmForOwner(out, gameState, clickedTile, casterOwner);
 		}
-
 		return false;
 	}
 
@@ -312,8 +665,16 @@ public final class SimpleCardLogic {
 		summoned.setMaxHealth(summonHealth);
 		summoned.setMoveRange(2);
 		summoned.setAttackRange(1);
-		summoned.setHasMoved(true);
-		summoned.setHasAttacked(true);
+		applyUnitKeywordAndAbilityFlagsFromCard(summoned, normalizeCardName(card));
+		// SC35:
+		// default summon sickness blocks move/attack this turn, except Rush units.
+		if (summoned.isRush()) {
+			summoned.setHasMoved(false);
+			summoned.setHasAttacked(false);
+		} else {
+			summoned.setHasMoved(true);
+			summoned.setHasAttacked(true);
+		}
 		summoned.setStunTurnsRemaining(0);
 		summoned.setPositionByTile(targetTile);
 
@@ -322,6 +683,9 @@ public final class SimpleCardLogic {
 		BasicCommands.setUnitAttack(out, summoned, summoned.getAttack());
 		BasicCommands.setUnitHealth(out, summoned, summoned.getHealth());
 		SimpleBoardLogic.registerUnit(gameState, summoned, targetTile);
+		// SC30:
+		// opening-gambit abilities resolve immediately after unit creation.
+		triggerOnSummonAbilities(out, gameState, summoned);
 		return true;
 	}
 
@@ -330,7 +694,84 @@ public final class SimpleCardLogic {
 	 * Truestrike -> deal fixed damage to an enemy unit target.
 	 */
 	private static boolean castTruestrike(ActorRef out, GameState gameState, Tile targetTile, BetterUnit target) {
-		if (target == null || target.getOwner() != GameState.OWNER_AI) {
+		return castTruestrikeForOwner(out, gameState, targetTile, target, GameState.OWNER_HUMAN);
+	}
+
+	/**
+	 * SC25:
+	 * Sundrop Elixir -> heal allied target by 5 without exceeding max health.
+	 */
+	private static boolean castSundropElixir(ActorRef out, GameState gameState, Tile targetTile, BetterUnit target) {
+		return castSundropElixirForOwner(out, gameState, targetTile, target, GameState.OWNER_HUMAN);
+	}
+
+	/**
+	 * SC26 + 2025-26 Deck spec:
+	 * Dark Terminus -> destroy enemy non-avatar unit, then summon Wraithling on that tile.
+	 */
+	private static boolean castDarkTerminus(ActorRef out, GameState gameState, Tile targetTile, BetterUnit target) {
+		return castDarkTerminusForOwner(out, gameState, targetTile, target, GameState.OWNER_HUMAN);
+	}
+
+	/**
+	 * SC27 + 2025-26 Deck spec:
+	 * Beamshock -> stun enemy non-avatar unit for its next turn only.
+	 */
+	private static boolean castBeamshock(ActorRef out, GameState gameState, Tile targetTile, BetterUnit target) {
+		return castBeamshockForOwner(out, gameState, targetTile, target, GameState.OWNER_HUMAN);
+	}
+
+	/**
+	 * SC33 + 2025-26 Deck spec:
+	 * Horn of the Forsaken equips artifact charges (3) on the human avatar.
+	 */
+	private static boolean castHornOfTheForsaken(ActorRef out, GameState gameState, Tile targetTile, BetterUnit target) {
+		return castHornOfTheForsakenForOwner(out, gameState, targetTile, target, GameState.OWNER_HUMAN);
+	}
+
+	/**
+	 * SC28 + 2025-26 Deck spec:
+	 * Wraithling Swarm -> summon 3 Wraithlings in sequence (up to available legal tiles).
+	 */
+	private static boolean castWraithlingSwarm(ActorRef out, GameState gameState, Tile selectedTile) {
+		return castWraithlingSwarmForOwner(out, gameState, selectedTile, GameState.OWNER_HUMAN);
+	}
+
+	/**
+	 * Shared spell helper for SC33:
+	 * Equip Horn artifact charges on the caster avatar.
+	 */
+	private static boolean castHornOfTheForsakenForOwner(
+			ActorRef out,
+			GameState gameState,
+			Tile targetTile,
+			BetterUnit target,
+			int casterOwner) {
+		if (target == null || !target.isAvatar() || target.getOwner() != casterOwner) {
+			return false;
+		}
+		// Current runtime only tracks artifact charges for human deck implementation.
+		if (casterOwner != GameState.OWNER_HUMAN) {
+			return false;
+		}
+		playEffectAndWait(out, StaticConfFiles.f1_buff, targetTile);
+		gameState.humanHornCharges = 3;
+		BasicCommands.addPlayer1Notification(out, "Horn equipped (3)", 2);
+		return true;
+	}
+
+	/**
+	 * Shared spell helper for SC24:
+	 * Deal 2 damage to an enemy unit from the specified caster side.
+	 */
+	private static boolean castTruestrikeForOwner(
+			ActorRef out,
+			GameState gameState,
+			Tile targetTile,
+			BetterUnit target,
+			int casterOwner) {
+		int enemyOwner = casterOwner == GameState.OWNER_HUMAN ? GameState.OWNER_AI : GameState.OWNER_HUMAN;
+		if (target == null || target.getOwner() != enemyOwner) {
 			return false;
 		}
 		playEffectAndWait(out, StaticConfFiles.f1_inmolation, targetTile);
@@ -339,11 +780,16 @@ public final class SimpleCardLogic {
 	}
 
 	/**
-	 * SC25:
-	 * Sundrop Elixir -> heal allied target by 5 without exceeding max health.
+	 * Shared spell helper for SC25:
+	 * Heal allied unit by 5 without exceeding max health.
 	 */
-	private static boolean castSundropElixir(ActorRef out, GameState gameState, Tile targetTile, BetterUnit target) {
-		if (target == null || target.getOwner() != GameState.OWNER_HUMAN) {
+	private static boolean castSundropElixirForOwner(
+			ActorRef out,
+			GameState gameState,
+			Tile targetTile,
+			BetterUnit target,
+			int casterOwner) {
+		if (target == null || target.getOwner() != casterOwner) {
 			return false;
 		}
 		playEffectAndWait(out, StaticConfFiles.f1_buff, targetTile);
@@ -352,11 +798,17 @@ public final class SimpleCardLogic {
 	}
 
 	/**
-	 * SC26 + 2025-26 Deck spec:
-	 * Dark Terminus -> destroy enemy non-avatar unit, then summon Wraithling on that tile.
+	 * Shared spell helper for SC26:
+	 * Destroy enemy non-avatar unit, then summon a Wraithling on its tile.
 	 */
-	private static boolean castDarkTerminus(ActorRef out, GameState gameState, Tile targetTile, BetterUnit target) {
-		if (target == null || target.getOwner() != GameState.OWNER_AI || target.isAvatar()) {
+	private static boolean castDarkTerminusForOwner(
+			ActorRef out,
+			GameState gameState,
+			Tile targetTile,
+			BetterUnit target,
+			int casterOwner) {
+		int enemyOwner = casterOwner == GameState.OWNER_HUMAN ? GameState.OWNER_AI : GameState.OWNER_HUMAN;
+		if (target == null || target.getOwner() != enemyOwner || target.isAvatar()) {
 			return false;
 		}
 
@@ -368,34 +820,51 @@ public final class SimpleCardLogic {
 		SimpleBoardLogic.applySpellDamage(out, gameState, target, target.getHealth());
 
 		if (replacementTile != null) {
-			summonWraithling(out, gameState, replacementTile, GameState.OWNER_HUMAN);
+			summonWraithling(out, gameState, replacementTile, casterOwner);
 		}
 		return true;
 	}
 
 	/**
-	 * SC27 + 2025-26 Deck spec:
-	 * Beamshock -> stun enemy non-avatar unit for its next turn only.
+	 * Shared spell helper for SC27:
+	 * Stun enemy non-avatar for its next turn.
 	 */
-	private static boolean castBeamshock(ActorRef out, GameState gameState, Tile targetTile, BetterUnit target) {
-		if (target == null || target.getOwner() != GameState.OWNER_AI || target.isAvatar()) {
+	private static boolean castBeamshockForOwner(
+			ActorRef out,
+			GameState gameState,
+			Tile targetTile,
+			BetterUnit target,
+			int casterOwner) {
+		int enemyOwner = casterOwner == GameState.OWNER_HUMAN ? GameState.OWNER_AI : GameState.OWNER_HUMAN;
+		if (target == null || target.getOwner() != enemyOwner || target.isAvatar()) {
 			return false;
 		}
 		playEffectAndWait(out, StaticConfFiles.f1_inmolation, targetTile);
 		target.setStunTurnsRemaining(1);
+		// SC27 UX:
+		// notify both "stun applied" and "you got stunned" perspectives for the human player.
+		if (casterOwner == GameState.OWNER_HUMAN) {
+			BasicCommands.addPlayer1Notification(out, "You applied Stun", 2);
+		} else if (target.getOwner() == GameState.OWNER_HUMAN) {
+			BasicCommands.addPlayer1Notification(out, "Your unit was stunned", 2);
+		}
 		return true;
 	}
 
 	/**
-	 * SC28 + 2025-26 Deck spec:
-	 * Wraithling Swarm -> summon 3 Wraithlings in sequence (up to available legal tiles).
+	 * Shared spell helper for SC28:
+	 * Summon 3 Wraithlings in sequence (up to available legal tiles) for caster side.
 	 */
-	private static boolean castWraithlingSwarm(ActorRef out, GameState gameState, Tile selectedTile) {
-		boolean spawnedAny = summonWraithling(out, gameState, selectedTile, GameState.OWNER_HUMAN);
+	private static boolean castWraithlingSwarmForOwner(
+			ActorRef out,
+			GameState gameState,
+			Tile selectedTile,
+			int casterOwner) {
+		boolean spawnedAny = summonWraithling(out, gameState, selectedTile, casterOwner);
 		int spawned = spawnedAny ? 1 : 0;
 
 		while (spawned < MAX_SPELL_SUMMON_COUNT) {
-			List<String> sortedCandidates = sortedTileKeys(SimpleBoardLogic.computeAdjacentUnoccupiedTilesForOwner(gameState, GameState.OWNER_HUMAN));
+			List<String> sortedCandidates = sortedTileKeys(SimpleBoardLogic.computeAdjacentUnoccupiedTilesForOwner(gameState, casterOwner));
 			if (sortedCandidates.isEmpty()) {
 				break;
 			}
@@ -403,7 +872,7 @@ public final class SimpleCardLogic {
 			if (nextTile == null) {
 				break;
 			}
-			if (!summonWraithling(out, gameState, nextTile, GameState.OWNER_HUMAN)) {
+			if (!summonWraithling(out, gameState, nextTile, casterOwner)) {
 				break;
 			}
 			spawned++;
@@ -451,18 +920,183 @@ public final class SimpleCardLogic {
 	 * SC29:
 	 * Remove used card and redraw hand positions so indices stay contiguous.
 	 */
-	private static void discardCardAndReorderHand(ActorRef out, Player player, int handPosition) {
+	private static void discardCardAndReorderHand(ActorRef out, Player player, int handPosition, boolean redrawHumanUi) {
 		int index = handPosition - 1;
 		if (index < 0 || index >= player.getHand().size()) {
 			return;
 		}
 		player.getHand().remove(index);
 
+		if (!redrawHumanUi) {
+			return;
+		}
+
 		for (int i = 1; i <= 6; i++) {
 			BasicCommands.deleteCard(out, i);
 		}
 		for (int i = 0; i < player.getHand().size() && i < 6; i++) {
 			BasicCommands.drawCard(out, player.getHand().get(i), i + 1, CARD_MODE_NORMAL);
+		}
+	}
+
+	/**
+	 * SC30-SC36:
+	 * Maps card identity to runtime keyword/ability flags on summoned units.
+	 */
+	private static void applyUnitKeywordAndAbilityFlagsFromCard(BetterUnit unit, String normalizedCardName) {
+		unit.setProvoke(false);
+		unit.setRush(false);
+		unit.setFlying(false);
+		unit.setOpeningGambitGloomChaser(false);
+		unit.setOpeningGambitNightsorrowAssassin(false);
+		unit.setOpeningGambitSilverguardSquire(false);
+		unit.setDeathwatchBadOmen(false);
+		unit.setDeathwatchShadowWatcher(false);
+		unit.setDeathwatchBloodmoon(false);
+		unit.setDeathwatchShadowdancer(false);
+		unit.setZealOnAvatarDamaged(false);
+		unit.setOnHitSummonWraithling(false);
+
+		if ("rock pulveriser".equals(normalizedCardName)
+				|| "swamp entangler".equals(normalizedCardName)
+				|| "ironcliff guardian".equals(normalizedCardName)) {
+			unit.setProvoke(true);
+		}
+		if ("silverguard knight".equals(normalizedCardName)) {
+			unit.setProvoke(true);
+			unit.setZealOnAvatarDamaged(true);
+		}
+		if ("saberspine tiger".equals(normalizedCardName)) {
+			unit.setRush(true);
+		}
+		if ("young flamewing".equals(normalizedCardName)) {
+			unit.setFlying(true);
+		}
+		if ("gloom chaser".equals(normalizedCardName)) {
+			unit.setOpeningGambitGloomChaser(true);
+		}
+		if ("nightsorrow assassin".equals(normalizedCardName)) {
+			unit.setOpeningGambitNightsorrowAssassin(true);
+		}
+		if ("silverguard squire".equals(normalizedCardName)) {
+			unit.setOpeningGambitSilverguardSquire(true);
+		}
+		if ("bad omen".equals(normalizedCardName)) {
+			unit.setDeathwatchBadOmen(true);
+		}
+		if ("shadow watcher".equals(normalizedCardName)) {
+			unit.setDeathwatchShadowWatcher(true);
+		}
+		if ("bloodmoon priestess".equals(normalizedCardName)) {
+			unit.setDeathwatchBloodmoon(true);
+		}
+		if ("shadowdancer".equals(normalizedCardName)) {
+			unit.setDeathwatchShadowdancer(true);
+		}
+	}
+
+	/**
+	 * SC30:
+	 * Execute opening-gambit effects immediately after summon.
+	 */
+	private static void triggerOnSummonAbilities(ActorRef out, GameState gameState, BetterUnit summoned) {
+		if (summoned == null || gameState.gameOver) {
+			return;
+		}
+		if (summoned.isOpeningGambitGloomChaser()) {
+			triggerGloomChaserOpeningGambit(out, gameState, summoned);
+		}
+		if (summoned.isOpeningGambitNightsorrowAssassin()) {
+			triggerNightsorrowOpeningGambit(out, gameState, summoned);
+		}
+		if (summoned.isOpeningGambitSilverguardSquire()) {
+			triggerSilverguardSquireOpeningGambit(out, gameState, summoned);
+		}
+	}
+
+	/**
+	 * SC30 (Gloom Chaser):
+	 * Summon Wraithling directly behind this unit. Human behind = left, AI behind = right.
+	 */
+	private static void triggerGloomChaserOpeningGambit(ActorRef out, GameState gameState, BetterUnit summoned) {
+		int x = summoned.getPosition().getTilex();
+		int y = summoned.getPosition().getTiley();
+		int behindX = summoned.getOwner() == GameState.OWNER_HUMAN ? x - 1 : x + 1;
+		Tile behindTile = SimpleBoardLogic.getTileByKey(gameState, SimpleBoardLogic.tileKey(behindX, y));
+		if (behindTile == null) {
+			return;
+		}
+		String key = SimpleBoardLogic.tileKey(behindTile.getTilex(), behindTile.getTiley());
+		if (!gameState.unitIdByTile.containsKey(key)) {
+			summonWraithling(out, gameState, behindTile, summoned.getOwner());
+		}
+	}
+
+	/**
+	 * SC30 (Nightsorrow Assassin):
+	 * Destroy one adjacent enemy whose current health is below max health.
+	 */
+	private static void triggerNightsorrowOpeningGambit(ActorRef out, GameState gameState, BetterUnit summoned) {
+		List<BetterUnit> candidates = new ArrayList<BetterUnit>();
+		int sx = summoned.getPosition().getTilex();
+		int sy = summoned.getPosition().getTiley();
+		for (BetterUnit unit : gameState.unitsById.values()) {
+			if (unit.getOwner() == summoned.getOwner() || unit.getHealth() <= 0) {
+				continue;
+			}
+			int dx = Math.abs(unit.getPosition().getTilex() - sx);
+			int dy = Math.abs(unit.getPosition().getTiley() - sy);
+			// 2025-26 Deck spec:
+			// Nightsorrow Assassin can only destroy an adjacent DAMAGED non-avatar enemy unit.
+			if (dx <= 1
+					&& dy <= 1
+					&& !(dx == 0 && dy == 0)
+					&& !unit.isAvatar()
+					&& unit.getHealth() < unit.getMaxHealth()) {
+				candidates.add(unit);
+			}
+		}
+		if (candidates.isEmpty()) {
+			return;
+		}
+		Collections.sort(candidates, new Comparator<BetterUnit>() {
+			@Override
+			public int compare(BetterUnit a, BetterUnit b) {
+				return Integer.compare(a.getId(), b.getId());
+			}
+		});
+		BetterUnit target = candidates.get(0);
+		Tile targetTile = gameState.board[target.getPosition().getTilex()][target.getPosition().getTiley()];
+		playEffectAndWait(out, StaticConfFiles.f1_martyrdom, targetTile);
+		SimpleBoardLogic.applySpellDamage(out, gameState, target, target.getHealth());
+	}
+
+	/**
+	 * SC30 (Silverguard Squire):
+	 * Buff allied units directly left/right of own avatar by +1/+1 permanently.
+	 */
+	private static void triggerSilverguardSquireOpeningGambit(ActorRef out, GameState gameState, BetterUnit summoned) {
+		BetterUnit avatar = SimpleBoardLogic.getAvatarUnitForOwner(gameState, summoned.getOwner());
+		if (avatar == null) {
+			return;
+		}
+		int ax = avatar.getPosition().getTilex();
+		int ay = avatar.getPosition().getTiley();
+		int[] candidateXs = new int[] {ax - 1, ax + 1};
+		for (int tx : candidateXs) {
+			Tile tile = SimpleBoardLogic.getTileByKey(gameState, SimpleBoardLogic.tileKey(tx, ay));
+			if (tile == null) {
+				continue;
+			}
+			BetterUnit target = SimpleBoardLogic.getUnitAt(gameState, tx, ay);
+			if (target == null || target.getOwner() != summoned.getOwner() || target.isAvatar() || target.getHealth() <= 0) {
+				continue;
+			}
+			target.setAttack(target.getAttack() + 1);
+			target.setMaxHealth(target.getMaxHealth() + 1);
+			target.setHealth(target.getHealth() + 1);
+			BasicCommands.setUnitAttack(out, target, target.getAttack());
+			BasicCommands.setUnitHealth(out, target, target.getHealth());
 		}
 	}
 
@@ -493,6 +1127,9 @@ public final class SimpleCardLogic {
 		}
 		if ("beamshock".equals(name)) {
 			return TARGET_ENEMY_NON_AVATAR;
+		}
+		if ("horn of the forsaken".equals(name)) {
+			return TARGET_SELF_AVATAR;
 		}
 		if ("wraithling swarm".equals(name)) {
 			return TARGET_SUMMON_TILE;

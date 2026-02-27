@@ -32,7 +32,7 @@ public class TileClicked implements EventProcessor{
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
 
 		// SC10-SC15: movement/attack interactions are valid only after full initialize.
-		if (!SimpleBoardLogic.isTurnSystemReady(gameState)) {
+		if (!SimpleBoardLogic.isGameActive(gameState)) {
 			return;
 		}
 		// Only accept tile interactions on the human turn in this phase.
@@ -110,7 +110,13 @@ public class TileClicked implements EventProcessor{
 			return;
 		}
 		if (!SimpleBoardLogic.unitCanTakeAction(clickedUnit)) {
-			BasicCommands.addPlayer1Notification(out, "Unit already acted this turn", 2);
+			// SC27 UX:
+			// distinguish stun lock from normal "already acted" state.
+			if (gameState.stunnedThisTurnUnitIds.contains(clickedUnit.getId())) {
+				BasicCommands.addPlayer1Notification(out, "This unit is stunned this turn", 2);
+			} else {
+				BasicCommands.addPlayer1Notification(out, "Unit already acted this turn", 2);
+			}
 			SimpleBoardLogic.clearSelectionAndHighlights(out, gameState);
 			return;
 		}
@@ -118,6 +124,11 @@ public class TileClicked implements EventProcessor{
 		gameState.selectedUnitId = clickedUnit.getId();
 		HighlightPlan plan = SimpleBoardLogic.buildHighlightPlan(gameState, clickedUnit);
 		SimpleBoardLogic.applyHighlightPlan(out, gameState, plan);
+		// SC34 UX:
+		// explicit feedback when Provoke prevents movement options.
+		if (SimpleBoardLogic.isMovementLockedByProvoke(gameState, clickedUnit)) {
+			BasicCommands.addPlayer1Notification(out, "This unit is Provoked", 2);
+		}
 	}
 
 	/**
@@ -132,7 +143,10 @@ public class TileClicked implements EventProcessor{
 		gameState.actionLocked = true;
 		gameState.pendingMoveUnitId = mover.getId();
 		gameState.pendingAttackTargetUnitId = optionalAttackTargetUnitId;
-		BasicCommands.moveUnitToTile(out, mover, destination);
+		// SC10 visual-path fix:
+		// choose axis order that avoids crossing occupied intermediates in the move animation.
+		boolean yFirst = SimpleBoardLogic.shouldMoveYFirstForVisualPath(gameState, mover, destination);
+		BasicCommands.moveUnitToTile(out, mover, destination, yFirst);
 	}
 
 	/**
@@ -146,6 +160,11 @@ public class TileClicked implements EventProcessor{
 			BetterUnit attacker,
 			BetterUnit defender,
 			String defenderTileKey) {
+		if (!SimpleBoardLogic.canAttackTargetRespectingProvoke(gameState, attacker, defender)) {
+			BasicCommands.addPlayer1Notification(out, "Provoke: must attack nearby Provoke unit", 2);
+			SimpleBoardLogic.clearSelectionAndHighlights(out, gameState);
+			return;
+		}
 
 		// Direct adjacent attack path.
 		if (SimpleBoardLogic.isInAttackRange(attacker, defender)) {

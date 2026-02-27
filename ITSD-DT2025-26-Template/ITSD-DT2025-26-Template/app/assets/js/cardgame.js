@@ -63,6 +63,9 @@ function setup() {
 }
 
 function bgClicked(eventData) {
+	if (gameEnded) {
+		return;
+	}
 	ws.send(JSON.stringify({
     		messagetype: "otherclicked"
   	}));
@@ -96,6 +99,9 @@ function drawTile(message) {
 }
 
 function tileClicked(eventData) {
+	if (gameEnded) {
+		return;
+	}
 	ws.send(JSON.stringify({
     		messagetype: "tileclicked",
             tilex: eventData.target.tilex,
@@ -244,6 +250,9 @@ function renderCardPreview(position) {
 }
 
 function cardClicked(eventData) {
+	if (gameEnded) {
+		return;
+	}
 	renderCardPreview(eventData.target.cardindex);
 	ws.send(JSON.stringify({
     		messagetype: "cardclicked",
@@ -735,6 +744,9 @@ function renderEndTurnButton() {
 }
 
 function endturnClicked(eventData) {
+	if (gameEnded) {
+		return;
+	}
 	ws.send(JSON.stringify({
     		messagetype: "endturnclicked"
   	}));
@@ -915,6 +927,61 @@ function addPlayer2Notification(message) {
 	}
 }
 
+/**
+ * SC40 + SC41:
+ * Render a blocking game-over overlay with a restart button.
+ * Restart uses full page reload, which creates a fresh GameActor and fresh GameState.
+ */
+function showGameOverOverlay(message) {
+	if (gameOverOverlay != null) {
+		return;
+	}
+	gameEnded = true;
+
+	var overlayContainer = new PIXI.Container();
+
+	var dim = new PIXI.Graphics();
+	dim.beginFill(0x000000, 0.65);
+	dim.drawRect(0, 0, stageWidth, stageHeight);
+	dim.endFill();
+	overlayContainer.addChild(dim);
+
+	var panel = g.sprite("assets/game/extra/ui/tooltip_left@2x.png");
+	panel.setPosition((stageWidth / 2) - 420, (stageHeight / 2) - 170);
+	panel.width = 840;
+	panel.height = 260;
+	overlayContainer.addChild(panel);
+
+	var title = new PIXI.Text("Game Over", { font: "56px Roboto", fill: "white", align: "center" });
+	title.position.x = (stageWidth / 2) - 150;
+	title.position.y = (stageHeight / 2) - 110;
+	overlayContainer.addChild(title);
+
+	var resultText = message.winnerText ? message.winnerText : "Match Finished";
+	var subtitle = new PIXI.Text(resultText, { font: "36px Roboto", fill: "white", align: "center" });
+	subtitle.position.x = (stageWidth / 2) - 110;
+	subtitle.position.y = (stageHeight / 2) - 40;
+	overlayContainer.addChild(subtitle);
+
+	var restartButton = g.sprite("assets/game/extra/ui/button_primary.png");
+	restartButton.setPosition((stageWidth / 2) - 170, (stageHeight / 2) + 30);
+	restartButton.width = 340;
+	restartButton.height = 95;
+	restartButton.interactive = true;
+	restartButton.on("click", function() {
+		window.location.reload();
+	});
+	overlayContainer.addChild(restartButton);
+
+	var restartText = new PIXI.Text("Restart", { font: "34px Roboto", fill: "white", align: "center" });
+	restartText.position.x = (stageWidth / 2) - 70;
+	restartText.position.y = (stageHeight / 2) + 58;
+	overlayContainer.addChild(restartText);
+
+	g.stage.addChild(overlayContainer);
+	gameOverOverlay = overlayContainer;
+}
+
 
 function playUnitAnimation(message) {
 	
@@ -1064,12 +1131,14 @@ function play(){
     }
 	
 
-	sinceLastHeartbeat = sinceLastHeartbeat+1;
-	if (sinceLastHeartbeat==120) {
-		ws.send(JSON.stringify({
-    		messagetype: "heartbeat"
-        }));
-        sinceLastHeartbeat = 1;
+	if (!gameEnded) {
+		sinceLastHeartbeat = sinceLastHeartbeat+1;
+		if (sinceLastHeartbeat==120) {
+			ws.send(JSON.stringify({
+		    		messagetype: "heartbeat"
+		        }));
+		        sinceLastHeartbeat = 1;
+		}
 	}
     				
   }

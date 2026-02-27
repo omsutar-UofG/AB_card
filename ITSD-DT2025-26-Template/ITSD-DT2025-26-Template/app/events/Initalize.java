@@ -35,6 +35,30 @@ public class Initalize implements EventProcessor{
 	private static final int maxHealth = 20;
 	private static final int avatarAttack = 2;
 
+	/**
+	 * SC41: restart-safe cleanup so a new initialize flow never inherits old match state.
+	 */
+	private void resetRuntimeStateForRestart(GameState gameState) {
+		gameState.board = new Tile[10][6];
+		gameState.unitsById.clear();
+		gameState.unitIdByTile.clear();
+		gameState.moveHighlightTiles.clear();
+		gameState.attackHighlightTiles.clear();
+		gameState.approachTileByEnemyTile.clear();
+		gameState.selectedUnitId = null;
+		gameState.selectedCardHandPosition = null;
+		gameState.selectedCardTargetMode = null;
+		gameState.pendingMoveUnitId = null;
+		gameState.pendingAttackTargetUnitId = null;
+		gameState.actionLocked = false;
+		gameState.gameOver = false;
+		gameState.winnerOwner = 0;
+		gameState.humanAvatarUnitId = null;
+		gameState.aiAvatarUnitId = null;
+		gameState.humanHornCharges = 0;
+		gameState.stunnedThisTurnUnitIds.clear();
+	}
+
 	private void drawTiles(ActorRef out, GameState gameState, JsonNode message) {
 		// NOTIFICATION: Drawing tiles.
 		BasicCommands.addPlayer1Notification(out, "Drawing tiles", 2);
@@ -165,6 +189,7 @@ public class Initalize implements EventProcessor{
 		BasicCommands.setUnitAttack(out, humanUnit, humanUnit.getAttack());
 		BasicCommands.setUnitHealth(out, humanUnit, humanUnit.getHealth());
 		SimpleBoardLogic.registerUnit(gameState, humanUnit, humanUnitTile);
+		gameState.humanAvatarUnitId = humanUnit.getId();
 		try {Thread.sleep(200);} catch (InterruptedException e) {e.printStackTrace();}
 
 		// NOTIFICATION: Draw AI Unit
@@ -185,6 +210,7 @@ public class Initalize implements EventProcessor{
 		BasicCommands.setUnitAttack(out, aiUnit, aiUnit.getAttack());
 		BasicCommands.setUnitHealth(out, aiUnit, aiUnit.getHealth());
 		SimpleBoardLogic.registerUnit(gameState, aiUnit, aiUnitTile);
+		gameState.aiAvatarUnitId = aiUnit.getId();
 		try {Thread.sleep(200);} catch (InterruptedException e) {e.printStackTrace();}
 
 	}
@@ -196,6 +222,8 @@ public class Initalize implements EventProcessor{
 		// (board, players, decks, avatars, active player) has completed.
 		gameState.gameInitalised = false;
 		gameState.something = true;
+		// SC41: ensure restart reuses a fully cleaned runtime state.
+		resetRuntimeStateForRestart(gameState);
 		
 		//CommandDemo.executeDemo(out); // this executes the command demo, comment out this when implementing your solution
 		//Loaders_2024_Check.test(out);

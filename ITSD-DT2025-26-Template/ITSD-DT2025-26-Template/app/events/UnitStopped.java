@@ -29,7 +29,12 @@ public class UnitStopped implements EventProcessor{
 		int tilex = message.get("tilex").asInt();
 		int tiley = message.get("tiley").asInt();
 
-		if (!SimpleBoardLogic.isTurnSystemReady(gameState)) {
+		if (!SimpleBoardLogic.isGameActive(gameState)) {
+			return;
+		}
+		// SC13/SC14:
+		// UnitStopped is only consumed for tracked in-flight human action chains.
+		if (gameState.pendingMoveUnitId == null || gameState.pendingMoveUnitId != unitid) {
 			return;
 		}
 

@@ -29,6 +29,10 @@ public class EndTurnClicked implements EventProcessor{
 			BasicCommands.addPlayer1Notification(out, "Game is initializing...", 2);
 			return;
 		}
+		if (gameState.gameOver) {
+			BasicCommands.addPlayer1Notification(out, "Game Over", 2);
+			return;
+		}
 
 		// The End Turn button is a player-side action. Do not allow manual turn
 		// skipping while the opponent turn is active.

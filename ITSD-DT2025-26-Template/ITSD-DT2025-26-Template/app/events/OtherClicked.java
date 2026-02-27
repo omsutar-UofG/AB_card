@@ -23,7 +23,7 @@ public class OtherClicked implements EventProcessor{
 	@Override
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
 		// SC12: Clicking any non-action area clears active highlights/selection.
-		if (!SimpleBoardLogic.isTurnSystemReady(gameState)) {
+		if (!SimpleBoardLogic.isGameActive(gameState)) {
 			return;
 		}
 		SimpleBoardLogic.clearSelectionAndHighlights(out, gameState);

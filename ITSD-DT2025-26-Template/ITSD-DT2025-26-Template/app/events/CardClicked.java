@@ -24,8 +24,8 @@ public class CardClicked implements EventProcessor{
 
 	@Override
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
-		// SC21-SC29: only allow card interactions when turn system is ready.
-		if (!SimpleBoardLogic.isTurnSystemReady(gameState)) {
+		// SC21-SC29 + SC40: only allow card interactions while game is active.
+		if (!SimpleBoardLogic.isGameActive(gameState)) {
 			return;
 		}
 		// Card play is human-driven in this sprint scope.
