@@ -76,7 +76,8 @@ public class TileClicked implements EventProcessor{
 		// SC13: click a valid move tile to start movement animation.
 		if (gameState.moveHighlightTiles.contains(clickedTileKey)
 				&& clickedUnit == null
-				&& !selectedUnit.isHasMoved()) {
+				&& !selectedUnit.isHasMoved()
+				&& !selectedUnit.isHasAttacked()) {
 			startMoveAction(out, gameState, selectedUnit, clickedTile, null);
 			return;
 		}
@@ -144,6 +145,10 @@ public class TileClicked implements EventProcessor{
 		if (SimpleBoardLogic.isInAttackRange(attacker, defender)) {
 			gameState.actionLocked = true;
 			SimpleBoardLogic.executeAttack(out, gameState, attacker, defender);
+			// 2024 GameRules: attacking before moving forfeits movement.
+			if (!attacker.isHasMoved()) {
+				attacker.setHasMoved(true);
+			}
 			attacker.setHasAttacked(true);
 			SimpleBoardLogic.clearPendingAction(gameState);
 			// SC12: clear highlights after completing an action.
