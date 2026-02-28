@@ -41,6 +41,9 @@ public final class SimpleBoardLogic {
 	private static final int MAX_ANIMATION_WAIT_MS = 900;
 	private static final Random RNG = new Random();
 
+	/**
+	 * Utility class: no instances.
+	 */
 	private SimpleBoardLogic() {}
 
 	/**
@@ -61,10 +64,16 @@ public final class SimpleBoardLogic {
 				&& gameState.activePlayer != null;
 	}
 
+	/**
+	 * Returns owner id for the currently active player pointer.
+	 */
 	public static int ownerForActivePlayer(GameState gameState) {
 		return gameState.activePlayer == gameState.humanPlayer ? GameState.OWNER_HUMAN : GameState.OWNER_AI;
 	}
 
+	/**
+	 * True when the active side is the human player.
+	 */
 	public static boolean isHumanTurn(GameState gameState) {
 		return gameState.activePlayer == gameState.humanPlayer;
 	}
@@ -85,6 +94,9 @@ public final class SimpleBoardLogic {
 		gameState.unitIdByTile.put(tileKey(tile.getTilex(), tile.getTiley()), unit.getId());
 	}
 
+	/**
+	 * Fast board lookup using tile occupancy index.
+	 */
 	public static BetterUnit getUnitAt(GameState gameState, int tilex, int tiley) {
 		Integer unitId = gameState.unitIdByTile.get(tileKey(tilex, tiley));
 		if (unitId == null) {
@@ -135,6 +147,10 @@ public final class SimpleBoardLogic {
 		gameState.unitIdByTile.put(tileKey(destinationTile.getTilex(), destinationTile.getTiley()), unit.getId());
 	}
 
+	/**
+	 * SC15 helper:
+	 * Unit can still act when alive and not exhausted by move+attack limits.
+	 */
 	public static boolean unitCanTakeAction(BetterUnit unit) {
 		return unit != null && unit.getHealth() > 0 && !(unit.isHasMoved() && unit.isHasAttacked());
 	}
@@ -164,6 +180,10 @@ public final class SimpleBoardLogic {
 		gameState.attackHighlightTiles.clear();
 	}
 
+	/**
+	 * SC12 helper:
+	 * Clear both visual highlights and selected-unit pointer.
+	 */
 	public static void clearSelectionAndHighlights(ActorRef out, GameState gameState) {
 		clearHighlights(out, gameState);
 		clearSelection(gameState);
@@ -383,6 +403,9 @@ public final class SimpleBoardLogic {
 		}
 	}
 
+	/**
+	 * Tile-key lookup with bounds safety.
+	 */
 	public static Tile getTileByKey(GameState gameState, String key) {
 		int[] xy = parseKey(key);
 		if (xy == null || !inBoard(gameState, xy[0], xy[1])) {
@@ -398,6 +421,10 @@ public final class SimpleBoardLogic {
 		return parseKey(key);
 	}
 
+	/**
+	 * SC10 helper:
+	 * Compute legal non-flying movement destinations under occupancy and range rules.
+	 */
 	private static Set<String> computeReachableUnoccupiedTiles(GameState gameState, BetterUnit unit) {
 		Set<String> reachable = new HashSet<String>();
 		int startX = unit.getPosition().getTilex();
@@ -587,6 +614,10 @@ public final class SimpleBoardLogic {
 		return false;
 	}
 
+	/**
+	 * SC14 helper:
+	 * For a non-adjacent enemy, find a reachable tile that enters attack range this turn.
+	 */
 	private static String findApproachTileForEnemy(
 			GameState gameState,
 			BetterUnit attacker,
@@ -620,6 +651,10 @@ public final class SimpleBoardLogic {
 		return best;
 	}
 
+	/**
+	 * Shared range helper:
+	 * Attack range is square/Chebyshev style and excludes same-tile.
+	 */
 	private static boolean isTileInAttackRange(int dx, int dy, int range) {
 		return !(dx == 0 && dy == 0) && dx <= range && dy <= range;
 	}
@@ -969,11 +1004,19 @@ public final class SimpleBoardLogic {
 		return snapshot;
 	}
 
+	/**
+	 * Internal index helper:
+	 * Remove one unit from tile and id indexes after it leaves play.
+	 */
 	private static void removeUnitFromIndexes(GameState gameState, BetterUnit unit) {
 		gameState.unitIdByTile.remove(tileKey(unit.getPosition().getTilex(), unit.getPosition().getTiley()));
 		gameState.unitsById.remove(unit.getId());
 	}
 
+	/**
+	 * SC20 helper:
+	 * Sync avatar unit HP to player HP UI/state (includes debug notifications on damage).
+	 */
 	private static void syncAvatarHealth(ActorRef out, GameState gameState, BetterUnit avatarUnit) {
 		int hp = Math.max(0, avatarUnit.getHealth());
 		if (avatarUnit.getOwner() == GameState.OWNER_HUMAN) {
@@ -997,6 +1040,9 @@ public final class SimpleBoardLogic {
 		}
 	}
 
+	/**
+	 * Shared null-safe alive check for combat and trigger flows.
+	 */
 	private static boolean isUnitAlive(BetterUnit unit) {
 		return unit != null && unit.getHealth() > 0;
 	}
@@ -1017,6 +1063,9 @@ public final class SimpleBoardLogic {
 		}
 	}
 
+	/**
+	 * Tile-key parser for format "x-y"; returns null on malformed input.
+	 */
 	private static int[] parseKey(String key) {
 		String[] split = key.split("-");
 		if (split.length != 2) {
@@ -1029,6 +1078,9 @@ public final class SimpleBoardLogic {
 		}
 	}
 
+	/**
+	 * Board bounds helper that also checks the tile object exists.
+	 */
 	private static boolean inBoard(GameState gameState, int x, int y) {
 		return x >= 0
 				&& y >= 0

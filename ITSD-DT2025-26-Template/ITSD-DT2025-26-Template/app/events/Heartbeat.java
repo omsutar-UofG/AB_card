@@ -31,6 +31,10 @@ import structures.basic.Tile;
  */
 public class Heartbeat implements EventProcessor{
 
+	/**
+	 * SC37-SC39 turn loop entry:
+	 * executes AI turn only when turn system is ready, game is active, and AI owns the current turn.
+	 */
 	@Override
 	public void processEvent(ActorRef out, GameState gameState, JsonNode message) {
 		// Only run turn logic once the game has finished initialize pipeline.

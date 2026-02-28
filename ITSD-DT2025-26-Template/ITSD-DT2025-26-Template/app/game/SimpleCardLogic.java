@@ -60,6 +60,9 @@ public final class SimpleCardLogic {
 		}
 	}
 
+	/**
+	 * Utility class: no instances.
+	 */
 	private SimpleCardLogic() {}
 
 	/**
@@ -1100,6 +1103,10 @@ public final class SimpleCardLogic {
 		}
 	}
 
+	/**
+	 * SC21/SC29 helper:
+	 * Safe 1-based hand lookup used by both click flow and AI flow.
+	 */
 	private static Card getCardByHandPosition(Player player, Integer handPosition) {
 		if (player == null || handPosition == null) {
 			return null;
@@ -1111,6 +1118,10 @@ public final class SimpleCardLogic {
 		return player.getHand().get(index);
 	}
 
+	/**
+	 * SC22-SC29 helper:
+	 * Maps card identity to target-selection mode used by validation and highlighting.
+	 */
 	private static String resolveTargetMode(Card card) {
 		if (card.isCreature()) {
 			return TARGET_SUMMON_TILE;
@@ -1137,6 +1148,10 @@ public final class SimpleCardLogic {
 		return TARGET_NONE;
 	}
 
+	/**
+	 * Shared helper:
+	 * Normalizes card names for stable string matching across loader variants.
+	 */
 	private static String normalizeCardName(Card card) {
 		if (card == null || card.getCardname() == null) {
 			return "";
@@ -1144,6 +1159,10 @@ public final class SimpleCardLogic {
 		return card.getCardname().trim().toLowerCase();
 	}
 
+	/**
+	 * Shared FX helper:
+	 * Plays one effect animation and blocks roughly until it is visible.
+	 */
 	private static void playEffectAndWait(ActorRef out, String effectConfPath, Tile tile) {
 		EffectAnimation effect = BasicObjectBuilders.loadEffect(effectConfPath);
 		if (effect == null || tile == null) {
@@ -1158,6 +1177,10 @@ public final class SimpleCardLogic {
 		}
 	}
 
+	/**
+	 * Shared helper:
+	 * Sort tile keys deterministically by row then column for reproducible AI choices.
+	 */
 	private static List<String> sortedTileKeys(Iterable<String> tileKeys) {
 		List<String> list = new ArrayList<String>();
 		for (String key : tileKeys) {
@@ -1177,6 +1200,10 @@ public final class SimpleCardLogic {
 		return list;
 	}
 
+	/**
+	 * Shared helper:
+	 * Parses tile key format "x-y"; returns {0,0} on malformed input.
+	 */
 	private static int[] parseTileKey(String key) {
 		String[] split = key.split("-");
 		if (split.length != 2) {
